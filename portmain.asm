@@ -11,7 +11,12 @@ org $298000
 incsrc engine/sprite_new_table.asm
 
 org $308000
+pushpc
 incsrc engine/sprite_new_functions.asm
+incsrc FallingTiles.asm
+incsrc PaletteGlowTagHole1.asm
+incsrc SparkleTitlescreen.asm
+pullpc
 
 ;===============================================
 
