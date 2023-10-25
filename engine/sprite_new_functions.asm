@@ -1,5 +1,3 @@
-
-pullpc
 ;=================================================================
 ;Long function, return Carry Set if Active
 ;=================================================================
@@ -104,7 +102,7 @@ Sprite_MoveAltitude:
 ; Movement, Collision are handled by this function (height:20 = vitreous)
 ; $09 = speed, $08 = max height
 ;===================================================================================================
-Sprite_BounceTowardPlayer:
+Sprite_Bouncetowardplayer:
 	JSL Sprite_MoveAltitude
 
 	DEC.w $0F80,X : DEC.w $0F80,X
@@ -115,8 +113,7 @@ Sprite_BounceTowardPlayer:
 
 	LDA.b $08 : STA.w $0F80,X ; set height from 08
 
-	;LDA.b $09
-  LDA.b #$20
+	LDA.b $09
 
 	JSL Sprite_ApplySpeedTowardsPlayer
 
@@ -140,6 +137,3 @@ Sprite_BounceFromTileCollision:
 	INC.w $0ED0,X
 
 ++	RTL
-
-; ==============================================================================
-pushpc

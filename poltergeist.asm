@@ -30,7 +30,7 @@
 !ImpervSwordHammer  = 00  ; 01 = Impervious to sword and hammer attacks
 !Boss               = 00  ; 00 = normal sprite, 01 = sprite is a boss
 
-%Set_Sprite_Properties(Sprite_Poltergeist_Prep, Sprite_Poltergeist_Long)
+;%Set_Sprite_Properties(Sprite_Poltergeist_Prep, Sprite_Poltergeist_Long)
 
 ;===============================================
 
@@ -66,7 +66,6 @@ Sprite_Poltergeist_Prep:
 
 ;===============================================
 
-print pc
 Sprite_Poltergeist_Main:
 {
   LDA.w SprAction, X ; Load the current action of the sprite

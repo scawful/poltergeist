@@ -23,9 +23,9 @@ pullpc
 ; Poltergeist Controller Sprite
 ; Handles a scripted event of poltergeist sprites
 ; similar to the flying tiles rooms.
-incsrc portset.asm
+incsrc PortSet.asm
 
 ; Poltergeist Sprites
 ; Includes the individual subtypes which make up the 
 ; poltergeist event. Can be used separately.
-incsrc poltergeist.asm
+incsrc Poltergeist.asm

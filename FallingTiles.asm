@@ -1,3 +1,6 @@
+;Set Tag to "fallingtile1"
+pushpc
+
 org $09BBB2
 JSL Overlord_CrumbleTilePath
 RTS
@@ -70,9 +73,6 @@ PHB : PHK : PLB
 
     PLB
     RTL
-
-
-
 
         ; Defines to make it easier to tell what the path looks like.
         !right = 0
@@ -150,9 +150,6 @@ PHB : PHK : PLB
         db .line_upward>>8
 
 
-
-
-
     CrumbleTilePath_SpawnCrumbleTileGarnish:
     {
         TXY
@@ -208,11 +205,12 @@ PHB : PHK : PLB
     SEP #$20 ; set it back on 8 bit
 
     LDA.w $0B38, X : BNE .initialized
+	STZ.w $0AE4
 
     LDA.w $0B10, X : CMP.b $23 : BNE .return
     LDA.w $0B20, X : CMP.b $21 : BNE .return
 
-        TAY ; set the step in Y
+        LDY #$00 ; set the step in Y
         LDA ($00), Y : STA.w $0B30, X ; set the initial timer
         INC $0B38, X ; increase current step
         LDA #$10 : STA.w $0B48, X ; set default delay on 0x10
@@ -224,7 +222,12 @@ PHB : PHK : PLB
 
 .timer_expired
 LDY $0B38, X
-LDA ($00), Y : CMP #$FF : BNE .continue
+LDA ($00), Y : CMP #$FF : BEQ .killsprite
+CMP #$FE : BNE .continue
+LDA.w $0AE4 : EOR #$01 : STA $0AE4 ; FREE RAM
+INC $0B38, X ; increase position for the next frame
+RTS
+.killsprite
 STZ $0B00, X ; kill the sprite
 RTS
 ; we reached the end 
@@ -235,21 +238,22 @@ STA $0B48, X ; set new delay
 INC $0B38, X ; increase position
 
 .Direction
-    LDA.w $0B48, X : STA $0B30, X ; set new delay
-    
-    JSR CrumbleTilePath_SpawnCrumbleTileGarnish
+LDA.w $0B48, X : STA $0B30, X ; set new delay
+LDA $0AE4 : BNE +
+JSR CrumbleTilePath_SpawnCrumbleTileGarnish
++
 
-    LDY.w $0B38, X
-    LDA ($00), Y : AND #$03 : TAY
+LDY.w $0B38, X
+LDA ($00), Y : AND #$03 : TAY
 
-    LDA $0B08, X : CLC : ADC .x_adjustments_low,  Y : STA $0B08, X
-    LDA $0B10, X : ADC .x_adjustments_high, Y : STA $0B10, X
-    
-    LDA $0B18, X : CLC : ADC .y_adjustments_low,  Y : STA $0B18, X
-    LDA $0B20, X : ADC .y_adjustments_high, Y : STA $0B20, X
+LDA $0B08, X : CLC : ADC .x_adjustments_low,  Y : STA $0B08, X
+LDA $0B10, X : ADC .x_adjustments_high, Y : STA $0B10, X
 
-    INC $0B38, X ; increase position for the next frame
-    RTS
+LDA $0B18, X : CLC : ADC .y_adjustments_low,  Y : STA $0B18, X
+LDA $0B20, X : ADC .y_adjustments_high, Y : STA $0B20, X
+
+INC $0B38, X ; increase position for the next frame
+RTS
 
 .x_adjustments_low
     db 16, -16,   0,   0
@@ -264,27 +268,30 @@ INC $0B38, X ; increase position
     db  0,   0,   0,  -1 
 
 RoomsTilePath: ; By default all rooms use rectangle pattern $00
-db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+;   00   01   02   03   04   05   06   07   08   09   0A   0B   0C   0D   0E   0F
+db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00 ; 00
+db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00 ; 10
+db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $03, $00, $00, $00, $00, $00 ; 20
+db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00 ; 30
+db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00 ; 40
+db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $01, $02, $00, $00, $00 ; 50
+db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00 ; 60
+db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00 ; 70
+db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $03, $00, $00, $00, $00 ; 80
+db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00 ; 90
+db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00 ; A0
+db $00, $00, $00, $00, $04, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00 ; B0
+db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00 ; C0
+db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00 ; D0
+db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00 ; E0
+db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00 ; F0
 
 TilePathPtrs:
 dw TilePath00
 dw TilePath01
 dw TilePath02
+dw TilePath03
+dw TilePath04
 
 ;================================================
 ; Commands can be
@@ -306,32 +313,79 @@ dw TilePath02
 
 ; Normal Rectangle Pattern
 TilePath00:
-db $00 ; Initial Delay
-db !down, !down,  !down,  !down,  !down,  !down
-db !left, !left,  !left,  !left,  !left,  !left, !left
+db $10 ; Initial Delay
+db !down, !down, !down, !down, !down, !down
+db !left, !left, !left, !left, !left, !left, !left
 db !up, !up, !up, !up, !up, !up
 db !right, !right, !right, !right, !right, !right, !right
 db $FF ; End of the path
 
 
-; Z Pattern
+; Rectangle with no delay
 TilePath01:
-db $10
-db !right, !right, !right, !right, !right, $04<<2
-db !down, !left, !down, !left, !down, !left, !down, !left, !down, !left
-db $1F<<2
-db !right, !right, !right, !right, !right, !right
-db $FF
-
-
-; Normal Rectangle Pattern
-TilePath02:
-db $10 ; Initial Delay
-db $3F<<2, !down, $3D<<2, !down, $3B<<2,  !down, $39<<2,  !down, $37<<2,  !down, $35<<2,  !down, $33<<2
-db !left, $30<<2, !left, $2E<<2, !left, $2C<<2, !left, $29<<2, !left, $26<<2, !left, $23<<2, !left
-db $20<<2, !up, $1D<<2, !up, $1A<<2, !up, $18<<2, !up, $15<<2, !up, $12<<2, !up
-db $10<<2, !right, $0D<<2, !right, $0A<<2, !right, $08<<2, !right, $06<<2, !right, $04<<2, !right, $02<<2, !right
+db $00
+db !down, !down, !down, !down, !down, !down ;, $04<<2
+db !left, !left, !left, !left, !left, !left, !left
+db !up, !up, !up, !up, !up, !up ;, $1F<<2
+db !right, !right, !right, !right, !right, !right, !right
 db $FF ; End of the path
 
 
-pushpc
+; Custom chase
+TilePath02:
+db $7F ; Initial Delay
+db $10<<2, !left, !left, !left, !left, !left, !left
+db $0F<<2, !down, !down, !down
+db $0E<<2, !right, !right, !right
+db $0C<<2, !down, !down, !down
+db $0A<<2, !left, !left, !left, !left, !left, !left, !left
+db $08<<2, !up, !up, !up, !up
+db $06<<2, !left, !left, !left, !left, !left, !left, !left
+db $04<<2, !down, !down, !down, !down
+db $02<<2, !left, !left, !left, !left, !left, !left, !left
+db $FF ; End of the path
+
+
+; Custom chase
+;TilePath02:
+;db $7F ; Initial Delay
+;db $12<<2, !left, !left, !left, !left, !left, !left
+;db $11<<2, !down, !down, !down
+;db $10<<2, !right, !right, !right
+;db $09<<2, !down, !down, !down
+;db $08<<2, !left, !left, !left, !left, !left, !left, !left
+;db $07<<2, !up, !up, !up, !up
+;db $06<<2, !left, !left, !left, !left, !left, !left, !left
+;db $04<<2, !down, !down, !down, !down
+;db $02<<2, !left, !left, !left, !left, !left, !left, !left
+;db $FF ; End of the path
+
+
+;Multi-row path; left falls first
+TilePath03:
+db $7F ; Initial Delay
+db $08<<2, !right, !up, !left, !up, !right, !up, !left, !up
+db !right, !up, !left, !up, !right, !up, !left, !up
+
+db $FE, 1<<2, !left, !left, !left, $FE, $08<<2
+
+db !right, !up, !left, !up, !right, !up
+db !left, !up, !right, !up, !left, !up
+
+db $FE, 1<<2, !right, !right, !right, $FE, $08<<2
+
+db !right, !up, !left, !up, !right, !up, !left, !up
+db !right, !up, !left, !up, !right, !up, !left, !up
+
+db $FF ; End of the path
+;calling $FE should disable placing tiles, then calling it again should reenable them again
+
+
+TilePath04:
+db $1F, $0D<<2
+db !down, !down, !down, !right, !right, !right, !right, !right, !right, !right
+db !up, !up, !up, !up, !up, !up, !up, !up, !up, !up, !up, !up, !up, !up, !up, !up, !up, !up
+db !left, !down, !left, !up, !left, !down, !left, !up, !left, !down
+db !down, !down, !down, !down, !down, !down, !down, !down, !left, !down, !down, !down, !down
+db $3F<<2, !left, !left
+db $FF
