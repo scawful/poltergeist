@@ -25,7 +25,8 @@ LevitateZelda_Hook:
 
       ; Remove the follower
       ; Summon a Walking Zelda (0x76) south of player pos
-      ; Create a fn similar to Zelda_TransitionFromTagalong
+      JSR Zelda_TransitionFromTagalong
+
       ; Run another dialogue from Zelda
         ; Dismiss 0x76 Zelda, start 0xC1 Cutscene_Zelda
         ; Run the levitate and warp away animation
@@ -35,6 +36,41 @@ LevitateZelda_Hook:
       ; Change the game state(?)
 
   .no_zelda
+    RTS
+}
+
+; TODO: Modify this routine to spawn Zelda south of Link
+; and have her walk to the right and then up towards the 
+; Weathervane and 0xC1 Cutscene_Zelda spawn position 
+Zelda_TransitionFromTagalong:
+{
+    ; Transition princess Zelda back into a sprite from the tagalong
+    ; state (the sage's sprite is doing this).
+    
+    LDA.b #$76 : JSL Sprite_SpawnDynamically
+    
+    PHX
+    
+    LDX $02CF
+    
+    LDA $1A64, X : AND.b #$03 : STA $0EB0, Y : STA $0DE0, Y
+    
+    LDA $20 : STA $0D00, Y
+    LDA $21 : STA $0D20, Y
+    
+    LDA $22 : STA $0D10, Y
+    LDA $23 : STA $0D30, Y
+    
+    LDA.b #$01 : STA $0E80, Y
+    
+    LDA.b #$00 : STA $7EF3CC
+    
+    LDA $0BA0, Y : INC A : STA $0BA0, Y
+    
+    LDA.b #$03 : STA $0F60, Y
+    
+    PLX
+    
     RTS
 }
 
@@ -51,11 +87,11 @@ CutsceneAgahnim_Main:
 org $1DD581
 AltarZelda_OamGroups:
 {
-  dw  -4,   0 : db $03, $01, $00, $02
-  dw   4,   0 : db $04, $01, $00, $02
+  dw -4,   0 : db $03, $01, $00, $02
+  dw 4,   0 : db $04, $01, $00, $02
 
-  dw  -4,   0 : db $00, $01, $00, $02
-  dw   4,   0 : db $01, $01, $00, $02
+  dw -4,   0 : db $00, $01, $00, $02
+  dw 4,   0 : db $01, $01, $00, $02
 }
 
 ; Main fn for the Zelda subtype of the Cutscene Agahnim sprite
@@ -85,7 +121,7 @@ AltarZelda_Main:
     LDA.b #$00 : XBA
     
     LDA.w $0DC0, X
-    REP #$20 : ASL #4
+    REP   #$20 : ASL #4
     ADC.w #AltarZelda_OamGroups : STA.b $08
     
     SEP #$20
