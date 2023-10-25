@@ -139,7 +139,7 @@ ApplyGraphics:
     RTS
 
     YourBitmap:
-    incbin Tileset.bin
+    incbin tileset.bin
 }
 
 ; ==============================================================================
@@ -162,7 +162,7 @@ ApplyTileMap:
     RTS
 
     YourTileMap:
-    incbin Tilemap.bin
+    incbin tilemap.bin
 }
 
 ; ==============================================================================

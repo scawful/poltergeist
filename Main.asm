@@ -27,6 +27,8 @@ incsrc 0x32CustomObject.asm
 incsrc BigWhirlPool.asm
 incsrc BowTablet.asm
 incsrc BumperASM.asm
+incsrc Clown.asm
+incsrc Doll.asm
 incsrc DWSpawn.asm
 incsrc EntranceAnimation.asm
 incsrc FacadeCB.asm
