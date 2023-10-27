@@ -258,7 +258,7 @@ DrawProgressIcons:
     LDA.w #$1476 : STA $00
     STZ $02
         
-    LDA $7EF374 : AND.w #$0008 : BEQ .pendant4
+    LDA $7EF37A : AND.w #$0001 : BEQ .pendant4
         LDA.w #$292B : STA $1476
         LDA.w #$292C : STA $1478
         LDA.w #$292D : STA $14B6

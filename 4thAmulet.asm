@@ -71,6 +71,14 @@ org $08C31D
 org $08C500
     NOP #$05
 
+; Change where to write the SRM. ; not needed probably
+org $98528
+    ;dw $F37A
+
+; Changes what value to write to the SRM.
+org $0985A0
+    db #$01
+
 function hexto555(h) = ((((h&$FF)/8)<<10)|(((h>>8&$FF)/8)<<5)|(((h>>16&$FF)/8)<<0))
 
 pullpc
