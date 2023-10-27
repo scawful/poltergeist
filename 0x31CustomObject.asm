@@ -5,7 +5,7 @@ pushpc
 org $018262 ;object id 0x31
     dw ExpandedObject31
 
-org $01B53C
+org $01B541
     ExpandedObject31:
     JSL NewObjectsCode31
     RTS

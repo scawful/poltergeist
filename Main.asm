@@ -24,6 +24,7 @@ incsrc engine/sprite_new_functions.asm
 
 incsrc 0x31CustomObject.asm
 incsrc 0x32CustomObject.asm
+incsrc 4thAmulet.asm
 incsrc BigWhirlPool.asm
 incsrc BowTablet.asm
 incsrc BumperASM.asm
