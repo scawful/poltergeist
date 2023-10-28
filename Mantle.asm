@@ -13,7 +13,7 @@ org $1AFCA7
     ; Tiles
     db $0C, $0E, $0C, $2C, $2E, $2C
     ; Mantle Properties : 
-    db $3D, $3D, $7D, $3D, $3D, $7D
+    db $3B, $3B, $7B, $3B, $3B, $7B
 
 pullpc
 

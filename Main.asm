@@ -8,6 +8,7 @@ incsrc Collision.asm
 incsrc DrawChanges.asm
 incsrc FixPumpkinDoor.asm
 incsrc SparkleTitlescreen.asm
+incsrc CustomSprProperties.asm
 
 incsrc engine/Macros.asm
 incsrc engine/sprite_functions_hooks.asm
@@ -49,6 +50,8 @@ incsrc SpookyInventory.asm
 incsrc TitleScreen.asm
 incsrc UncleFlicker.asm
 incsrc IntroZelda.asm
+incsrc DamageHole.asm
+incsrc StalfosLayeredOam.asm
 
 pushpc
 incsrc ZSCustomOverworld.asm
