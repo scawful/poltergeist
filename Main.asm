@@ -48,6 +48,7 @@ incsrc SpookyInventory.asm
 incsrc TitleScreen.asm
 incsrc UncleFlicker.asm
 incsrc IntroZelda.asm
+incsrc DamageHole.asm
 
 ; incsrc PortMain.asm ; This will need to be fixed before it can be put in.
 
