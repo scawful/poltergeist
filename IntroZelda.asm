@@ -1,3 +1,4 @@
+; =============================================================================
 ; Zelda Intro Cutscene
 ; Uses 76 Zelda and C1 Cutscene Agahnim
 
@@ -5,60 +6,156 @@
 org $1D8549
 Sprite4_DrawMultiple:
 
-; org $1DD6B1
-; AltarZelda_DrawWarpEffect:
+org $05F93F
+Sprite2_DirectionToFacePlayer:
 
-org $1DD5E9
-AltarZelda_DrawBody:
+; =============================================================================
 
-; We should jump here when sprite 0xC1 comes into frame
-; in CutsceneAgahnim_Main before Cutscene_Zelda
-org $248000
-LevitateZelda_CheckForStartCutscene:
+; Hook into the Cutscene Agahnim sprite
+org $1DD23F
+CutsceneAgahnim_Main:
 {
-    ; Check for the position of the player 
+  LDA $35 : BNE .start_cutscene
+  JSL Zelda_CheckForStartCutscene
+  JMP .return
+
+  .start_cutscene
+    ; Start the levitate sequence 
+    LDA.b #$FF : STA $0DF0, X ; Timer0
+    LDA.b #$01 : STA $0DC0, X
+    
+    ; Increase the sprite height 
+    LDA.w SprTimerC, X : BNE .dontchangeheight
+    INC.w SprHeight, X
+    ; LDA.w SprMiscA, X : STA.w SprTimerC, X : DEC : STA.w SprMiscA, X
+    .dontchangeheight
+
+    ; Check the height of the sprite, dismiss once its gone 
+    LDA SprHeight, X : CMP.b #$FF : BCC .draw_zelda
+    STZ $0DD0,     X
+
+  .draw_zelda
+    
+    ; JSR $D57D ; Sprite_AltarZelda -> AltarZelda_Main
+    
+    LDA $0D80, X : JSL UseImplicitRegIndexedLocalJumpTable
+
+    dw $D5A1 ; AltarZelda_Main
+
+  .return
+    RTS
+}
+warnpc $1DD284
+
+; =============================================================================
+; 0x76 Zelda Sprite Hooks
+
+; $2ED76-$2ED7D DATA
+org    $05ED76
+Zelda_WalkTowardsPriest:
+{
+  .timers
+    ;db $26, $1A, $2C, $01
+    db $1A, $1A, $2C, $01
+  .directions
+    ; db $04, $03, $02, $01
+    db   $00, $00, $00, $00
+}
+
+; *$2EDC4-$2EDEB JUMP LOCATION
+org $05EDC4
+Zelda_RespondToPriest:
+{
+    ; "Yes, it was [Name] who helped me escape from the dungeon! ..."
+    LDA.b #$1D : LDY.b #$00
+    JSL   Sprite_ShowMessageUnconditional
+    
+    INC $0D80, X ; Move to Zelda_BeCarefulOutThere next state
+    
+    LDA.b #$02 : STA $7FFE01 ; Zelda rescue dialog counter 
+    LDA.b #$01 : STA $7EF3C8 ; Set Sanctuary Spawn point 
+
+    REP #$30 : LDA.b #$30 : STA SprTimerD, X : SEP   #$30
+    
+    ; ; Change the game state
+    ; LDA.b #$02 : STA $7EF3C5
+    
+    ; ; Sprite_LoadGfxProperties.justLightWorld
+    ; PHX : JSL $00FC62 : PLX
+    
+    RTS
+}
+
+Zelda_BeCarefulOutThere:
+{
+    JSR Sprite2_DirectionToFacePlayer : TYA : EOR.b #$03 : STA $0EB0, X
+
+    LDA SprTimerD, X : BNE .didnt_speak
+    
+    LDA #$01 : STA $35
+    STZ $0DD0, X
+    ; ; "[Name], be careful out there! I know you can save Hyrule!"
+    ; LDA.b #$1E
+    ; LDY.b #$00
+    
+    ; JSL Sprite_ShowSolicitedMessageIfPlayerFacing : BCC .didnt_speak
+    
+    ; STA $0DE0, X
+    ; STA $0EB0, X
+
+.didnt_speak
+
+    RTS
+}
+
+
+; =============================================================================
+; Custom Code Region 
+
+org $248000
+; Check for the position of the player 
+Zelda_CheckForStartCutscene:
+{
     REP #$20
-    LDA $0FD8 ; Sprite X
-    SEC : SBC $22 ; - Player X
-    BPL +
+    ; Sprite X - Player X
+    LDA $0FD8 : SEC : SBC $22 : BPL .positive_x
     EOR #$FFFF
-    +
-    STA $00 ; Distance X (ABS)
-
-    LDA $0FDA ; Sprite Y
-    SEC : SBC $20 ; - Player Y
-    BPL +
+  .positive_x
+    STA $00                                     ; Distance X (ABS)
+    ; Sprite Y - Player Y
+    LDA $0FDA : SEC : SBC $20 : BPL .positive_y
     EOR #$FFFF
-    +
+  .positive_y
     ; Add it back to X Distance
-    CLC : ADC $00 : STA $02 ; distance total X, Y (ABS)
-
+    CLC : ADC $00 : STA $02    ; distance total X, Y (ABS)
+    ; Distance away from player
     CMP #$0040 : BCS .no_zelda
     SEP #$20
 
     ; If player is near, check for Zelda follower
     LDA $7EF3CC : CMP.b #$01 : BNE .no_zelda
+    JSR Uncle_GiveSwordAndShield
+    JSR Zelda_TransitionFromTagalong
 
-      ; TODO: Grant the player the Sword and Shield.
-      JSR Zelda_TransitionFromTagalong
-
-      LDA #$01 : STA $35
-      RTL
-
-      ; TODO: Run the levitate and warp away animation
-      ; TODO: Based on CutsceneAgahnim_LevitateZelda hardcoded
-
-      ; TODO: Set RAM to dismiss village guards
-      ; TODO: Change the game state(?)
+    LDA #$FF : STA SprTimerC, X
+    
+    RTL
 
   .no_zelda
     SEP #$20
     RTL
 }
 
-; TODO: Modify this routine to spawn Zelda south of Link
-; and have her walk to the right and then up towards the 
-; Weathervane and 0xC1 Cutscene_Zelda spawn position 
+Uncle_GiveSwordAndShield:
+{
+  LDY.b #$00 : STZ $02E9
+  JSL   Link_ReceiveItem
+  LDA.b #$01 : STA $0DC0, X
+
+  LDA.b #$01 : STA $7EF3C5
+  RTS
+}
+
 Zelda_TransitionFromTagalong:
 {
     ; Transition princess Zelda back into a sprite from the tagalong
@@ -100,7 +197,7 @@ Zelda_SpawnAndLevitate:
   
   JSL Sprite_SetSpawnedCoords
   
-  LDA $02 : CLC : ADC.b #$28 : STA $0D00, Y
+  LDA $02 : CLC : ADC.b #$28 : STA $0D00, Y ; Y Pos
   
   LDA.b #$00 : STA $0E40, Y
   
@@ -109,69 +206,12 @@ Zelda_SpawnAndLevitate:
   RTL
 }
 
-; $2ED76-$2ED7D DATA
-org $05ED76
-Zelda_WalkTowardsPriest:
-{
-  .timers
-    db $26, $1A, $2C, $01
-
-  .directions
-    ; db $04, $03, $02, $01
-    db $00, $00, $00, $00
-}
-
-; *$2EDC4-$2EDEB JUMP LOCATION
-org $05EDC4
-Zelda_RespondToPriest:
-{
-    ; "Yes, it was [Name] who helped me escape from the dungeon! ..."
-    LDA.b #$1D
-    LDY.b #$00
-    
-    JSL Sprite_ShowMessageUnconditional
-    
-    INC $0D80, X
-    
-    LDA.b #$02 : STA $7FFE01
-    
-    LDA.b #$01 : STA $7EF3C8
-
-    ; JSL $00F9DD ; SavePalaceDeaths
-    
-    ; LDA.b #$02 : STA $7EF3C5
-    
-    ; PHX
-    
-    ; JSL $00FC62 ; Sprite_LoadGfxProperties.justLightWorld
-    
-    ; PLX
-    
-    RTS
-}
-
-; Hook into the Cutscene Agahnim sprite
-org $1DD23F
-CutsceneAgahnim_Main:
-{
-  LDA $35 : BNE .cutscene_started
-  JSL LevitateZelda_CheckForStartCutscene
-  JMP .draw_zelda  
-
-  .cutscene_started
-    ; Skip straight to Levitate Zelda Sprite
-    LDA.b #$50 : STA $0DF0, X ; Timer0
-    LDA.b #$01 : STA $0DCF
-    LDA.b #$02 : STA $0E80, X
-    LDA.b #$FF : STA $0E30, X
-  .draw_zelda
-    JSR $D57D ; Sprite_AltarZelda -> AltarZelda_Main
-    
-  .no_warp
-    RTS
-}
+; =============================================================================
 
 ; Hook into the Cutscene AltarZelda sprite
+org $1DD5E9
+AltarZelda_DrawBody:
+
 ; sheet00 $03, $04, $00, $00
 ; sheet01 $43, $44, $40, $40
 ; sheet02 $83, $84, $80, $80
@@ -191,23 +231,23 @@ AltarZelda_OamGroups:
 org $1DD5A1
 AltarZelda_Main:
 {
-    LDA.w $0DF0, X 
-    BEQ .not_telewarping_zelda
+    LDA.w $0DF0, X
+    BEQ   .not_telewarping_zelda
     
     ; Draw telewarp effect
-    PHA : JSR AltarZelda_DrawWarpEffect : PLA 
+    PHA   : JSR AltarZelda_DrawWarpEffect : PLA
     CMP.b #$01 : BNE .delay_self_termination
     
     STZ.w $0DD0, X
 
-.delay_self_termination
+  .delay_self_termination
 
     CMP.b #$0C : BCS .also_draw_zelda_body
     
     RTS
 
-.also_draw_zelda_body
-.not_telewarping_zelda
+  .also_draw_zelda_body
+  .not_telewarping_zelda
 
     LDA.b #$08 : JSL OAM_AllocateFromRegionA
     LDA.b #$00 : XBA
@@ -227,22 +267,22 @@ AltarZelda_Main:
 
 ; $ED661-$ED6B0 DATA
 org $1DD661
-WarpEffect_oam_groups:
+AltarZelda_WarpEffectOam:
 {
-    dw  4, 4 : db $80, $04, $00, $00
-    dw  4, 4 : db $80, $04, $00, $00
+    dw 4, 4 : db $80, $04, $00, $00
+    dw 4, 4 : db $80, $04, $00, $00
     
-    dw  4, 4 : db $B7, $04, $00, $00
-    dw  4, 4 : db $B7, $04, $00, $00
+    dw 4, 4 : db $B7, $04, $00, $00
+    dw 4, 4 : db $B7, $04, $00, $00
     
     dw -6, 0 : db $24, $05, $00, $02
-    dw  6, 0 : db $24, $45, $00, $02
+    dw 6, 0 : db $24, $45, $00, $02
     
     dw -8, 0 : db $24, $05, $00, $02
-    dw  8, 0 : db $24, $45, $00, $02
+    dw 8, 0 : db $24, $45, $00, $02
     
-    dw  0, 0 : db $C6, $05, $00, $02
-    dw  0, 0 : db $C6, $05, $00, $02
+    dw 0, 0 : db $C6, $05, $00, $02
+    dw 0, 0 : db $C6, $05, $00, $02
 }
 
 org $1DD6B1
@@ -254,7 +294,7 @@ AltarZelda_DrawWarpEffect:
     
     LDA $0DF0, X : LSR #2 : REP #$20 : ASL #4
     
-    ADC.w #WarpEffect_oam_groups : STA $08
+    ADC.w #AltarZelda_WarpEffectOam : STA $08
     
     SEP #$20
     
