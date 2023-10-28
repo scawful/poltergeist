@@ -8,6 +8,7 @@ incsrc Collision.asm
 incsrc DrawChanges.asm
 incsrc FixPumpkinDoor.asm
 incsrc SparkleTitlescreen.asm
+incsrc CustomSprProperties.asm
 
 incsrc engine/Macros.asm
 incsrc engine/sprite_functions_hooks.asm

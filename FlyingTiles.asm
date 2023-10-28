@@ -20,9 +20,9 @@ NewSpawnFlyingTile:
 
         PHX : LDA $0B28, X : TAX
 
-        LDA $A0 : CMP #$61 : BNE +
-            LDA.l TilesRoom61X, X : STA $0D10, Y
-            LDA.l TilesRoom61Y, X : SEC : SBC #$08 : STA $0D00, Y
+        LDA $A0 : CMP #$8D : BNE +
+            LDA.l TilesRoom8DX, X : STA $0D10, Y
+            LDA.l TilesRoom8DY, X : SEC : SBC #$08 : STA $0D00, Y
 
         +
         ;LDA $A0 : CMP #$08 : BNE +
@@ -60,7 +60,7 @@ NewSpawnFlyingTile:
 
     .spawn_failed
 
-    RTS
+    RTL
 
 
     DefaultTilesX:
@@ -73,12 +73,12 @@ NewSpawnFlyingTile:
     db $60, $A0, $60, $B0, $60, $B0, $80, $90
     db $80, $90, $70, $90, $70, $90
 
-    TilesRoom61X:
+    TilesRoom8DX:
     db $70, $80, $60, $90, $90, $60, $70, $80
     db $80, $70, $50, $A0, $A0, $50, $50, $A0
     db $A0, $50, $70, $80, $80, $70
 
-    TilesRoom61Y:
+    TilesRoom8DY:
     db $40, $40, $60, $80, $60, $90, $60, $A0
     db $60, $A0, $60, $B0, $60, $B0, $80, $90
     db $80, $90, $70, $90, $70, $90
@@ -90,7 +90,7 @@ NewTileReplace:
 {
     STA $03
 
-    LDA $A0 : CMP #$61 : BNE +
+    LDA $A0 : CMP #$8D : BNE +
         LDY #$04
         RTL
 

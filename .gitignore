@@ -6,3 +6,4 @@ patched.cpu.sym
 patched.sfc
 patched.smp.sym
 patched.srm
+*.bst
