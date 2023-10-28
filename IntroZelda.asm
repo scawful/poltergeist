@@ -21,23 +21,20 @@ CutsceneAgahnim_Main:
 
   .start_cutscene
     ; Start the levitate sequence 
-    LDA.b #$FF : STA $0DF0, X ; Timer0
-    LDA.b #$01 : STA $0DC0, X
-    
-    ; Increase the sprite height 
-    LDA.w SprTimerC, X : BNE .dontchangeheight
-    INC.w SprHeight, X
-    ; LDA.w SprMiscA, X : STA.w SprTimerC, X : DEC : STA.w SprMiscA, X
-    .dontchangeheight
+    LDA.b #$40 : STA $0DF0, X ; Set Timer0 for AltarZelda_Main
+    LDA.b #$01 : STA $0DC0, X ; Move Zelda to next anim frame
 
-    ; Check the height of the sprite, dismiss once its gone 
-    LDA SprHeight, X : CMP.b #$FF : BCC .draw_zelda
-    STZ $0DD0,     X
+      LDA $35 : CMP #$02 : BEQ .summoned
+        LDA #$90 : JSL Sprite_SpawnDynamically
+        JSL Sprite_SetSpawnedCoords
+      LDA #$02 : STA $35
+    .summoned
+
+    JSL Zelda_LevitateAway
 
   .draw_zelda
     
     ; JSR $D57D ; Sprite_AltarZelda -> AltarZelda_Main
-    
     LDA $0D80, X : JSL UseImplicitRegIndexedLocalJumpTable
 
     dw $D5A1 ; AltarZelda_Main
@@ -77,12 +74,6 @@ Zelda_RespondToPriest:
 
     REP #$30 : LDA.b #$30 : STA SprTimerD, X : SEP   #$30
     
-    ; ; Change the game state
-    ; LDA.b #$02 : STA $7EF3C5
-    
-    ; ; Sprite_LoadGfxProperties.justLightWorld
-    ; PHX : JSL $00FC62 : PLX
-    
     RTS
 }
 
@@ -93,6 +84,7 @@ Zelda_BeCarefulOutThere:
     LDA SprTimerD, X : BNE .didnt_speak
     
     LDA #$01 : STA $35
+    LDA #$27 : STA $012F
     STZ $0DD0, X
     ; ; "[Name], be careful out there! I know you can save Hyrule!"
     ; LDA.b #$1E
@@ -103,11 +95,10 @@ Zelda_BeCarefulOutThere:
     ; STA $0DE0, X
     ; STA $0EB0, X
 
-.didnt_speak
+  .didnt_speak
 
     RTS
 }
-
 
 ; =============================================================================
 ; Custom Code Region 
@@ -134,10 +125,14 @@ Zelda_CheckForStartCutscene:
 
     ; If player is near, check for Zelda follower
     LDA $7EF3CC : CMP.b #$01 : BNE .no_zelda
+
+    LDA.b #$21 : LDY.b #$00
+    JSL   Sprite_ShowMessageUnconditional
+
     JSR Uncle_GiveSwordAndShield
     JSR Zelda_TransitionFromTagalong
 
-    LDA #$FF : STA SprTimerC, X
+    LDA #$99 : STA SprTimerC, X
     
     RTL
 
@@ -187,24 +182,64 @@ Zelda_TransitionFromTagalong:
     RTS
 }
 
-Zelda_SpawnAndLevitate:
+SummonRogueWallmaster:
 {
- ; Spawn the Zelda companion sprite so Agahnim has something to teleport.
-  LDA.b #$C1 : JSL Sprite_SpawnDynamically
-  
-  LDA.b #$01 : STA $0D90, Y
-               STA $0BA0, Y
-  
+  LDA #$90 : JSL Sprite_SpawnDynamically
   JSL Sprite_SetSpawnedCoords
-  
-  LDA $02 : CLC : ADC.b #$28 : STA $0D00, Y ; Y Pos
-  
-  LDA.b #$00 : STA $0E40, Y
-  
-  LDA.b #$0C : STA $0F50, Y
-  
+  LDA $0D00, Y : SEC : SBC.b #$20 : STA $0D00, Y
+  ; LDA #$01 : STA $0D80, Y ; Set subtype
   RTL
 }
+
+Zelda_LevitateAway:
+{
+  ; Increase the sprite height 
+  LDA.w SprTimerC, X : BNE .dontchangeheight
+    INC.w SprHeight, X
+    LDA #$28 : STA $012F ; Play warp away sfx
+    ; LDA.w SprMiscA, X : STA.w SprTimerC, X : DEC : STA.w SprMiscA, X
+  .dontchangeheight
+
+  ; Check the height of the sprite, dismiss once its gone 
+  LDA SprHeight, X : CMP.b #$9F : BCC .draw_zelda
+
+    ; Spawn a rogue wallmaster
+    LDA #$90 : JSL Sprite_SpawnDynamically
+
+    PHX
+    
+    LDX $02CF
+    
+    LDA $1A64, X : AND.b #$03 : STA $0EB0, Y : STA $0DE0, Y
+    LDA $20 : CLC : ADC.b #$02 : STA $0D00, Y ; SprY Low
+    LDA $21 : STA $0D20, Y ; SprY High
+    LDA $22 : STA $0D10, Y ; SprX Low
+    LDA $23 : STA $0D30, Y ; SprX High
+    LDA.b #$01 : STA $0E80, Y ; SprDelay
+    LDA $0BA0, Y : INC A : STA $0BA0, Y
+    
+    ; ISPH HHHH - [I ignore collisions][S Statis (not alive eg beamos)][P Persist code still run outside of camera][H Hitbox] 
+    LDA.b #$03 : STA $0F60, Y ; SprHitbox
+    
+    PLX
+
+    ; Change the game state
+    LDA.b #$02 : STA $7EF3C5
+    LDA.b #$01 : STA $7EF3C8
+    LDA.b #$04 : STA $7EF3C6
+    
+    ; Sprite_LoadGfxProperties.justLightWorld
+    PHX : JSL $00FC62 : PLX
+
+    LDA #$4D : STA $04AA
+
+    ; Goodbye Zelda
+    STZ $0DD0,     X
+
+.draw_zelda
+  RTL
+}
+
 
 ; =============================================================================
 
