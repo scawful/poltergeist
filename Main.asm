@@ -28,6 +28,7 @@ incsrc 4thAmulet.asm
 incsrc BigWhirlPool.asm
 incsrc BowTablet.asm
 incsrc BumperASM.asm
+incsrc CastleBGGFX.asm
 incsrc Clown.asm
 incsrc Doll.asm
 incsrc DWSpawn.asm
@@ -48,6 +49,10 @@ incsrc SpookyInventory.asm
 incsrc TitleScreen.asm
 incsrc UncleFlicker.asm
 incsrc IntroZelda.asm
+
+pushpc
+incsrc ZSCustomOverworld.asm
+pullpc
 
 ; incsrc PortMain.asm ; This will need to be fixed before it can be put in.
 
