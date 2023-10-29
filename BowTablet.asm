@@ -79,7 +79,7 @@ EtherTabletDuringCrumblingHook:
     LDA.b #$01 :  STA $02DA  : STA $037B
     
     INC $0D80, X
-    LDA.b #$F0 : STA $0E00, X
+    LDA.b #$8E : STA $0E00, X
     LDA.b #$60 : STA $0DF0, X ; Delay before sword start to fall (must not be too high)
     
     RTL
@@ -105,12 +105,11 @@ EtherTabletAfterCrumblingHook:
     LDA $0DF0, X : BNE .delay
     LDA $7EF340 : CMP #$01 : BCS .noDraw
     PHB : PHK : PLB
-    LDA $20 : CLC : ADC #$09 : STA $00
     INC $0DE0, X
     INC $0DE0, X ; Can remove that line to reduce the falling sword speed
     ;IF you removed the line above, scroll lower in SwordFallingDraw function another value need to be changed
 
-    LDA $0DE0, X : CLC : ADC #$10 : CMP $00 : BCC +
+    LDA $0DE0, X : CMP $20 : BCC +
         STZ $0E00, X
     +
     JSR SwordFallingDraw
