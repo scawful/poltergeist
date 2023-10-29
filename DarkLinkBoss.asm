@@ -130,7 +130,7 @@ Sprite_DarkLink_Main:
 {
   LDA.w SprAction, X; Load the SprAction
   JSL UseImplicitRegIndexedLocalJumpTable; Goto the SprAction we are currently in
-  dw Action00
+  dw Handler
   dw SwordSlash
   dw JumpBack
   dw JumpAttackUp
@@ -147,12 +147,397 @@ Sprite_DarkLink_Main:
   dw Dead
   dw Enraging
 
+  Handler:
+  {  
+    LDA.w SprSubtype, X : CMP #$01 : BNE +
+    %SetTimerA(16)
+    %GotoAction(10)
+    RTS
+    +
 
-  Action00:
+    LDA.w SprMiscF, X : BNE .nodamage
+    JSL Sprite_CheckDamageFromPlayer : BCC .nodamage
 
 
 
-  RTS
+    LDA #$20
+    JSL Sprite_ApplySpeedTowardsPlayer
+    LDA.w SprXSpeed, X : EOR #$FF : STA.w SprXSpeed, X
+    LDA.w SprYSpeed, X : EOR #$FF : STA.w SprYSpeed, X
+    LDA.b #$10 : STA.w $0F80,X
+    LDA.b #$20 : STA.w SprTimerA, X
+    LDA #$26 : STA.w $012E
+    %GotoAction(8)
+    RTS
+    .nodamage
+    JSL Sprite_CheckDamageToPlayer
+
+
+    LDA #$10
+    JSL Sprite_ApplySpeedTowardsPlayer
+
+    REP #$20
+
+    LDA $0FD8 ; Sprite X
+    SEC : SBC $22 ; - Player X
+    BPL +
+    EOR #$FFFF
+    +
+    STA $00 ; Distance X (ABS)
+
+    LDA $0FDA ; Sprite Y
+    SEC : SBC $20 ; - Player Y
+    BPL +
+    EOR #$FFFF
+    +
+    ; Add it back to X Distance
+    CLC : ADC $00 : STA $02 ; distance total X, Y (ABS)
+
+    CMP #$0020 : BCS .toofarsword
+    .dosword
+    SEP #$20
+    LDA.w SprTimerC, X : BNE ++
+    ; attempt a slash if we can
+
+    LDA.w SprMiscD, X : BNE +
+    STZ.w SprFrame, X
+    BRA .skipdirections
+    +
+    LDA.w SprMiscD, X : CMP #$01 : BNE +
+    LDA.b #06 : STA.w SprFrame, X
+    BRA .skipdirections
+    +
+    LDA.w SprMiscD, X : CMP #$02 : BNE +
+    LDA.b #12 : STA.w SprFrame, X
+    BRA .skipdirections
+    +
+    LDA.b #18 : STA.w SprFrame, X
+    +
+
+    .skipdirections
+
+
+    JSR SpawnSwordDamage
+
+    %GotoAction(1)
+    ++
+    REP #$20
+    .toofarsword
+    LDA $02 : CMP #$002B : BCS .toofardodge
+    SEP #$20
+
+    LDA.w SprMiscF : BNE .toofardodge
+
+
+    LDA.w $0354 : CMP #$27 : BEQ .attemptToDodge
+    CMP #$02 : BEQ .attemptToDodge
+    CMP #$0F : BNE .toofardodge
+
+    ; only once per slash !
+
+    .attemptToDodge
+
+    ;check if we are using spin attack
+    LDA.b $3C : CMP #$90 : BNE .nospin
+
+    ; determine if player is going to dodge it or not
+    LDA $1A : AND #$01 : BEQ .dodge
+
+    .nospin
+    LDA.w SprMiscB, X : CMP.w $0354 : BEQ .toofardodge
+
+
+    LDA.w SprMiscC, X : BNE .enrageddodge
+    LDA $1A : AND #$03 : BEQ .toofardodge ; 50/50 chances of dodging
+    BRA .dodge
+    .enrageddodge
+    LDA $1A : AND #$07 : BEQ .toofardodge ; 50/50 chances of dodging
+
+    .dodge
+    LDA #$16
+    JSL Sprite_ApplySpeedTowardsPlayer
+    LDA.w SprXSpeed, X : EOR #$FF : STA.w SprXSpeed, X
+    LDA.w SprYSpeed, X : EOR #$FF : STA.w SprYSpeed, X
+    LDA.b #$1A : STA.w $0F80,X
+
+    %GotoAction(2)
+
+    RTS
+
+    .toofardodge
+
+    SEP #$20
+
+
+    .linknotattacking
+    LDA.w $0354 : STA.w SprMiscB, X
+
+    STZ $02 ; x direction if non zero = negative
+    STZ $03 ; y direction
+
+    LDA.w SprXSpeed, X : BPL .positiveX
+    STA $02
+    EOR #$FF
+    .positiveX
+    STA $00 ; X speed (abs)
+
+    LDA.w SprYSpeed, X : BPL .positiveY
+    STA $03
+    EOR #$FF
+    .positiveY
+    STA $01 ; Y speed (abs)
+
+
+    LDA.w SprXSpeed, X : CMP.b #$08 : BCC .zeroXSpeed
+    BPL .positiveXspeed
+    LDA #$F0 : STA.w SprXSpeed, X
+    BRA .doYspeed
+    .positiveXspeed
+    LDA #$10 : STA.w SprXSpeed, X
+    BRA .doYspeed
+    .zeroXSpeed
+    STZ.w SprXSpeed, X
+    .doYspeed
+    LDA.w SprYSpeed, X : CMP.b #$08 : BCC .zeroYSpeed
+
+    BPL .positiveYspeed
+    LDA #$F0 : STA.w SprYSpeed, X
+    BRA .ignorezerospeed
+    .positiveYspeed
+    LDA #$10 : STA.w SprYSpeed, X
+    BRA .ignorezerospeed
+    .zeroYSpeed
+    STZ.w SprYSpeed, X
+    .ignorezerospeed
+
+    LDA.w SprXSpeed, X : BEQ .nodiagonal 
+    LDA.w SprYSpeed, X : BEQ .nodiagonal 
+    BPL .diagoyspeedpositive
+    LDA #$F5 : STA.w SprYSpeed, X
+    BRA .dodiagox
+    .diagoyspeedpositive
+    LDA #$0B : STA.w SprYSpeed, X
+
+
+    .dodiagox
+    LDA.w SprXSpeed, X
+    BPL .diagoxspeedpositive
+    LDA #$F5 : STA.w SprXSpeed, X
+    BRA .nodiagonal
+    .diagoxspeedpositive
+    LDA #$0B : STA.w SprXSpeed, X
+
+    .nodiagonal
+
+
+    LDA.w SprTimerD, X : BNE +
+    TXY ; save X in Y
+    JSL GetRandomInt : CMP #$3F : BCC .donothing
+    LDA.w SprMiscF, X : BEQ .notusingcape
+    JSR Cape
+    BRA .donothing
+    .notusingcape
+    JSL GetRandomInt : AND #$03 : ASL ; use that as jump table
+    TAX ; set X to do the jump table
+    JSR (ActionJumpTable, X)
+
+    .donothing
+    LDA.w SprMiscC, X : BEQ .notenraged
+    JSL GetRandomInt : AND #$3F : CLC : ADC #$20
+    BRA .settimer
+    .notenraged
+    JSL GetRandomInt : AND #$3F : CLC : ADC #$50
+    .settimer
+    STA.w SprTimerD, X
+    ;RTS
+    +
+
+
+
+
+    .DoWalk
+    JSL Sprite_MoveLong
+
+    LDA.b $01 : CMP.b $00 : BCC .xwassmaller
+    ; if X is smaller than y were moving on y axis
+    LDA $03 : BNE .up
+    ; down
+    STZ.w SprMiscD, X
+    LDA.w SprTimerB, X : BNE +
+        LDA.w SprFrame, X : INC : STA.w SprFrame, X : CMP.b #12 : BCC .noframereset1
+        .resetframe1
+        LDA.b #4 : STA.w SprFrame, X
+        .noframereset1
+        CMP #4 : BCC .resetframe1
+        LDA.b #4 : STA.w SprTimerB, X
+        LDA.w SprTimerA, X : BNE +
+    +
+    BRA .end
+    .up
+    LDA #$01 : STA.w SprMiscD, X
+    LDA.w SprTimerB, X : BNE +
+        LDA.w SprFrame, X : INC : STA.w SprFrame, X : CMP.b #20 : BCC .noframereset2
+        .resetframe2
+        LDA.b #12 : STA.w SprFrame, X
+        .noframereset2
+        CMP #12 : BCC .resetframe2
+        LDA.b #4 : STA.w SprTimerB, X
+    +
+    BRA .end
+    .xwassmaller
+    ; were moving on x axis
+    LDA $02 : BNE .left
+    ; right
+    LDA #$02 : STA.w SprMiscD, X
+    LDA.w SprTimerB, X : BNE +
+        LDA.w SprFrame, X : INC : STA.w SprFrame, X : CMP.b #24 : BCC .noframereset3
+        .resetframe3
+        LDA.b #20 : STA.w SprFrame, X
+        .noframereset3
+        CMP #20 : BCC .resetframe3
+        LDA.b #4 : STA.w SprTimerB, X
+    +
+    BRA .end
+    .left
+    LDA #$03 : STA.w SprMiscD, X
+    LDA.w SprTimerB, X : BNE +
+        LDA.w SprFrame, X : INC : STA.w SprFrame, X : CMP.b #28 : BCC .noframereset4
+        .resetframe4
+        LDA.b #24 : STA.w SprFrame, X
+        .noframereset4
+        CMP #24 : BCC .resetframe4
+        LDA.b #4 : STA.w SprTimerB, X
+    +
+    BRA .end
+
+    .end
+    RTS
+
+
+    ActionJumpTable:
+    dw JumpAttack ;00
+    dw Cape ;02
+    dw Bomb ;04
+    dw BombThrow ;04
+    ;dw Walk ;06
+
+
+
+    Bomb:
+    TYX ; get back sprite index
+
+    ;second guess itself because it can spawn too many bombs
+    LDA $1A : AND #$01 : BNE .spawn_failed ; 50/50 chances
+
+    LDA.b #$4A
+    LDY.b #$0B
+    JSL $1DF65F : BMI .spawn_failed
+
+    JSL $09AE64
+
+    ; ... but once spawned, transmute it to an enemy bomb.
+    JSL $06AD50
+    JSL GetRandomInt : AND #$7F : CLC : ADC #$20
+    STA $0E00, Y
+    .spawn_failed
+    RTS
+
+    BombThrow:
+    TYX ; get back sprite index
+
+    ;second guess itself because it can spawn too many bombs
+    LDA $1A : AND #$01 : BNE .spawn_failed ; 50/50 chances
+
+    LDA.b #$4A
+    LDY.b #$0B
+    JSL $1DF65F : BMI .spawn_failed
+    JSL $09AE64
+    ; ... but once spawned, transmute it to an enemy bomb.
+    JSL $06AD50
+
+    PHX
+    TYX
+    LDA.b #$28 : JSL Sprite_ApplySpeedTowardsPlayer
+    LDA.b #$01 : STA $0DB0, X
+    LDA.b #$16 : STA $0F80, X
+    JSL GetRandomInt : AND #$7F : CLC : ADC #$20
+    STA $0E00, X
+    PLX
+
+    .spawn_failed
+    RTS
+
+
+    Cape:
+    TYX ; get back sprite index
+    LDA.w SprMiscF, X : BNE +
+    LDA $1A : AND #$01 : BNE .nocape ; 50/50 chances
+    +
+    JSL $05AB9C
+    LDA.w SprMiscF, X : EOR #$01 : STA.w SprMiscF, X
+    .nocape
+    RTS
+
+    Walk:
+    TYX ; get back sprite index
+    %GotoAction(7)
+    JSL GetRandomInt : AND #$1F : CLC : ADC #$18
+    STA.w SprTimerA, X
+    JSL GetRandomInt
+    AND #$03
+    TAY
+    LDA speedTableX, Y : STA SprXSpeed, X
+    LDA speedTableY, Y : STA SprYSpeed, X
+
+
+    RTS
+
+
+    JumpAttack:
+    TYX ; get back sprite index
+    LDA #$20
+    JSL Sprite_ApplySpeedTowardsPlayer
+    LDA.b #$28 : STA.w $0F80,X
+    LDA.b #$10 : STA.w SprTimerA, X
+    %GotoAction(5)
+    JSL GetRandomInt : AND #$3F : CLC : ADC #$50
+    STA.w SprTimerD, X
+    ; that one is popping the RTS to end sprite entirely
+    ;PLA : PLA
+    RTS
+
+
+
+    SpawnSwordDamage:
+
+    LDA #24 : STA.w SprTimerC, X
+    LDA.w SprMiscC, X : BEQ +
+    LDA #15 : STA.w SprTimerC, X ;faster if enraged
+    +
+    LDA #$06 : STA.w SprTimerB, X
+    LDA #$03 : STA.w $012E
+
+
+    LDA #$00 ; SET THE RIGHT SPRITE ID!! ======================CHANGE========================
+    JSL Sprite_SpawnDynamically
+    JSL Sprite_SetSpawnedCoords
+    PHX
+    LDA #$01 : STA.w SprSubtype, Y
+    LDA.w SprMiscD, X
+    TYX
+    TAY
+    LDA.w SprX, X : CLC : ADC.w DirOffsetX, Y : STA.w SprX, X
+    LDA.w SprY, X : CLC : ADC.w DirOffsetY, Y : STA.w SprY, X
+
+
+    PLX
+    RTS
+
+    DirOffsetX:
+    db $00, $00, $0E, $F2
+    DirOffsetY:
+    db $0E, $F2, $00, $00
+  }
 
   SwordSlash:
   JSL Sprite_CheckDamageFromPlayer : BCC .nodamage
@@ -447,7 +832,7 @@ Sprite_DarkLink_Main:
   .positiveY
   STA $01 ; Y speed (abs)
 
-  JMP Action00_DoWalk
+  JMP Handler_DoWalk
 
   RTS
 
