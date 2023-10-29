@@ -37,17 +37,23 @@
 ; handle the draw code and if the sprite is active and should move or not
 ;==================================================================================================
 Sprite_Poltergeist_Long:
-PHB : PHK : PLB
+{
+  PHB : PHK : PLB
 
-JSR Sprite_Poltergeist_Draw ; Call the draw code
-JSL Sprite_CheckActive   ; Check if game is not paused
-BCC .SpriteIsNotActive   ; Skip Main code is sprite is innactive
+  JSR Sprite_Poltergeist_Draw ; Call the draw code
+  LDA $E0 : CMP #$F0 : BNE .onscreen
+  LDA.w SprMiscA, X : BEQ .SpriteIsNotActive
+  STZ.w SprState, X ; kill the sprite if offscreen and activated
+  .onscreen
+  JSL Sprite_CheckActive   ; Check if game is not paused
+  BCC .SpriteIsNotActive   ; Skip Main code is sprite is innactive
 
-JSR Sprite_Poltergeist_Main ; Call the main sprite code
+  JSR Sprite_Poltergeist_Main ; Call the main sprite code
 
-.SpriteIsNotActive
-PLB ; Get back the databank we stored previously
-RTL ; Go back to original code
+  .SpriteIsNotActive
+  PLB ; Get back the databank we stored previously
+  RTL ; Go back to original code
+}
 
 ;==================================================================================================
 ; Sprite initialization
@@ -58,76 +64,56 @@ RTL ; Go back to original code
 Sprite_Poltergeist_Prep:
 {
     PHB : PHK : PLB
-    
-    PHX
-      ; Add more code here to initialize data
-  REP #$20 ; P is still on stack, so we don't even need to fix this
-      LDX #$20
-      --
-      LDA HousePalette, X : STA $7EC600, X
-      DEX : DEX : BNE --
-      INC $15 ;Refresh Palettes
-      
-  SEP #$20
+    ; LDA #$00 : STA $0F60, X ; Persist 
+    LDA #$02 : STA $0E40, X ;1 tile by default
+    LDA #$01 : STA.w SprAction, X ; by default it's a chair
+    LDA.w SprSubtype, X : CMP #$10 : BNE .notPictureFrame
+    STZ.w SprMiscA, X
+    STZ.w SprAction, X
+    JMP .done
+    .notPictureFrame
+    CMP #$11 : BNE .notAxe
+    LDA #$07 : STA.w SprFrame, X
+    LDA #$02 : STA.w SprAction, X
+    LDA #$04 : STA $0E40, X
+    BRA .done
+    .notAxe
+    CMP #$12 : BNE .notKnife
+    LDA #15 : STA.w SprFrame, X
+    LDA #$02 : STA.w SprAction, X
+    BRA .done
+    .notKnife
+    CMP #$13 : BNE .notFork
+    LDA #37 : STA.w SprFrame, X
+    LDA #$02 : STA.w SprAction, X
 
-  PLX
+    BRA .done
+    .notFork
+    CMP #$14 : BNE .notBed
+    LDA #5 : STA.w SprFrame, X
+    LDA #$01 : STA.w SprAction, X
+    LDA #$06 : STA $0E40, X
+    BRA .done
+    .notBed
+    CMP #$15 : BNE .notDoor
+    LDA #36 : STA.w SprFrame, X
+    LDA #$01 : STA.w SprAction, X
+    LDA #$04 : STA $0E40, X
+    LDA.w SprY, X : SEC : SBC #$0C : STA.w SprY, X 
+    LDA.w SprX, X : CLC : ADC #$08 : STA.w SprX, X 
+    BRA .done
+    .notDoor
 
+    LDA.w SprSubtype, X : AND #$08 : BNE .secondset ;2nd set
+    LDA.w SprSubtype, X : CLC : ADC #23 : STA.w SprFrame, X
+    BRA .done
+    .secondset
+    LDA.w SprSubtype, X : AND #$07 : CLC : ADC #30 : STA.w SprFrame, X
+    LDA.w SprSubtype, X 
 
-  LDA #$02 : STA $0E40, X ;1 tile by default
-  LDA #$01 : STA.w SprAction, X ; by default it's a chair
-  LDA.w SprSubtype, X : CMP #$10 : BNE .notPictureFrame
-  STZ.w SprMiscA, X
-  STZ.w SprAction, X
-  BRA .done
-  .notPictureFrame
-  CMP #$11 : BNE .notAxe
-  LDA #$07 : STA.w SprFrame, X
-  LDA #$02 : STA.w SprAction, X
-  LDA #$04 : STA $0E40, X
-  BRA .done
-  .notAxe
-  CMP #$12 : BNE .notKnife
-  LDA #15 : STA.w SprFrame, X
-  LDA #$02 : STA.w SprAction, X
-  BRA .done
-  .notKnife
-  CMP #$13 : BNE .notFork
-  LDA #37 : STA.w SprFrame, X
-  LDA #$02 : STA.w SprAction, X
-
-  BRA .done
-  .notFork
-  CMP #$14 : BNE .notBed
-  LDA #5 : STA.w SprFrame, X
-  LDA #$01 : STA.w SprAction, X
-  LDA #$06 : STA $0E40, X
-  BRA .done
-  .notBed
-  CMP #$14 : BNE .notDoor
-  LDA #36 : STA.w SprFrame, X
-  LDA #$01 : STA.w SprAction, X
-  LDA #$04 : STA $0E40, X
-  BRA .done
-  .notDoor
-
-  LDA.w SprSubtype, X : AND #$08 : BNE .secondset ;2nd set
-  LDA.w SprSubtype, X : CLC : ADC #23 : STA.w SprFrame, X
-  BRA .done
-  .secondset
-  LDA.w SprSubtype, X : AND #$07 : CLC : ADC #30 : STA.w SprFrame, X
-  LDA.w SprSubtype, X 
-
-  .done
-  PLB
-  RTL
-
-  ;THAT NEED TO BE A IN GAME PALETTE!!
-  HousePalette:
-  dw #$0000, #$1063, #$18A4, #$20E6, #$1D29, #$258C, #$29CF, #$10A6
-
-
-  ; HousePalette:
-  ; dw #$0000, #$1063, #$18A4, #$20E6, #$1D29, #$258C, #$29CF, #$10A6
+    .done
+    PLB
+    RTL
 }
 
 ;==================================================================================================
@@ -346,6 +332,7 @@ Sprite_Poltergeist_Main:
     JSR PlayAxe
     BRA .done
     .notAxe
+    CMP #$12 : BNE .notKnife
     JSR PlayKnife
     BRA .done
     .notKnife
@@ -665,13 +652,13 @@ db $28
 db $3E, $3F
 db $28
 .properties
-db $31, $71
-db $31, $71
-db $31, $71
-db $31, $71
-db $31
-db $31, $71, $31, $71, $31, $71
-db $31, $71, $31, $71, $31, $71
+db $3D, $7D
+db $3D, $7D
+db $3D, $7D
+db $3D, $7D
+db $3D
+db $3D, $7D, $3D, $7D, $3D, $7D
+db $3D, $7D, $3D, $7D, $3D, $7D
 db $39
 db $39
 db $39
@@ -688,20 +675,20 @@ db $B9, $B9
 db $F9
 db $79, $79
 db $79
-db $31
-db $31
+db $3D
+db $3D
 db $39
-db $31
-db $31
-db $31
+db $3D
+db $3D
+db $3D
 db $39
-db $31
-db $31, $31
-db $31, $31
-db $31, $31
-db $31, $B1
-db $71, $F1
-db $31, $71, $31, $71
+db $3D
+db $3D, $3D
+db $3D, $3D
+db $3D, $3D
+db $3D, $BD
+db $7D, $FD
+db $3D, $7D, $3D, $7D
 db $B9, $B9
 db $F9
 db $79, $79

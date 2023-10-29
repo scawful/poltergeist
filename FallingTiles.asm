@@ -331,7 +331,7 @@ db !right, !right, !right, !right, !right, !right, !right
 db $FF ; End of the path
 
 
-; Custom chase
+; Room 5C - Custom chase
 TilePath02:
 db $7F ; Initial Delay
 db $10<<2, !left, !left, !left, !left, !left, !left
@@ -339,9 +339,9 @@ db $0F<<2, !down, !down, !down
 db $0E<<2, !right, !right, !right
 db $0C<<2, !down, !down, !down
 db $0A<<2, !left, !left, !left, !left, !left, !left, !left
-db $08<<2, !up, !up, !up, !up
+db $08<<2, !up, !up, !up
 db $06<<2, !left, !left, !left, !left, !left, !left, !left
-db $04<<2, !down, !down, !down, !down
+db $04<<2, !down, !down, !down
 db $02<<2, !left, !left, !left, !left, !left, !left, !left
 db $FF ; End of the path
 
