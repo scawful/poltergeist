@@ -1,6 +1,9 @@
 ; =============================================================================
 ; Zelda Intro Cutscene
 ; Uses 76 Zelda and C1 Cutscene Agahnim
+;
+; $35   - Cutscene State
+; $0FA6 - Wallmaster ID for tracking Zelda height
 
 ; Hooked routines 
 org $1D8549
@@ -20,29 +23,46 @@ CutsceneAgahnim_Main:
   JMP .return
 
   .start_cutscene
+  CMP.b #$03 : BEQ .old_man_save_me
+  CMP.b #$04 : BEQ .no_really_please
+  CMP.b #$05 : BEQ .return
+
     ; Start the levitate sequence 
     LDA.b #$40 : STA $0DF0, X ; Set Timer0 for AltarZelda_Main
     LDA.b #$01 : STA $0DC0, X ; Move Zelda to next anim frame
 
       LDA $35 : CMP #$02 : BEQ .summoned
-        LDA #$90 : JSL Sprite_SpawnDynamically
-        JSL Sprite_SetSpawnedCoords
-      LDA #$02 : STA $35
+        JSL SummonRogueWallmaster
+        LDA #$02 : STA $35 ; Advance the cutscene
     .summoned
 
     JSL Zelda_LevitateAway
 
   .draw_zelda
-    
-    ; JSR $D57D ; Sprite_AltarZelda -> AltarZelda_Main
     LDA $0D80, X : JSL UseImplicitRegIndexedLocalJumpTable
-
     dw $D5A1 ; AltarZelda_Main
 
   .return
     RTS
+
+.old_man_save_me
+  ; Old man needs a minute to prepare his spells
+  LDA #$FF : STA SprTimerA, X 
+  LDA #$4F : STA $7E010E ; Set destination of old man
+  LDA #$04 : STA $35 ; Advance the cutscene
+  LDA #$11 : STA $012D
+  RTS
+
+.no_really_please
+  ; Wait for it...
+  LDA SprTimerA, X : BNE .return
+  JSL $0BFFA8 ; WallMaster_SendPlayerToLastEntrance
+  LDA #$05 : STA $35
+  RTS
+
 }
-warnpc $1DD284
+
+warnpc $1DD2A4
 
 ; =============================================================================
 ; 0x76 Zelda Sprite Hooks
@@ -83,17 +103,10 @@ Zelda_BeCarefulOutThere:
 
     LDA SprTimerD, X : BNE .didnt_speak
     
-    LDA #$01 : STA $35
-    LDA #$27 : STA $012F
-    STZ $0DD0, X
-    ; ; "[Name], be careful out there! I know you can save Hyrule!"
-    ; LDA.b #$1E
-    ; LDY.b #$00
-    
-    ; JSL Sprite_ShowSolicitedMessageIfPlayerFacing : BCC .didnt_speak
-    
-    ; STA $0DE0, X
-    ; STA $0EB0, X
+    LDA #$01 : STA $35   ; Advance the cutscene state
+    LDA #$27 : STA $012F ; Levitate charge sfx 
+
+    STZ $0DD0, X ; Dismiss Zelda
 
   .didnt_speak
 
@@ -132,6 +145,7 @@ Zelda_CheckForStartCutscene:
     JSR Uncle_GiveSwordAndShield
     JSR Zelda_TransitionFromTagalong
 
+    LDA #$02 : STA $02F5 ; prevent link from moving 
     LDA #$99 : STA SprTimerC, X
     
     RTL
@@ -186,36 +200,41 @@ SummonRogueWallmaster:
 {
   LDA #$90 : JSL Sprite_SpawnDynamically
   JSL Sprite_SetSpawnedCoords
-  LDA $0D00, Y : SEC : SBC.b #$20 : STA $0D00, Y
+  
+  LDA $0F70 : CLC : ADC #$40 : STA $0F70, Y
+  LDA $0D00, Y : SEC : SBC.b #$06 : STA $0D00, Y
   ; LDA #$01 : STA $0D80, Y ; Set subtype
+  TYA : STA $0FA6
   RTL
 }
 
 Zelda_LevitateAway:
 {
-  ; Increase the sprite height 
-  LDA.w SprTimerC, X : BNE .dontchangeheight
-    INC.w SprHeight, X
+  
+  LDA.w SprTimerC, X : BNE .dont_levitate
+    ; Increase the sprite height with the wallmaster ID in $0FA6
+    PHX : LDA $0FA6 : TAX : LDA SprHeight, X : PLX
+    STA SprHeight, X
     LDA #$28 : STA $012F ; Play warp away sfx
-    ; LDA.w SprMiscA, X : STA.w SprTimerC, X : DEC : STA.w SprMiscA, X
-  .dontchangeheight
+  .dont_levitate
 
   ; Check the height of the sprite, dismiss once its gone 
   LDA SprHeight, X : CMP.b #$9F : BCC .draw_zelda
 
     ; Spawn a rogue wallmaster
     LDA #$90 : JSL Sprite_SpawnDynamically
-
     PHX
     
     LDX $02CF
     
     LDA $1A64, X : AND.b #$03 : STA $0EB0, Y : STA $0DE0, Y
-    LDA $20 : CLC : ADC.b #$02 : STA $0D00, Y ; SprY Low
+    LDA $20 : STA $0D00, Y ; SprY Low
     LDA $21 : STA $0D20, Y ; SprY High
     LDA $22 : STA $0D10, Y ; SprX Low
     LDA $23 : STA $0D30, Y ; SprX High
-    LDA.b #$01 : STA $0E80, Y ; SprDelay
+
+    LDA $24 : CLC : ADC #$80 : STA $0F70, Y ; SprZ Low
+    LDA.b #$01 : STA $0E80, Y ; SprDelayso yea
     LDA $0BA0, Y : INC A : STA $0BA0, Y
     
     ; ISPH HHHH - [I ignore collisions][S Statis (not alive eg beamos)][P Persist code still run outside of camera][H Hitbox] 
@@ -231,7 +250,13 @@ Zelda_LevitateAway:
     ; Sprite_LoadGfxProperties.justLightWorld
     PHX : JSL $00FC62 : PLX
 
-    LDA #$4D : STA $04AA
+    ; Set destination after Link is kidnapped by Wallmaster
+    LDA #$4E : STA $7E010E
+
+    LDA #$03 : STA $35
+
+    ; Allow Link to move again
+    STZ $02F5
 
     ; Goodbye Zelda
     STZ $0DD0,     X
@@ -247,6 +272,12 @@ Zelda_LevitateAway:
 org $1DD5E9
 AltarZelda_DrawBody:
 
+; org $1DD643
+;   LDA.b #$CC
+
+; org $1DD64D
+;   LDA.b #$C4
+
 ; sheet00 $03, $04, $00, $00
 ; sheet01 $43, $44, $40, $40
 ; sheet02 $83, $84, $80, $80
@@ -259,6 +290,13 @@ AltarZelda_OamGroups:
 
   dw -4,   0 : db $00, $01, $00, $02
   dw 4,   0 : db $01, $01, $00, $02
+
+  ; sheet04 experiment
+  ; dw -4,   0 : db $C3, $C1, $C0, $C2
+  ; dw 4,   0 : db $C4, $C1, $C0, $C2
+
+  ; dw -4,   0 : db $C0, $C1, $C0, $C2
+  ; dw 4,   0 : db $C1, $C1, $C0, $C2
 }
 
 ; Main fn for the Zelda subtype of the Cutscene Agahnim sprite
