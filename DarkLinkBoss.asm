@@ -1,7 +1,7 @@
 ;==============================================================================
 ; Sprite Properties
 ;==============================================================================
-!SPRID              = $7B ; The sprite ID you are overwriting (HEX)
+!SPRID              = $88 ; The sprite ID you are overwriting (HEX)
 !NbrTiles           = 4   ; Number of tiles used in a frame
 !Harmless           = 00  ; 00 = Sprite is Harmful,  01 = Sprite is Harmless
 !HVelocity          = 00  ; Is your sprite going super fast? put 01 if it is
@@ -518,7 +518,7 @@ Sprite_DarkLink_Main:
     LDA #$03 : STA.w $012E
 
 
-    LDA #$00 ; SET THE RIGHT SPRITE ID!! ======================CHANGE========================
+    LDA #$88 ; SET THE RIGHT SPRITE ID!! ======================CHANGE========================
     JSL Sprite_SpawnDynamically
     JSL Sprite_SetSpawnedCoords
     PHX
@@ -962,12 +962,13 @@ Sprite_DarkLink_Main:
   INC.w SprMiscF, X
   ;LDA #$1A : STA.b $11 ; ganon open door routine
   ; handled by the room tag?
+  STZ.w $0DD0, X
+
   %GotoAction(14)
 
   RTS
 
   Dead:
-
 
 
   RTS
