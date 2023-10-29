@@ -52,6 +52,8 @@ incsrc SpookyInventory.asm
 incsrc StalfosLayeredOam.asm
 incsrc TitleScreen.asm
 incsrc UncleFlicker.asm
+incsrc PoltergeistNew.asm
+incsrc DarkLinkBoss.asm
 
 pushpc
 ;incsrc ZSCustomOverworld.asm ; Currently too buggy to use.
