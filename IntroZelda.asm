@@ -187,6 +187,9 @@ Zelda_TransitionFromTagalong:
     LDA.b #$00 : STA $7EF3CC ; Remove tagalong
     
     LDA $0BA0, Y : INC A : STA $0BA0, Y
+
+    LDA #$06 : STA $0F50, Y
+
     
     ; ISPH HHHH - [I ignore collisions][S Statis (not alive eg beamos)][P Persist code still run outside of camera][H Hitbox] 
     LDA.b #$03 : STA $0F60, Y ; SprHitbox
@@ -203,7 +206,7 @@ SummonRogueWallmaster:
   
   LDA $0F70 : CLC : ADC #$40 : STA $0F70, Y
   LDA $0D00, Y : SEC : SBC.b #$06 : STA $0D00, Y
-  ; LDA #$01 : STA $0D80, Y ; Set subtype
+  LDA #$04 : STA $0F50, Y 
   TYA : STA $0FA6
   RTL
 }
@@ -223,6 +226,7 @@ Zelda_LevitateAway:
 
     ; Spawn a rogue wallmaster
     LDA #$90 : JSL Sprite_SpawnDynamically
+    LDA #$04 : STA $0F50, Y 
     PHX
     
     LDX $02CF
