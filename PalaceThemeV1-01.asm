@@ -364,8 +364,4 @@ db $24
 db $00 ; End of the channel
 
 
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 print pc
