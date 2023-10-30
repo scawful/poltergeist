@@ -12,6 +12,7 @@ incsrc SparkleTitlescreen.asm
 incsrc SpookyCredits.asm
 incsrc RainMusic.asm
 incsrc Tavern.asm
+incsrc HammerDamage.asm
 
 incsrc PalaceThemeV1-01.asm ; castle song 0x10
 ;incsrc CallingThatDetestableNameV1-00.asm
@@ -66,6 +67,7 @@ incsrc PoltergeistNew.asm
 incsrc DarkLinkBoss.asm
 incsrc SahasralalalalaFlippers.asm
 incsrc MagicMirror.asm
+
 pushpc
 incsrc ZSCustomOverworld.asm ; stripped of most functionality
 pullpc

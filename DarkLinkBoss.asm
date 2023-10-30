@@ -231,6 +231,7 @@ Sprite_DarkLink_Main:
 
     LDA.w $0354 : CMP #$27 : BEQ .attemptToDodge
     CMP #$02 : BEQ .attemptToDodge
+    CMP #$06 : BEQ .attemptToDodge
     CMP #$0F : BNE .toofardodge
 
     ; only once per slash !
