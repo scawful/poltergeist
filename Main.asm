@@ -10,6 +10,7 @@ incsrc DrawChanges.asm
 incsrc FixPumpkinDoor.asm
 incsrc SparkleTitlescreen.asm
 incsrc SpookyCredits.asm
+incsrc RainMusic.asm
 
 incsrc PalaceThemeV1-01.asm
 ;incsrc CallingThatDetestableNameV1-00.asm
@@ -62,7 +63,7 @@ incsrc UncleFlicker.asm
 incsrc PoltergeistNew.asm
 incsrc DarkLinkBoss.asm
 incsrc SahasralalalalaFlippers.asm
-
+incsrc MagicMirror.asm
 pushpc
 incsrc ZSCustomOverworld.asm ; stripped of most functionality
 pullpc
