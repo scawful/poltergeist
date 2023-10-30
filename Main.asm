@@ -54,6 +54,7 @@ incsrc TitleScreen.asm
 incsrc UncleFlicker.asm
 incsrc PoltergeistNew.asm
 incsrc DarkLinkBoss.asm
+;incsrc SahasralalalalaFlippers.asm
 
 pushpc
 ;incsrc ZSCustomOverworld.asm ; Currently too buggy to use.
