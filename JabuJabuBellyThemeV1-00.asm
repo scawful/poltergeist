@@ -5,22 +5,8 @@
 ; Midi by FireMario
 ; ASM Framework by Zarby89
 ; Ported by Letterbomb
+; Size 0xE9
 ;=====================================================================================
-
-lorom
-
-; Test code to play the song as the game start (Only for Testing)
-!n = $7F
-org $00FFD7; Set rom on 16mb
-db #$0B
-org $3FFFFF; write at the last position to expand on 2mb
-db #$00
-org $0CC120
-LDA #$02 : STA $012C
-STA $2140 : STA $0133 : STA $0130
-RTL
-
-incsrc yourfilename.asm
 
 org $1A9FF8; Sections?
 JabuJabuBellyTheme:

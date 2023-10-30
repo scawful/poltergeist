@@ -6,6 +6,7 @@
 ; Midi by Kiku
 ; ASM Framework by Zarby89
 ; Ported by Letterbomb
+; Size 0x479
 ;=====================================================================================
 
 lorom
