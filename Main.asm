@@ -1,7 +1,7 @@
 ; ==============================================================================
 
 lorom
-incsrc musicengine.asm
+
 incsrc BookRoom.asm
 incsrc BugNetKid.asm
 incsrc CollisionTables.asm
@@ -11,13 +11,6 @@ incsrc FixPumpkinDoor.asm
 incsrc SparkleTitlescreen.asm
 incsrc SpookyCredits.asm
 
-incsrc PalaceThemeV1-01.asm
-;incsrc CallingThatDetestableNameV1-00.asm
-incsrc MysteriousForestV1-00.asm
-;incsrc GnarledRootThemeV1-00.asm
-incsrc GraveyardThemeV1-00.asm
-;incsrc JabuJabuBellyThemeV1-00.asm
-incsrc SwordTrainingThemeV1-00.asm
 incsrc engine/Macros.asm
 incsrc engine/sprite_functions_hooks.asm
 
@@ -61,7 +54,7 @@ incsrc TitleScreen.asm
 incsrc UncleFlicker.asm
 incsrc PoltergeistNew.asm
 incsrc DarkLinkBoss.asm
-incsrc SahasralalalalaFlippers.asm
+;incsrc SahasralalalalaFlippers.asm
 
 pushpc
 incsrc ZSCustomOverworld.asm ; stripped of most functionality

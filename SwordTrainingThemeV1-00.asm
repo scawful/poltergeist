@@ -5,7 +5,6 @@
 ; Midi by Dehadin
 ; ASM Framework by Zarby89
 ; Ported by Letterbomb
-<<<<<<< Updated upstream
 ;=====================================================================================
 
 lorom
@@ -26,15 +25,6 @@ incsrc yourfilename.asm
 org $1A9FF8; Sections?
 SwordSchoolTheme:
 !ARAMAddr = $D0FF
-=======
-; Size 0xDF
-;=====================================================================================
-
-
-org $1BA1D5; Sections?
-SwordSchoolTheme:
-!ARAMAddr = $F1D1
->>>>>>> Stashed changes
 dw !ARAMAddr+$08
 dw $00FF
 dw !ARAMAddr

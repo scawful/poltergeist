@@ -5,7 +5,6 @@
 ; Midi by Forrest Riedl
 ; ASM Framework by Zarby89
 ; Ported by Letterbomb
-<<<<<<< Updated upstream
 ;=====================================================================================
 
 lorom
@@ -26,14 +25,6 @@ incsrc yourfilename.asm
 org $1A9FF8; Sections?
 GraveyardTheme:
 !ARAMAddr = $D0FF
-=======
-; Size 0x27A
-;=====================================================================================
-
-org $1ABE66; Sections?
-GraveyardTheme:
-!ARAMAddr = $EF6D
->>>>>>> Stashed changes
 dw !ARAMAddr+$0A ; Intro
 dw !ARAMAddr+$1A ; Looping
 dw $00FF
