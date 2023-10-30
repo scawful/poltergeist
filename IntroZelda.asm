@@ -232,13 +232,15 @@ Zelda_CheckForStartCutscene:
     ; If player is near, check for Zelda follower
     LDA $7EF3CC : CMP.b #$01 : BNE .no_zelda
 
+    LDA #$02 : STA $02F5 ; prevent link from moving 
+
     LDA.b #$21 : LDY.b #$00
     JSL   Sprite_ShowMessageUnconditional
 
     JSR Uncle_GiveSwordAndShield
     JSR Zelda_TransitionFromTagalong
 
-    LDA #$02 : STA $02F5 ; prevent link from moving 
+
     LDA #$99 : STA SprTimerC, X
     
     RTL
