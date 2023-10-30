@@ -54,7 +54,7 @@ incsrc TitleScreen.asm
 incsrc UncleFlicker.asm
 
 pushpc
-incsrc ZSCustomOverworld.asm ; Currently too buggy to use.
+incsrc ZSCustomOverworld.asm ; stripped of most functionality
 pullpc
 
 ; incsrc PortMain.asm ; This will need to be fixed before it can be put in.
