@@ -6,10 +6,15 @@
 ; Midi by Kiku
 ; ASM Framework by Zarby89
 ; Ported by Letterbomb
+<<<<<<< Updated upstream
+=======
+; Size 0x479
+>>>>>>> Stashed changes
 ;=====================================================================================
 
 lorom
 
+<<<<<<< Updated upstream
 ; Test code to play the song as the game start (Only for Testing)
 !n = $7F
 org $00FFD7; Set rom on 16mb
@@ -23,6 +28,8 @@ RTL
 
 incsrc yourfilename.asm
 
+=======
+>>>>>>> Stashed changes
 org $1A9FF8; Sections?
 CallingThatDetestableNameTheme:
 !ARAMAddr = $D0FF

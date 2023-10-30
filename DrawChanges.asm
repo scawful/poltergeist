@@ -79,3 +79,7 @@ Pool_Zol_DrawMultiple:
 }
 
 ; ==============================================================================
+
+; Lumberjacks palette to blue
+org $0DB359+$2C
+db $49

@@ -174,10 +174,10 @@ db $6C, $C2, $24
 db $6C, $C2, $28
 db $6C, $C2, $26
 .properties
-db $3A, $3B, $3B
-db $3A, $3B, $3B
-db $3A, $3B, $7B
-db $3A, $3B, $3B
+db $3C, $3D, $3D
+db $3C, $3D, $3D
+db $3C, $3D, $7D
+db $3C, $3D, $3D
 .sizes
 db $02, $02, $02
 db $02, $02, $02

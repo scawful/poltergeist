@@ -5,6 +5,7 @@
 ; Midi by FireMario
 ; ASM Framework by Zarby89
 ; Ported by Letterbomb
+<<<<<<< Updated upstream
 ;=====================================================================================
 
 lorom
@@ -22,6 +23,11 @@ RTL
 
 incsrc yourfilename.asm
 
+=======
+; Size 0xE9
+;=====================================================================================
+
+>>>>>>> Stashed changes
 org $1A9FF8; Sections?
 JabuJabuBellyTheme:
 !ARAMAddr = $D0FF

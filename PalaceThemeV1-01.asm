@@ -5,10 +5,15 @@
 ; Midi by (Unknown)
 ; ASM Framework by Zarby89
 ; Ported by Letterbomb
+<<<<<<< Updated upstream
+=======
+; Size 0x478
+>>>>>>> Stashed changes
 ;=====================================================================================
 
 lorom
 
+<<<<<<< Updated upstream
 ; Test code to play the song as the game start (Only for Testing)
 !n = $7F
 org $00FFD7; Set rom on 16mb
@@ -25,6 +30,11 @@ incsrc yourfilename.asm
 org $1A9FF8; Sections?
 PalaceTheme: 
 !ARAMAddr = $D0FF
+=======
+org $1B804A; Sections?
+PalaceTheme: 
+!ARAMAddr = $D046
+>>>>>>> Stashed changes
 dw !ARAMAddr+$0A ; Intro
 dw !ARAMAddr+$1A ; Looping
 dw $00FF
@@ -376,5 +386,8 @@ db $24
 db $00 ; End of the channel
 
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 print pc
