@@ -4,7 +4,7 @@ lorom
 
 incsrc BookRoom.asm
 incsrc BugNetKid.asm
-incsrc Collision.asm
+incsrc CollisionTables.asm
 incsrc CustomSprProperties.asm
 incsrc DrawChanges.asm
 incsrc FixPumpkinDoor.asm
