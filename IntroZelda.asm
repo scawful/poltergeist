@@ -12,6 +12,58 @@ Sprite4_DrawMultiple:
 org $05F93F
 Sprite2_DirectionToFacePlayer:
 
+; 76
+org $0DB3CF
+  db $1D
+
+; C1 
+org $0DB41A
+  ; db $02 ; weird yellow index $9X
+  ; db $06    ; $BX
+  db $0C ; yellow 
+
+; Follower palettes 
+org $09A8F9
+  db $00
+  db $0E ; Zelda
+
+org $1AF8AC
+dw 0, -8 : db $E0, $20, $00, $02
+dw 0, 0 : db $E8, $20, $00, $02
+dw 0, -7 : db $E0, $20, $00, $02
+dw 0, 1 : db $E8, $60, $00, $02
+
+dw 0, -8 : db $C0, $20, $00, $02
+dw 0, 0 : db $C2, $20, $00, $02
+dw 0, -7 : db $C0, $20, $00, $02
+dw 0, 1 : db $C2, $60, $00, $02
+
+dw 0, -8 : db $E2, $20, $00, $02
+dw 0, 0 : db $E4, $20, $00, $02
+dw 0, -7 : db $E2, $20, $00, $02
+dw 0, 1 : db $E6, $20, $00, $02
+
+dw 0, -8 : db $E2, $60, $00, $02
+dw 0, 0 : db $E4, $60, $00, $02
+dw 0, -7 : db $E2, $60, $00, $02
+dw 0, 1 : db $E6, $60, $00, $02
+
+; D8 64 
+; D9 24
+; D9 64
+; DA 24
+; DA 64
+; C8 22
+; C8 62
+; C9 22 
+; C9 62 
+; CA 22 
+; CA 62 
+; 70 01 
+; C0 00
+; C0 01 
+; 10 01 
+
 ; =============================================================================
 
 ; Hook into the Cutscene Agahnim sprite
@@ -30,6 +82,7 @@ CutsceneAgahnim_Main:
     ; Start the levitate sequence 
     LDA.b #$40 : STA $0DF0, X ; Set Timer0 for AltarZelda_Main
     LDA.b #$01 : STA $0DC0, X ; Move Zelda to next anim frame
+    LDA.b #$0C : STA $0E60, X
 
       LDA $35 : CMP #$02 : BEQ .summoned
         JSL SummonRogueWallmaster
@@ -62,7 +115,7 @@ CutsceneAgahnim_Main:
 
 }
 
-warnpc $1DD2A4
+warnpc $1DD2A6
 
 ; =============================================================================
 ; 0x76 Zelda Sprite Hooks
@@ -160,8 +213,6 @@ Uncle_GiveSwordAndShield:
   LDY.b #$00 : STZ $02E9
   JSL   Link_ReceiveItem
   LDA.b #$01 : STA $0DC0, X
-
-  LDA.b #$01 : STA $7EF3C5
   RTS
 }
 
@@ -175,7 +226,7 @@ Zelda_TransitionFromTagalong:
     
     LDX $02CF
     
-    LDA $1A64, X : AND.b #$03 : STA $0EB0, Y : STA $0DE0, Y
+    ; LDA $1A64, X : AND.b #$03 : STA $0EB0, Y : STA $0DE0, Y
     
     LDA $20 : STA $0D00, Y ; SprY Low
     LDA $21 : STA $0D20, Y ; SprY High
@@ -186,11 +237,10 @@ Zelda_TransitionFromTagalong:
     
     LDA.b #$00 : STA $7EF3CC ; Remove tagalong
     
-    LDA $0BA0, Y : INC A : STA $0BA0, Y
+    ; LDA $0BA0, Y : INC A : STA $0BA0, Y
 
-    LDA #$06 : STA $0F50, Y
+    ; LDA #$19 : STA $0F50, Y
 
-    
     ; ISPH HHHH - [I ignore collisions][S Statis (not alive eg beamos)][P Persist code still run outside of camera][H Hitbox] 
     LDA.b #$03 : STA $0F60, Y ; SprHitbox
     
@@ -207,6 +257,7 @@ SummonRogueWallmaster:
   LDA $0F70 : CLC : ADC #$40 : STA $0F70, Y
   LDA $0D00, Y : SEC : SBC.b #$06 : STA $0D00, Y
   LDA #$04 : STA $0F50, Y 
+
   TYA : STA $0FA6
   RTL
 }
@@ -276,12 +327,6 @@ Zelda_LevitateAway:
 org $1DD5E9
 AltarZelda_DrawBody:
 
-; org $1DD643
-;   LDA.b #$CC
-
-; org $1DD64D
-;   LDA.b #$C4
-
 ; sheet00 $03, $04, $00, $00
 ; sheet01 $43, $44, $40, $40
 ; sheet02 $83, $84, $80, $80
@@ -294,13 +339,6 @@ AltarZelda_OamGroups:
 
   dw -4,   0 : db $00, $01, $00, $02
   dw 4,   0 : db $01, $01, $00, $02
-
-  ; sheet04 experiment
-  ; dw -4,   0 : db $C3, $C1, $C0, $C2
-  ; dw 4,   0 : db $C4, $C1, $C0, $C2
-
-  ; dw -4,   0 : db $C0, $C1, $C0, $C2
-  ; dw 4,   0 : db $C1, $C1, $C0, $C2
 }
 
 ; Main fn for the Zelda subtype of the Cutscene Agahnim sprite
