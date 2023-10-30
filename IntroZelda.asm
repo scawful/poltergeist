@@ -170,7 +170,7 @@ Zelda_RespondToPriest:
     INC $0D80, X ; Move to Zelda_BeCarefulOutThere next state
     
     LDA.b #$02 : STA $7FFE01 ; Zelda rescue dialog counter 
-    LDA.b #$01 : STA $7EF3C8 ; Set Sanctuary Spawn point 
+    LDA.b #$00 : STA $7EF3C8 ; Set Sanctuary Spawn point 
 
     REP #$30 : LDA.b #$30 : STA SprTimerD, X : SEP   #$30
     
