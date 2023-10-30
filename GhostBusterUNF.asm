@@ -577,7 +577,7 @@ NewPoe:
 
 
 
-    NewDiggingDude:
+NewDiggingDude:
 
     LDA $04B4 : BEQ .timer_elapsed
                 BMI .timer_elapsed
@@ -606,7 +606,7 @@ NewPoe:
     .timer_elapsed
 
 
-    LDA.b #$09 : STA $012C
+    LDA.b #$05 : STA $012C
     
     INC $0D80, X
     
