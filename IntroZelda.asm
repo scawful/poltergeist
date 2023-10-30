@@ -12,6 +12,17 @@ Sprite4_DrawMultiple:
 org $05F93F
 Sprite2_DirectionToFacePlayer:
 
+; Aginah in room 11
+org $068CE3
+CMP.b #$11 : BNE .notAginah
+        
+      INC $0E80, X
+      
+      ; Basically changes him to Aginah rather than Sahasralah
+      LDA.b #$0F : STA $0F50, X
+    
+    .notAginah
+
 ; -------- Orange Dress ----------
 ; 76 Zelda Sprite Palette 
 org $0DB3CF
@@ -25,6 +36,7 @@ org $0DB41A
 org $09A8F9
   db $00
   db $07 ; Zelda
+
 ; --------------------------------
 
 ; ; 76 Zelda Sprite Palette 
@@ -130,7 +142,7 @@ CutsceneAgahnim_Main:
 
 }
 
-warnpc $1DD2AA
+warnpc $1DD2B0
 
 ; =============================================================================
 ; 0x76 Zelda Sprite Hooks
@@ -201,7 +213,7 @@ Zelda_CheckForStartCutscene:
     ; Add it back to X Distance
     CLC : ADC $00 : STA $02    ; distance total X, Y (ABS)
     ; Distance away from player
-    CMP #$0040 : BCS .no_zelda
+    CMP #$0046 : BCS .no_zelda
     SEP #$20
 
     ; If player is near, check for Zelda follower
@@ -271,7 +283,7 @@ SummonRogueWallmaster:
   
   LDA $0F70 : CLC : ADC #$40 : STA $0F70, Y
   LDA $0D00, Y : SEC : SBC.b #$06 : STA $0D00, Y
-  LDA #$04 : STA $0F50, Y 
+  LDA #$0C : STA $0F50, Y 
 
   TYA : STA $0FA6
   RTL
@@ -291,7 +303,7 @@ Zelda_LevitateAway:
 
     ; Spawn a rogue wallmaster
     LDA #$90 : JSL Sprite_SpawnDynamically
-    LDA #$04 : STA $0F50, Y 
+    LDA #$0C : STA $0F50, Y 
     PHX
     
     LDX $02CF
@@ -331,8 +343,8 @@ OldMan_AdvanceGameState:
 {
   ; Change the game state
   LDA.b #$02 : STA $7EF3C5
-  LDA.b #$01 : STA $7EF3C8
-  LDA.b #$04 : STA $7EF3C6
+  LDA.b #$00 : STA $7EF3C8
+  LDA.b #$11 : STA $7EF3C6
   
   ; Sprite_LoadGfxProperties.justLightWorld
   PHX : JSL $00FC62 : PLX
