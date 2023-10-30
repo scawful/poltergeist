@@ -7,3 +7,7 @@ patched.sfc
 patched.smp.sym
 patched.srm
 *.bst
+*.sym
+alttp.cht
+alttp.srm
+patched.bp

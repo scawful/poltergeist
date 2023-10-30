@@ -8,9 +8,9 @@
 ; Size 0xE9
 ;=====================================================================================
 
-org $1A9FF8; Sections?
+org $1BA308; Sections?
 JabuJabuBellyTheme:
-!ARAMAddr = $D0FF
+!ARAMAddr = $F304
 dw !ARAMAddr+$08
 dw $00FF
 dw !ARAMAddr

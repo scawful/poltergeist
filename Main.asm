@@ -11,14 +11,15 @@ incsrc FixPumpkinDoor.asm
 incsrc SparkleTitlescreen.asm
 incsrc SpookyCredits.asm
 incsrc RainMusic.asm
+incsrc Tavern.asm
 
-incsrc PalaceThemeV1-01.asm
+incsrc PalaceThemeV1-01.asm ; castle song 0x10
 ;incsrc CallingThatDetestableNameV1-00.asm
-incsrc MysteriousForestV1-00.asm
-;incsrc GnarledRootThemeV1-00.asm
-incsrc GraveyardThemeV1-00.asm
-;incsrc JabuJabuBellyThemeV1-00.asm
-incsrc SwordTrainingThemeV1-00.asm
+incsrc MysteriousForestV1-00.asm ; Light World overworld song 0x02
+incsrc GnarledRootThemeV1-00.asm ; sanctuary song 0x14
+incsrc GraveyardThemeV1-00.asm ; Dark World overworld song 0x09
+incsrc JabuJabuBellyThemeV1-00.asm ; zelda rescue song 0x19
+incsrc SwordTrainingThemeV1-00.asm ; shop ; song 0x17
 incsrc engine/Macros.asm
 incsrc engine/sprite_functions_hooks.asm
 

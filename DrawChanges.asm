@@ -84,3 +84,8 @@ Pool_Zol_DrawMultiple:
 org $08EDF9 ; Gravestones moved to sheet00 instead of 03
 
     db $08, $08, $18, $18
+
+org $0DB393 ; Half Magic Fix
+db $59
+org $05FBA2
+NOP #$0B 

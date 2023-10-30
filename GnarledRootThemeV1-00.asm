@@ -10,9 +10,9 @@
 
 lorom
 
-org $1A9FF8; Sections?
+org $1B96FD; Sections?
 GnarledRootTheme:
-!ARAMAddr = $D0FF
+!ARAMAddr = $E6F9
 dw !ARAMAddr+$08
 dw $00FF
 dw !ARAMAddr
