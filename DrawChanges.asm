@@ -79,3 +79,8 @@ Pool_Zol_DrawMultiple:
 }
 
 ; ==============================================================================
+
+
+org $08EDF9 ; Gravestones moved to sheet00 instead of 03
+
+    db $08, $08, $18, $18
