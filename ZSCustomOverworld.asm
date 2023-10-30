@@ -164,7 +164,7 @@ Pool:
     
     org $288144 ; $140144
     .EnableSubScreenOverlay
-    db $0
+    db $FF
 
     ; This is a reserved value that ZS will write to when it has applied the ASM.
     ; That way the next time ZS loads the ROM it knows to read the custom values
@@ -174,7 +174,7 @@ Pool:
     db $FF
     
     ; The rest of these are extra bytes that can be used for anything else later on.
-    db $00, $00, $00
+    db $00, $00
     db $00, $00, $00, $00, $00, $00, $00, $00
     db $00, $00, $00, $00, $00, $00, $00, $00
     db $00, $00, $00, $00, $00, $00, $00, $00
@@ -222,13 +222,13 @@ Pool:
     ; $01 to enable mosaic, $00 to disable.
 
     ; LW
-    db $01, $00, $00, $00, $00, $00, $00, $00
     db $00, $00, $00, $00, $00, $00, $00, $00
+    db $00, $00, $00, $00, $00, $00, $01, $00
     db $00, $00, $00, $00, $00, $00, $00, $00
+    db $00, $00, $00, $00, $00, $00, $01, $00
     db $00, $00, $00, $00, $00, $00, $00, $00
-    db $00, $00, $00, $00, $00, $00, $00, $00
-    db $00, $00, $00, $00, $00, $00, $00, $00
-    db $00, $00, $00, $00, $00, $00, $00, $00
+    db $00, $01, $01, $01, $01, $01, $00, $00
+    db $00, $00, $00, $00, $01, $01, $00, $00
     db $00, $00, $00, $00, $00, $00, $00, $00
     ; DW
     db $01, $00, $00, $00, $00, $00, $00, $00
@@ -290,28 +290,28 @@ Pool:
     ; $0096 is the pyramid background overlay.
     ; $0097 is the first fog overlay.
 
-    ; $009C is the lava background overlay.
+    ; $009C is the lava background overlay.d
     ; $009D is the second fog overlay.
     ; $009E is the tree canopy overlay.
     ; $009F is the rain overlay.
 
     ;LW
-    dw $009D, $00FF, $00FF, $0095, $00FF, $0095, $00FF, $0095
     dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
     dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
     dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
     dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
-    dw $00FF, $009F, $009F, $00FF, $00FF, $00FF, $00FF, $00FF
     dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
+    dw $00FF, $009F, $009F, $009D, $009D, $009D, $00FF, $00FF
+    dw $00FF, $00FF, $00FF, $00FF, $009D, $009D, $00FF, $00FF
     dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
     ;DW
-    dw $0095, $00FF, $00FF, $009C, $00FF, $009C, $00FF, $009C
     dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
     dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
-    dw $00FF, $00FF, $00FF, $0096, $00FF, $00FF, $00FF, $00FF
     dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
     dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
-    dw $009F, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
+    dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
+    dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
+    dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
     dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
     ;SP
     dw $0097, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
@@ -321,61 +321,67 @@ Pool:
     warnpc $288480
 }
 
+; Play wind sound instead of rain sound when starting the game.
+org $0283AD
+    LDA.b #$09 : STA $012D
+
+; Music that plays after link wakes up, changed to cancel ambient sound.
+org $05DEA5 ; nothing for now
+    LDA.b #$00 : STA $012D
+
 ; Start of expanded space.
 org $288480 ; $140480
 pushpc
 
 ; Debug addresses
 ; 00D8D5 ; W7 Animated tiles on warp.
-!Func00D8D5 = $01
+!Func00D8D5 = $00 ; Disable
 ; 00DA63 ; W8 Enable/Disable subscreen.
-!Func00DA63 = $01
-; 00EEBC
-!Func00EEBC = $01
+!Func00DA63 = $00 ; Disable
+; 00EEBC ; Zeros out the BG color when mirror warping to the pyramid area.
+!Func00EEBC = $00 ; Disable
 ; 00FF7C ; W9 BG scrolling for HC and the pyramid area.
-!Func00FF7C = $01
+!Func00FF7C = $00 ; Disable
+
 ; 028027
-!Func028027 = $01
 ; 029C0C
-!Func029C0C = $01
 ; 029D1E
-!Func029D1E = $01
 ; 029F82
-!Func029F82 = $01
-; 0283EE ; E2
-!Func0283EE = $01
-; 028632
-!Func028632 = $01
-; 029AA6 ; E1
-!Func029AA6 = $01
+
+; 0283EE ; E2 ; Changes the function that loads overworld properties when exiting a dungeon. Includes removing asm that plays music in certain areas and changing how animated tiles are loaded.
+!Func0283EE = $00 ; Disable
+; 028632 ; Changes a function that loads animated tiles under certain conditions.
+!Func028632 = $00 ; Disable
+; 029AA6 ; E1 ; Changes part of a function that changes the special BG color when leaving dungeons? not sure.
+!Func029AA6 = $00 ; Disable
 ; 02AF58 ; T2 W2 Main subscreen loading function.
 !Func02AF58 = $01
 ; 02B2D4 ; W1 turns on subscreen for pyramid.
-!Func02B2D4 = $01
+!Func02B2D4 = $00 ; Disable
 ; 02B3A1 ; W6 Activate subscreen durring pyramid warp.
-!Func02B3A1 = $01
-; 02BC44
-!Func02BC44 = $01
+!Func02B3A1 = $00 ; Disable
+; 02BC44 ; Controls overworld vertical subscreen movement for the pyramid BG.
+!Func02BC44 = $00 ; Disable
 ; 02C02D ; T4 pyramid bg scroll.
-!Func02C02D = $01
+!Func02C02D = $00 ; Disable
 ; 02C692 ; W3 Main palette loading routine.
-!Func02C692 = $01
+!Func02C692 = $00 ; Disable
 ; 02A4CD ; Rain animation code.
 !Func02A4CD = $01
 ; 02AADB ; T1 Mosaic
 !Func02AADB = $01
 ; 02ABB8 ; T3 transition animated and main palette.
-!Func02ABB8 = $01
-; 0ABC5A
-!Func0ABC5A = $01
-; 0AB8F5
-!Func0AB8F5 = $01
+!Func02ABB8 = $00 ; Disable
+; 0ABC5A ; Loads the animated tiles after the overworld map is closed.
+!Func0ABC5A = $00 ; Disable
+; 0AB8F5 ; Loads different animated tiles when returning from bird travel.
+!Func0AB8F5 = $00 ; prob disable
 ; 0BFEC6 ; W5 Load overlay, fixed color, and BG color.
 !Func0BFEC6 = $01
 ; 0ED627 ; W4 Transparent color durring warp.
-!Func0ED627 = $01
-; 0ED8AE
-!Func0ED8AE = $01
+!Func0ED627 = $00 ; if disabled causes a crash when leaving a dungeon for some reason.
+; 0ED8AE ; Resets the area special color after the screen flashes.
+!Func0ED8AE = $00 ; Disable
 
 ; ==============================================================================
 
@@ -717,7 +723,7 @@ PreOverworld_LoadProperties_LoadMain:
     .no_music_load_needed
 
     ; PLACE CUSTOM GFX LOAD HERE!
-    JSL CheckForChangeGraphicsNormalLoadCastle
+    ;JSL CheckForChangeGraphicsNormalLoadCastle
     
     RTS
 }
@@ -912,7 +918,7 @@ org $02AF58 ; $012F58
         .makeItRain
     
         ; The rain overlay
-        LDX.w #$009F
+        ;LDX.w #$009F
     
     ; *$1300B ALTERNATE ENTRY POINT ; TODO: Verify this. If it is an alternate entry I can't find where it is reference anywhere.
     .loadSubScreenOverlay
@@ -1225,10 +1231,10 @@ if !Func02A4CD = 1
 org $02A4CD ; $0124CD
 RainAnimation:
 {
-    LDA $8C : CMP.b #$9F : BEQ .evilSwamp
+    LDA $8C : CMP.b #$9F : BEQ .rainOverlaySet
         ; Check the progress indicator
-        LDA $7EF3C5 : CMP.b #$02 : BCS .skipMovement
-            .evilSwamp
+        LDA $7EF3C5 : CMP.b #$02 : BRA .skipMovement
+            .rainOverlaySet
 
             ; If misery mire has been opened already, we're done.
             ;LDA $7EF2F0 : AND.b #$20 : BNE .skipMovement
@@ -1356,7 +1362,7 @@ CheckForChangeGraphicsTransitionLoad:
 
                 .dontUpdateAnimated1
 
-                LDA.w Pool_EnableAnimated : BEQ .dontUpdateMain1
+                LDA.w Pool_EnableMainPalette : BEQ .dontUpdateMain1
                     ; Check to see if we need to update the main palette by checking
                     ; what was previously loaded.
                     LDX.b $8A
@@ -1424,7 +1430,7 @@ CheckForChangeGraphicsTransitionLoad:
     LDA.b #$09 ; Replaced code.
 
     ; PLACE CUSTOM GFX LOAD HERE!
-    JML CheckForChangeGraphicsTransitionLoadCastle
+    ;JML CheckForChangeGraphicsTransitionLoadCastle
 
     CheckForChangeGraphicsTransitionLoadRetrun:
 
@@ -1546,7 +1552,7 @@ CheckForChangeGraphicsNormalLoad:
     ;JSL DecompOwAnimatedTiles 
 
     ; PLACE CUSTOM GFX LOAD HERE!
-    JSL CheckForChangeGraphicsNormalLoadCastle
+    ;JSL CheckForChangeGraphicsNormalLoadCastle
         
     PLB
 
@@ -1600,7 +1606,7 @@ org $0AB8F5 ; $0538F5
     STX.w $012C
 
     ; PLACE CUSTOM GFX LOAD HERE!
-    JSL CheckForChangeGraphicsNormalLoadCastle
+    ;JSL CheckForChangeGraphicsNormalLoadCastle
         
     RTL
 }
@@ -1612,11 +1618,11 @@ endif
 
 if !Func0BFEC6 = 1
 
-; Loads different special transparent colors and overlay speeds based on the overlay during transition and under other certain cases. Exact cases need to be investigated.
+; Loads different special transparent colors and overlay speeds based on the overlay during transition and under other certain cases. Exact cases need to be investigated. When leaving dungeon.
 org $0BFEC6 ; $05FEC6
 Overworld_LoadBGColorAndSubscreenOverlay:
 {
-    JSL ReplaceBGColor
+    ;JSL ReplaceBGColor
 
     ; set fixed color to neutral
     LDA.w #$4020 : STA.b $9C
@@ -1765,10 +1771,14 @@ pushpc
 
 ; ==============================================================================
 
+; Fixes an old hook.
+org $0ED627
+    LDA $8A : CMP.w #$0080
+
 if !Func0ED627 = 1
 
 ; Loads the transparent color under some load conditions such as the mirror warp.
-; TODO: Investigate the other conditions.
+; TODO: Investigate the other conditions. Exiting dungeons.
 org $0ED627 ; $075627
     JML IntColorLoad2
     NOP
