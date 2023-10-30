@@ -37,6 +37,19 @@ org $09A8F9
   db $00
   db $07 ; Zelda
 
+org $08C003
+Ancilla_BedSpread:
+{
+
+.chr
+    db $0A, $0A, $0A, $0A
+    db $0C, $0C, $0A, $0A
+    
+.properties
+    db $06, $66, $A6, $E6
+    db $06, $66, $A6, $E6
+}
+
 ; --------------------------------
 
 ; ; 76 Zelda Sprite Palette 
