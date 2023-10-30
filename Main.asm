@@ -38,6 +38,7 @@ incsrc 0x32CustomObject.asm
 incsrc 4thAmulet.asm
 incsrc BigWhirlPool.asm
 incsrc BowTablet.asm
+incsrc BottleFix.asm
 incsrc BumperASM.asm
 ;incsrc CastleBGGFX.asm ; Was going to be used with the ZSCustomOverworld but that's broken.
 incsrc Clown.asm
