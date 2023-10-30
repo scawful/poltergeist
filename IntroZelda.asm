@@ -12,21 +12,37 @@ Sprite4_DrawMultiple:
 org $05F93F
 Sprite2_DirectionToFacePlayer:
 
-; 76
+; -------- Orange Dress ----------
+; 76 Zelda Sprite Palette 
 org $0DB3CF
-  db $1D
+  db $1F 
 
 ; C1 
 org $0DB41A
-  ; db $02 ; weird yellow index $9X
-  ; db $06    ; $BX
-  db $0C ; yellow 
+  db $0E 
 
 ; Follower palettes 
 org $09A8F9
   db $00
-  db $0E ; Zelda
+  db $07 ; Zelda
+; --------------------------------
 
+; ; 76 Zelda Sprite Palette 
+; org $0DB3CF
+;   db $1D 
+
+; ; C1 
+; org $0DB41A
+;   db $0C ; yellow 
+;   ; db $02 ; weird yellow index $9X
+;   ; db $06    ; $BX
+
+; ; Follower palettes 
+; org $09A8F9
+;   db $00
+;   db $0E ; Zelda
+
+; Snitch Draw code ? 
 org $1AF8AC
 dw 0, -8 : db $E0, $20, $00, $02
 dw 0, 0 : db $E8, $20, $00, $02
@@ -48,23 +64,21 @@ dw 0, 0 : db $E4, $60, $00, $02
 dw 0, -7 : db $E2, $60, $00, $02
 dw 0, 1 : db $E6, $60, $00, $02
 
-; D8 64 
-; D9 24
-; D9 64
-; DA 24
-; DA 64
-; C8 22
-; C8 62
-; C9 22 
-; C9 62 
-; CA 22 
-; CA 62 
-; 70 01 
-; C0 00
-; C0 01 
-; 10 01 
-
 ; =============================================================================
+
+; Skip the spawning of a second Zelda for the vanilla cutscene
+org $06893B
+SpritePrep_ChattyAgahnim:
+{
+    LDA $0403 : AND.b #$40 : BEQ .not_triggered
+    
+    STZ $0DD0, X
+    
+    RTS
+
+.not_triggered
+    JMP $8BA7 ; SpritePrep_IgnoresProjectiles
+}
 
 ; Hook into the Cutscene Agahnim sprite
 org $1DD23F
@@ -98,24 +112,25 @@ CutsceneAgahnim_Main:
   .return
     RTS
 
-.old_man_save_me
-  ; Old man needs a minute to prepare his spells
-  LDA #$FF : STA SprTimerA, X 
-  LDA #$4F : STA $7E010E ; Set destination of old man
-  LDA #$04 : STA $35 ; Advance the cutscene
-  LDA #$11 : STA $012D
-  RTS
+  .old_man_save_me
+    ; Old man needs a minute to prepare his spells
+    LDA #$FF : STA SprTimerA, X 
+    LDA #$4F : STA $7E010E ; Set destination of old man
+    LDA #$04 : STA $35 ; Advance the cutscene
+    LDA #$11 : STA $012D
+    JSL OldMan_AdvanceGameState
+    RTS
 
-.no_really_please
-  ; Wait for it...
-  LDA SprTimerA, X : BNE .return
-  JSL $0BFFA8 ; WallMaster_SendPlayerToLastEntrance
-  LDA #$05 : STA $35
+  .no_really_please
+    ; Wait for it...
+    LDA SprTimerA, X : BNE .return
+    JSL $0BFFA8 ; WallMaster_SendPlayerToLastEntrance
+    LDA #$05 : STA $35
   RTS
 
 }
 
-warnpc $1DD2A6
+warnpc $1DD2AA
 
 ; =============================================================================
 ; 0x76 Zelda Sprite Hooks
@@ -264,7 +279,6 @@ SummonRogueWallmaster:
 
 Zelda_LevitateAway:
 {
-  
   LDA.w SprTimerC, X : BNE .dont_levitate
     ; Increase the sprite height with the wallmaster ID in $0FA6
     PHX : LDA $0FA6 : TAX : LDA SprHeight, X : PLX
@@ -297,17 +311,10 @@ Zelda_LevitateAway:
     
     PLX
 
-    ; Change the game state
-    LDA.b #$02 : STA $7EF3C5
-    LDA.b #$01 : STA $7EF3C8
-    LDA.b #$04 : STA $7EF3C6
-    
-    ; Sprite_LoadGfxProperties.justLightWorld
-    PHX : JSL $00FC62 : PLX
-
     ; Set destination after Link is kidnapped by Wallmaster
     LDA #$4E : STA $7E010E
 
+    ; Advance the cutscene state 
     LDA #$03 : STA $35
 
     ; Allow Link to move again
@@ -317,6 +324,19 @@ Zelda_LevitateAway:
     STZ $0DD0,     X
 
 .draw_zelda
+  RTL
+}
+
+OldMan_AdvanceGameState:
+{
+  ; Change the game state
+  LDA.b #$02 : STA $7EF3C5
+  LDA.b #$01 : STA $7EF3C8
+  LDA.b #$04 : STA $7EF3C6
+  
+  ; Sprite_LoadGfxProperties.justLightWorld
+  PHX : JSL $00FC62 : PLX
+
   RTL
 }
 
