@@ -4,7 +4,7 @@ lorom
 
 incsrc BookRoom.asm
 incsrc BugNetKid.asm
-incsrc Collision.asm
+incsrc CollisionTables.asm
 incsrc CustomSprProperties.asm
 incsrc DrawChanges.asm
 incsrc FixPumpkinDoor.asm
@@ -52,6 +52,9 @@ incsrc SpookyInventory.asm
 incsrc StalfosLayeredOam.asm
 incsrc TitleScreen.asm
 incsrc UncleFlicker.asm
+incsrc PoltergeistNew.asm
+incsrc DarkLinkBoss.asm
+;incsrc SahasralalalalaFlippers.asm
 
 pushpc
 incsrc ZSCustomOverworld.asm ; stripped of most functionality

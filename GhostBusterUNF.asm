@@ -2,10 +2,17 @@
 
 pushpc
 
-org $0FFD86
-    STZ.w $1CDB ; set count to 00
-    STZ.w $1CF3 ; set numeric to 00
-    RTL
+org $079B35
+JMP $A64B
+
+org $1DFCB2
+LDA #$90 ; number of frames it'll move out of the way
+
+org $0FFD8A
+JSL LendItem
+
+org $1AFF1E
+db #$10 ; npc is moved more to the left when coming from top
 
 org $1DFD18 ; New digging game dude
     JML NewDiggingDude
@@ -27,7 +34,7 @@ org $1DFE4B
 org $1DFE6D
     returnRTS:
 
-org $07A479 ; book of mudora
+org $07A64B ; quake medallion
     JSL Vacuum
     RTS
 
@@ -35,15 +42,24 @@ org $07A479 ; book of mudora
 
  ; New Item Use ( Vacuum )
 pullpc
+
+LendItem:
+JSL $07F1FA
+STZ.w $1CDB ; set count to 00
+STZ.w $1CF3 ; set numeric to 00
+RTL
+
 Vacuum:
 {
-    LDY.b #$0F
 
-    --
+;WTF IS THAT ?
+    ;LDY.b #$0F
 
-        LDA.b #$00 
-        STA $0E40, Y 
-    DEY : BPL --
+    ;--
+
+    ;LDA.b #$00 
+    ;STA $0E40, Y 
+    ;DEY : BPL --
 
     STZ.w $037A
     STZ.w $0B7B
@@ -517,7 +533,6 @@ db $00
 
 
 NewPoe:
-{
     LDA.w $0E30, X : CMP #$02 : BNE ++
     ; otherwise do not check for damage just float around waiting to be captured
 
@@ -531,11 +546,20 @@ NewPoe:
         ; he's getting attracted to player
         LDA #$08
         JSL Sprite_ApplySpeedTowardsPlayer
-
+        
     +
 
+    REP #$20
+    LDA.w $0FD8 : CMP #$0AA0 : BCC .killghost
+    CMP #$0B70 : BCS .killghost
+
+    LDA.w $0FDA : CMP #$0A80 : BCC .killghost
+    CMP #$0B60 : BCS .killghost
+    
+    SEP #$20
     INC.w $0E80, X
     RTL
+
     ++
     ;restore original code kinda
     JSL Sprite_CheckDamageFromPlayer
@@ -545,29 +569,70 @@ NewPoe:
 
     RTL
 
+    .killghost
+    SEP #$20
+    DEC.w $1CDB
+    STZ.w $0DD0, X
+    RTL
+
+
+
     NewDiggingDude:
 
     LDA $04B4 : BEQ .timer_elapsed
                 BMI .timer_elapsed
 
 
-    LDA $1CDB : CMP #$03 : BCS +
+    LDA $1CDB : CMP #$04 : BCS +
     INC.w $1CDB
         LDA #$19
         JSL Sprite_SpawnDynamically
         LDA.b #$02 : STA.w $0E30, Y
-        LDA #$0A : STA.w $0D20, Y
-        JSL GetRandomInt : AND #$7F : CLC : ADC #$88 : STA $0D00, Y
         REP #$20
-        JSL GetRandomInt : AND #$007F : CLC : ADC #$0088 : STA $00
+        JSL GetRandomInt : AND.w #$007F : CLC : ADC.w #$0AC0 : STA $02
+        JSL GetRandomInt : AND.w #$007F : CLC : ADC.w #$0AA0 : STA $00
         SEP #$20
+        
         LDA $00 : STA $0D10, Y
         LDA $01 : STA $0D30, Y
+
+        LDA $02 : STA $0D00, Y
+        LDA $03 : STA $0D20, Y
 
     +
 
     JML DiggingReturn
 
     .timer_elapsed
-    JML DiggingTimerDone
-}
+
+
+    LDA.b #$09 : STA $012C
+    
+    INC $0D80, X
+    
+    STZ.w $03FC
+    STZ.w $037A
+    STZ.w $0B7B
+
+
+    LDA $1CF3 : AND #$F0 : BNE .overTen ; Nbr of ghost in decimal
+    ; "OK! Time's up, game over. Come back again. Good bye..."
+    ;LDA.b #$8A :  STA $1CF0
+    ;LDA.b #$01 :  JSR Sprite4_ShowMessageMinimal
+    %ShowUnconditionalMessage($18A)
+
+    JML DiggingReturn
+    .overTen
+
+    ; do we already have the prize ?
+
+    
+    %ShowUnconditionalMessage($18A)
+    LDA $7EF2AD : AND #$40 : BNE .alreadyhaveprize
+    LDY #$17
+    JSL Link_ReceiveItem
+    LDA $7EF2AD : ORA #$40 : STA $7EF2AD
+    .alreadyhaveprize
+    JML DiggingReturn
+
+

@@ -12,7 +12,73 @@ Sprite4_DrawMultiple:
 org $05F93F
 Sprite2_DirectionToFacePlayer:
 
+; -------- Orange Dress ----------
+; 76 Zelda Sprite Palette 
+org $0DB3CF
+  db $1F 
+
+; C1 
+org $0DB41A
+  db $0E 
+
+; Follower palettes 
+org $09A8F9
+  db $00
+  db $07 ; Zelda
+; --------------------------------
+
+; ; 76 Zelda Sprite Palette 
+; org $0DB3CF
+;   db $1D 
+
+; ; C1 
+; org $0DB41A
+;   db $0C ; yellow 
+;   ; db $02 ; weird yellow index $9X
+;   ; db $06    ; $BX
+
+; ; Follower palettes 
+; org $09A8F9
+;   db $00
+;   db $0E ; Zelda
+
+; Snitch Draw code ? 
+org $1AF8AC
+dw 0, -8 : db $E0, $20, $00, $02
+dw 0, 0 : db $E8, $20, $00, $02
+dw 0, -7 : db $E0, $20, $00, $02
+dw 0, 1 : db $E8, $60, $00, $02
+
+dw 0, -8 : db $C0, $20, $00, $02
+dw 0, 0 : db $C2, $20, $00, $02
+dw 0, -7 : db $C0, $20, $00, $02
+dw 0, 1 : db $C2, $60, $00, $02
+
+dw 0, -8 : db $E2, $20, $00, $02
+dw 0, 0 : db $E4, $20, $00, $02
+dw 0, -7 : db $E2, $20, $00, $02
+dw 0, 1 : db $E6, $20, $00, $02
+
+dw 0, -8 : db $E2, $60, $00, $02
+dw 0, 0 : db $E4, $60, $00, $02
+dw 0, -7 : db $E2, $60, $00, $02
+dw 0, 1 : db $E6, $60, $00, $02
+
 ; =============================================================================
+
+; Skip the spawning of a second Zelda for the vanilla cutscene
+org $06893B
+SpritePrep_ChattyAgahnim:
+{
+    LDA $0403 : AND.b #$40 : BEQ .not_triggered
+    
+    STZ $0DD0, X
+    
+    RTS
+
+.not_triggered
+    JMP $8BA7 ; SpritePrep_IgnoresProjectiles
+}
 
 ; Hook into the Cutscene Agahnim sprite
 org $1DD23F
@@ -30,6 +96,7 @@ CutsceneAgahnim_Main:
     ; Start the levitate sequence 
     LDA.b #$40 : STA $0DF0, X ; Set Timer0 for AltarZelda_Main
     LDA.b #$01 : STA $0DC0, X ; Move Zelda to next anim frame
+    LDA.b #$0C : STA $0E60, X
 
       LDA $35 : CMP #$02 : BEQ .summoned
         JSL SummonRogueWallmaster
@@ -45,24 +112,25 @@ CutsceneAgahnim_Main:
   .return
     RTS
 
-.old_man_save_me
-  ; Old man needs a minute to prepare his spells
-  LDA #$FF : STA SprTimerA, X 
-  LDA #$4F : STA $7E010E ; Set destination of old man
-  LDA #$04 : STA $35 ; Advance the cutscene
-  LDA #$11 : STA $012D
-  RTS
+  .old_man_save_me
+    ; Old man needs a minute to prepare his spells
+    LDA #$FF : STA SprTimerA, X 
+    LDA #$4F : STA $7E010E ; Set destination of old man
+    LDA #$04 : STA $35 ; Advance the cutscene
+    LDA #$11 : STA $012D
+    JSL OldMan_AdvanceGameState
+    RTS
 
-.no_really_please
-  ; Wait for it...
-  LDA SprTimerA, X : BNE .return
-  JSL $0BFFA8 ; WallMaster_SendPlayerToLastEntrance
-  LDA #$05 : STA $35
+  .no_really_please
+    ; Wait for it...
+    LDA SprTimerA, X : BNE .return
+    JSL $0BFFA8 ; WallMaster_SendPlayerToLastEntrance
+    LDA #$05 : STA $35
   RTS
 
 }
 
-warnpc $1DD2A4
+warnpc $1DD2AA
 
 ; =============================================================================
 ; 0x76 Zelda Sprite Hooks
@@ -160,8 +228,6 @@ Uncle_GiveSwordAndShield:
   LDY.b #$00 : STZ $02E9
   JSL   Link_ReceiveItem
   LDA.b #$01 : STA $0DC0, X
-
-  LDA.b #$01 : STA $7EF3C5
   RTS
 }
 
@@ -175,7 +241,7 @@ Zelda_TransitionFromTagalong:
     
     LDX $02CF
     
-    LDA $1A64, X : AND.b #$03 : STA $0EB0, Y : STA $0DE0, Y
+    ; LDA $1A64, X : AND.b #$03 : STA $0EB0, Y : STA $0DE0, Y
     
     LDA $20 : STA $0D00, Y ; SprY Low
     LDA $21 : STA $0D20, Y ; SprY High
@@ -186,8 +252,10 @@ Zelda_TransitionFromTagalong:
     
     LDA.b #$00 : STA $7EF3CC ; Remove tagalong
     
-    LDA $0BA0, Y : INC A : STA $0BA0, Y
-    
+    ; LDA $0BA0, Y : INC A : STA $0BA0, Y
+
+    ; LDA #$19 : STA $0F50, Y
+
     ; ISPH HHHH - [I ignore collisions][S Statis (not alive eg beamos)][P Persist code still run outside of camera][H Hitbox] 
     LDA.b #$03 : STA $0F60, Y ; SprHitbox
     
@@ -203,14 +271,14 @@ SummonRogueWallmaster:
   
   LDA $0F70 : CLC : ADC #$40 : STA $0F70, Y
   LDA $0D00, Y : SEC : SBC.b #$06 : STA $0D00, Y
-  ; LDA #$01 : STA $0D80, Y ; Set subtype
+  LDA #$04 : STA $0F50, Y 
+
   TYA : STA $0FA6
   RTL
 }
 
 Zelda_LevitateAway:
 {
-  
   LDA.w SprTimerC, X : BNE .dont_levitate
     ; Increase the sprite height with the wallmaster ID in $0FA6
     PHX : LDA $0FA6 : TAX : LDA SprHeight, X : PLX
@@ -223,6 +291,7 @@ Zelda_LevitateAway:
 
     ; Spawn a rogue wallmaster
     LDA #$90 : JSL Sprite_SpawnDynamically
+    LDA #$04 : STA $0F50, Y 
     PHX
     
     LDX $02CF
@@ -242,17 +311,10 @@ Zelda_LevitateAway:
     
     PLX
 
-    ; Change the game state
-    LDA.b #$02 : STA $7EF3C5
-    LDA.b #$01 : STA $7EF3C8
-    LDA.b #$04 : STA $7EF3C6
-    
-    ; Sprite_LoadGfxProperties.justLightWorld
-    PHX : JSL $00FC62 : PLX
-
     ; Set destination after Link is kidnapped by Wallmaster
     LDA #$4E : STA $7E010E
 
+    ; Advance the cutscene state 
     LDA #$03 : STA $35
 
     ; Allow Link to move again
@@ -265,18 +327,25 @@ Zelda_LevitateAway:
   RTL
 }
 
+OldMan_AdvanceGameState:
+{
+  ; Change the game state
+  LDA.b #$02 : STA $7EF3C5
+  LDA.b #$01 : STA $7EF3C8
+  LDA.b #$04 : STA $7EF3C6
+  
+  ; Sprite_LoadGfxProperties.justLightWorld
+  PHX : JSL $00FC62 : PLX
+
+  RTL
+}
+
 
 ; =============================================================================
 
 ; Hook into the Cutscene AltarZelda sprite
 org $1DD5E9
 AltarZelda_DrawBody:
-
-; org $1DD643
-;   LDA.b #$CC
-
-; org $1DD64D
-;   LDA.b #$C4
 
 ; sheet00 $03, $04, $00, $00
 ; sheet01 $43, $44, $40, $40
@@ -290,13 +359,6 @@ AltarZelda_OamGroups:
 
   dw -4,   0 : db $00, $01, $00, $02
   dw 4,   0 : db $01, $01, $00, $02
-
-  ; sheet04 experiment
-  ; dw -4,   0 : db $C3, $C1, $C0, $C2
-  ; dw 4,   0 : db $C4, $C1, $C0, $C2
-
-  ; dw -4,   0 : db $C0, $C1, $C0, $C2
-  ; dw 4,   0 : db $C1, $C1, $C0, $C2
 }
 
 ; Main fn for the Zelda subtype of the Cutscene Agahnim sprite
