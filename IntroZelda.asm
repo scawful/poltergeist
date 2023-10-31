@@ -5,6 +5,21 @@
 ; $35   - Cutscene State
 ; $0FA6 - Wallmaster ID for tracking Zelda height
 
+InCutScene = $7EF303
+
+org        $0083F8
+LDA        InCutScene : BEQ .notInCutscene
+    STZ $F0
+    STZ $F2
+    STZ $F4
+    STZ $F6
+    STZ $F8
+    STZ $FA ; kill all input
+
+.notInCutscene
+
+RTS
+
 ; Hooked routines 
 org $1D8549
 Sprite4_DrawMultiple:
@@ -139,6 +154,9 @@ CutsceneAgahnim_Main:
 
   .old_man_save_me
     ; Old man needs a minute to prepare his spells
+    ; Allow Link to move again
+    STZ $02F5
+    LDA #$00 : STA InCutScene
     LDA #$FF : STA SprTimerA, X 
     LDA #$4F : STA $7E010E ; Set destination of old man
     LDA #$04 : STA $35 ; Advance the cutscene
@@ -155,7 +173,7 @@ CutsceneAgahnim_Main:
 
 }
 
-warnpc $1DD2B0
+warnpc $1DD2B3
 
 ; =============================================================================
 ; 0x76 Zelda Sprite Hooks
@@ -240,7 +258,6 @@ Zelda_CheckForStartCutscene:
     JSR Uncle_GiveSwordAndShield
     JSR Zelda_TransitionFromTagalong
 
-
     LDA #$99 : STA SprTimerC, X
     
     RTL
@@ -299,6 +316,7 @@ SummonRogueWallmaster:
   LDA $0F70 : CLC : ADC #$40 : STA $0F70, Y
   LDA $0D00, Y : SEC : SBC.b #$06 : STA $0D00, Y
   LDA #$0C : STA $0F50, Y 
+  LDA #$01 : STA InCutScene
 
   TYA : STA $0FA6
   RTL
@@ -343,9 +361,6 @@ Zelda_LevitateAway:
 
     ; Advance the cutscene state 
     LDA #$03 : STA $35
-
-    ; Allow Link to move again
-    STZ $02F5
 
     ; Goodbye Zelda
     STZ $0DD0,     X
