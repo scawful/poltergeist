@@ -191,6 +191,32 @@ warnpc $1DD2D0
 ; =============================================================================
 ; 0x76 Zelda Sprite Hooks
 
+org $05ECFA
+Zelda_ApproachingPlayer:
+{
+    LDA $0DF0, X : BNE .still_approaching
+    
+    INC $0D80, X
+    
+    ; "Thank you, [Name]. I had a feeling you were getting close."
+    LDA.b #$1C
+    LDY.b #$00
+    
+    JSL Sprite_ShowMessageUnconditional
+    
+    STZ $0D50, X
+    STZ $0D40, X
+    
+    ; Play you saved the day durp durp music.
+    ; LDA.b #$19 : STA $012C
+
+.still_approaching
+
+    LDA $1A : LSR #3 : AND.b #$01 : STA $0DC0, X
+    
+    RTS
+}
+
 ; $2ED76-$2ED7D DATA
 org    $05ED76
 Zelda_WalkTowardsPriest:
