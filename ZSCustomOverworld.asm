@@ -296,8 +296,8 @@ Pool:
     ; $009F is the rain overlay.
 
     ;LW
-    dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
-    dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
+    dw $00FF, $00FF, $00FF, $009F, $009F, $00FF, $00FF, $00FF
+    dw $00FF, $00FF, $00FF, $009F, $009F, $00FF, $00FF, $00FF
     dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
     dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
     dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
@@ -328,6 +328,10 @@ org $0283AD
 ; Music that plays after link wakes up, changed to cancel ambient sound.
 org $05DEA5 ; nothing for now
     LDA.b #$00 : STA $012D
+
+; Music that plays when exiting a dungeon in the rain phase.
+org $028465
+    LDX.b #$07
 
 ; Start of expanded space.
 org $288480 ; $140480

@@ -75,7 +75,7 @@ dw Action00_Doll
 
 
 Action00_Doll:
-%ShowSolicitedMessage(59)
+%ShowSolicitedMessage(52)
 JSL Sprite_PlayerCantPassThrough
 JSL Sprite_DirectionToFacePlayer
 

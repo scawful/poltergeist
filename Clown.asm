@@ -75,7 +75,7 @@ dw Action00_Clown
 
 
 Action00_Clown:
-%ShowSolicitedMessage(47)
+%ShowSolicitedMessage(61)
 JSL Sprite_PlayerCantPassThrough
 JSL Sprite_DirectionToFacePlayer
 

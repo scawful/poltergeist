@@ -222,7 +222,7 @@ DrawProgressIcons:
     BCC .initCrystalDiagram
 
     ; 1st pendant
-    LDA $7EF374 : AND.w #$0001 : BEQ .pendant1
+    LDA $7EF374 : AND.w #$0004 : BEQ .pendant1
         LDA.w #$212B : STA $13AE
         LDA.w #$212C : STA $13B0
         LDA.w #$212D : STA $13EE
@@ -234,7 +234,7 @@ DrawProgressIcons:
     LDA.w #$13B6 : STA $00
     STZ $02
         
-    LDA $7EF374 : AND.w #$000F : BEQ .pendant2
+    LDA $7EF374 : AND.w #$0001 : BEQ .pendant2
         INC $02
     
     .pendant2
@@ -246,7 +246,7 @@ DrawProgressIcons:
     LDA.w #$146E : STA $00
     STZ $02
         
-    LDA $7EF374 : AND.w #$0004 : BEQ .pendant3
+    LDA $7EF374 : AND.w #$0002 : BEQ .pendant3
         INC $02
     
     .pendant3
