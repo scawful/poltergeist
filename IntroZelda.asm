@@ -5,6 +5,21 @@
 ; $35   - Cutscene State
 ; $0FA6 - Wallmaster ID for tracking Zelda height
 
+InCutScene = $7EF303
+
+org        $0083F8
+LDA        InCutScene : BEQ .notInCutscene
+    STZ $F0
+    STZ $F2
+    STZ $F4
+    STZ $F6
+    STZ $F8
+    STZ $FA ; kill all input
+
+.notInCutscene
+
+RTS
+
 ; Hooked routines 
 org $1D8549
 Sprite4_DrawMultiple:
@@ -92,6 +107,8 @@ dw 0, 1 : db $E6, $60, $00, $02
 ; =============================================================================
 
 ; Skip the spawning of a second Zelda for the vanilla cutscene
+; I'm just mowing through unused agahnim cutscene code here 
+; Don't mind me...
 org $06893B
 SpritePrep_ChattyAgahnim:
 {
@@ -116,7 +133,8 @@ CutsceneAgahnim_Main:
   .start_cutscene
   CMP.b #$03 : BEQ .old_man_save_me
   CMP.b #$04 : BEQ .no_really_please
-  CMP.b #$05 : BEQ .return
+  CMP.b #$05 : BEQ .this_isnt_funny
+  CMP.b #$06 : BEQ .return
 
     ; Start the levitate sequence 
     LDA.b #$40 : STA $0DF0, X ; Set Timer0 for AltarZelda_Main
@@ -139,26 +157,65 @@ CutsceneAgahnim_Main:
 
   .old_man_save_me
     ; Old man needs a minute to prepare his spells
-    LDA #$FF : STA SprTimerA, X 
+    STZ $02F5
+    LDA #$00 : STA InCutScene ; Allow Link to move again
+    LDA #$FF : STA SprTimerA, X  ; Start the timer
     LDA #$4F : STA $7E010E ; Set destination of old man
     LDA #$04 : STA $35 ; Advance the cutscene
-    LDA #$11 : STA $012D
     JSL OldMan_AdvanceGameState
+
+    ; Run some dialogue from the bad guy
+    LDA #$0E : LDY #$00
+    JSL Sprite_ShowMessageUnconditional
     RTS
 
   .no_really_please
     ; Wait for it...
     LDA SprTimerA, X : BNE .return
+    LDA #$FF : STA SprTimerA, X ; Start the timer again
+    
+    LDA #$11 : STA $012D ; Play the church music
+    LDA #$05 : STA $35 ; Advance the cutscene 
+    RTS
+
+  .this_isnt_funny
+    LDA SprTimerA, X : BNE .return
     JSL $0BFFA8 ; WallMaster_SendPlayerToLastEntrance
-    LDA #$05 : STA $35
-  RTS
+    LDA #$06 : STA $35 ; End the cutscene 
+    RTS
 
 }
 
-warnpc $1DD2B0
+warnpc $1DD2D0
 
 ; =============================================================================
 ; 0x76 Zelda Sprite Hooks
+
+org $05ECFA
+Zelda_ApproachingPlayer:
+{
+    LDA $0DF0, X : BNE .still_approaching
+    
+    INC $0D80, X
+    
+    ; "Thank you, [Name]. I had a feeling you were getting close."
+    LDA.b #$1C
+    LDY.b #$00
+    
+    JSL Sprite_ShowMessageUnconditional
+    
+    STZ $0D50, X
+    STZ $0D40, X
+    
+    ; Play you saved the day durp durp music.
+    ; LDA.b #$19 : STA $012C
+
+.still_approaching
+
+    LDA $1A : LSR #3 : AND.b #$01 : STA $0DC0, X
+    
+    RTS
+}
 
 ; $2ED76-$2ED7D DATA
 org    $05ED76
@@ -240,7 +297,6 @@ Zelda_CheckForStartCutscene:
     JSR Uncle_GiveSwordAndShield
     JSR Zelda_TransitionFromTagalong
 
-
     LDA #$99 : STA SprTimerC, X
     
     RTL
@@ -299,6 +355,7 @@ SummonRogueWallmaster:
   LDA $0F70 : CLC : ADC #$40 : STA $0F70, Y
   LDA $0D00, Y : SEC : SBC.b #$06 : STA $0D00, Y
   LDA #$0C : STA $0F50, Y 
+  LDA #$01 : STA InCutScene
 
   TYA : STA $0FA6
   RTL
@@ -343,9 +400,6 @@ Zelda_LevitateAway:
 
     ; Advance the cutscene state 
     LDA #$03 : STA $35
-
-    ; Allow Link to move again
-    STZ $02F5
 
     ; Goodbye Zelda
     STZ $0DD0,     X
