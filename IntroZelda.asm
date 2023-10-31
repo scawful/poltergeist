@@ -107,6 +107,8 @@ dw 0, 1 : db $E6, $60, $00, $02
 ; =============================================================================
 
 ; Skip the spawning of a second Zelda for the vanilla cutscene
+; I'm just mowing through unused agahnim cutscene code here 
+; Don't mind me...
 org $06893B
 SpritePrep_ChattyAgahnim:
 {
@@ -131,7 +133,8 @@ CutsceneAgahnim_Main:
   .start_cutscene
   CMP.b #$03 : BEQ .old_man_save_me
   CMP.b #$04 : BEQ .no_really_please
-  CMP.b #$05 : BEQ .return
+  CMP.b #$05 : BEQ .this_isnt_funny
+  CMP.b #$06 : BEQ .return
 
     ; Start the levitate sequence 
     LDA.b #$40 : STA $0DF0, X ; Set Timer0 for AltarZelda_Main
@@ -154,26 +157,36 @@ CutsceneAgahnim_Main:
 
   .old_man_save_me
     ; Old man needs a minute to prepare his spells
-    ; Allow Link to move again
     STZ $02F5
-    LDA #$00 : STA InCutScene
-    LDA #$FF : STA SprTimerA, X 
+    LDA #$00 : STA InCutScene ; Allow Link to move again
+    LDA #$FF : STA SprTimerA, X  ; Start the timer
     LDA #$4F : STA $7E010E ; Set destination of old man
     LDA #$04 : STA $35 ; Advance the cutscene
-    LDA #$11 : STA $012D
     JSL OldMan_AdvanceGameState
+
+    ; Run some dialogue from the bad guy
+    LDA #$0E : LDY #$00
+    JSL Sprite_ShowMessageUnconditional
     RTS
 
   .no_really_please
     ; Wait for it...
     LDA SprTimerA, X : BNE .return
+    LDA #$FF : STA SprTimerA, X ; Start the timer again
+    
+    LDA #$11 : STA $012D ; Play the church music
+    LDA #$05 : STA $35 ; Advance the cutscene 
+    RTS
+
+  .this_isnt_funny
+    LDA SprTimerA, X : BNE .return
     JSL $0BFFA8 ; WallMaster_SendPlayerToLastEntrance
-    LDA #$05 : STA $35
-  RTS
+    LDA #$06 : STA $35 ; End the cutscene 
+    RTS
 
 }
 
-warnpc $1DD2B3
+warnpc $1DD2D0
 
 ; =============================================================================
 ; 0x76 Zelda Sprite Hooks
