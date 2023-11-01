@@ -31,8 +31,8 @@ dw $0000
 
 
 .Channel0
-%SetMasterVolume($A5)
-%SetChannelVolume($A4)
+%SetMasterVolume($7F)
+%SetChannelVolume($7E)
 %SetTempo(88);
 %SetInstrument($18) ; Guitar
 %SetDurationN($48, $7F) ; 1/4
@@ -54,7 +54,7 @@ db $00 ; End
 
 
 .Channel1
-%SetChannelVolume($A4)
+%SetChannelVolume($7E)
 %SetInstrument($18) ; Guitar
 %SetDurationN($24, $7F) ; 1/8
 db Rest, $48, Rest
@@ -79,7 +79,7 @@ db A2s, A2s, Tie, Tie, A2s, A2s, Tie, Tie, B2, B2, Tie, Tie, B2, B2, Tie, Tie
 
 
 .Channel3
-%SetChannelVolume($A0)
+%SetChannelVolume($7A)
 %SetInstrument($09) ; Strings
 %SetDurationN($48, $7F) ; 1/4
 db E4, Tie, D4s, Tie, F4, Tie, E4, Tie, D4, Tie, Tie, $24, C4s, C4, $48, A3s, Tie, G3, Tie, Tie, Tie, A3, Tie, E4, Tie, A4, Tie, A4s, Tie, Tie, Tie, D4s, Tie, E4, Tie

@@ -44,7 +44,7 @@ dw $0000
 
 
 .Channel0Intro
-%SetMasterVolume($AF)
+%SetMasterVolume($8F)
 %SetTempo(116);
 %SetInstrument($18) ; Guitar
 %SetDurationN($24, $7F) ; 1/4
@@ -98,7 +98,7 @@ db $00 ; End
 
 
 .Channel2
-%SetChannelVolume($9A)
+%SetChannelVolume($7A)
 %SetInstrument($18) ; Guitar
 %SetDurationN($12, $7F) ; 1/16
 %CallSubroutine(.sub5+!ARAMC, 32)

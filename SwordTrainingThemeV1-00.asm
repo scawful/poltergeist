@@ -32,7 +32,7 @@ dw $0000
 
 
 .Channel0
-%SetMasterVolume($AF)
+%SetMasterVolume($7F)
 %SetTempo(90);
 %SetInstrument($02) ; Tympani
 %SetDurationN($48, $7F) ; 1/4
