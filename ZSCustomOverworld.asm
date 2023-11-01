@@ -321,18 +321,6 @@ Pool:
     warnpc $288480
 }
 
-; Play wind sound instead of rain sound when starting the game.
-org $0283AD
-    LDA.b #$09 : STA $012D
-
-; Music that plays after link wakes up, changed to cancel ambient sound.
-org $05DEA5 ; nothing for now
-    LDA.b #$00 : STA $012D
-
-; Music that plays when exiting a dungeon in the rain phase.
-org $028465
-    LDX.b #$07
-
 ; Start of expanded space.
 org $288480 ; $140480
 pushpc

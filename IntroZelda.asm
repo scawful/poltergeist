@@ -7,6 +7,21 @@
 
 InCutScene = $7EF303
 
+pushpc
+
+; Play wind sound instead of rain sound when starting the game.
+org $0283AD
+    LDA.b #$09 : STA $012D
+
+; Music that plays after link wakes up, changed to cancel ambient sound.
+org $05DEA5 ; nothing for now
+    LDA.b #$00 : STA $012D
+
+; Music that plays when exiting a dungeon in the rain phase.
+org $028465
+    LDX.b #$07
+    
+
 org        $0083F8
 LDA        InCutScene : BEQ .notInCutscene
     STZ $F0
@@ -266,7 +281,8 @@ Zelda_BeCarefulOutThere:
 ; =============================================================================
 ; Custom Code Region 
 
-org $248000
+pullpc ; Expanded space
+
 ; Check for the position of the player 
 Zelda_CheckForStartCutscene:
 {
@@ -421,7 +437,7 @@ OldMan_AdvanceGameState:
   RTL
 }
 
-
+pushpc
 ; =============================================================================
 
 ; Hook into the Cutscene AltarZelda sprite
@@ -518,3 +534,6 @@ AltarZelda_DrawWarpEffect:
 }
 
 ; warnpc $1DD5D8
+
+pullpc
+; =============================================================================
