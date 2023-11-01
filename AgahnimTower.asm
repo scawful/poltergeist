@@ -4,6 +4,8 @@
 ; his death, and we can use the space from the original cutscene
 ; routines for it if necessary.
 
+pushpc
+
 org $1ED376
 Agahnim_SpinToPyramid:
 {
@@ -13,3 +15,4 @@ Agahnim_SpinToPyramid:
     RTS
 }
 
+pullpc
