@@ -75,6 +75,7 @@ pullpc
 ; incsrc PortMain.asm ; This will need to be fixed before it can be put in.
 
 incsrc IntroZelda.asm
+incsrc AgahnimTower.asm
 
 print "Build Successful!"
 warnpc $39FFFF ; If it reaches the warning move some code in next bank.
