@@ -75,8 +75,8 @@ pushpc
 org $0288FD ; Replace a BEQ by a BRA (dungeon map removed)
 db $80
 
-org $02A55E ; Replace a BEQ by a BRA (overworld map removed)
-db $80
+;org $02A55E ; Replace a BEQ by a BRA (overworld map removed)
+;db $80
 
 pullpc
 

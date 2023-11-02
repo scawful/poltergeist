@@ -2,8 +2,8 @@
 
 pushpc
 
-org $079B35
-JMP $A64B
+org $079B35 ; lended item code for shovel
+JMP $AF3E ; Jump to byrna code      ; QUAKE :  JMP $A64B
 
 org $1DFCB2
 LDA #$90 ; number of frames it'll move out of the way
@@ -34,7 +34,7 @@ org $1DFE4B
 org $1DFE6D
     returnRTS:
 
-org $07A64B ; quake medallion
+org $07AF3E ; byrna     ;org $07A64B ; quake medallion
     JSL Vacuum
     RTS
 
