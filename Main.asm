@@ -17,6 +17,9 @@ incsrc Tavern.asm
 incsrc HammerDamage.asm
 incsrc OverworldMap.asm
 
+
+
+
 ; ==============================================================================
 
 ; Music:
@@ -52,7 +55,6 @@ incsrc BottleFix.asm
 incsrc BumperASM.asm
 incsrc Clown.asm
 incsrc DamageHole.asm
-incsrc DarkLinkBoss.asm
 incsrc Doll.asm
 incsrc DWSpawn.asm
 incsrc EntranceAnimation.asm
@@ -70,16 +72,17 @@ incsrc MetroidCC.asm
 incsrc PoltergeistNew.asm
 incsrc PotNotAlive.asm
 incsrc PumpkinHeadCD.asm
-incsrc SahasralalalalaFlippers.asm
 incsrc SpikeSubtypes.asm
 incsrc SpookyInventory.asm
 incsrc StalfosLayeredOam.asm
 incsrc TitleScreen.asm
 incsrc UncleFlicker.asm
-incsrc LockedDoorsRainstate.asm
-
 incsrc masks/MaskRoutines.asm
 incsrc masks/AllMasks.asm
+incsrc DarkLinkBoss.asm
+incsrc SahasralalalalaFlippers.asm
+incsrc LockedDoorsRainstate.asm
+incsrc MapShop.asm
 
 pushpc
 incsrc ZSCustomOverworld.asm ; stripped of most functionality
