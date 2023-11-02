@@ -92,15 +92,15 @@ Palette_ArmorAndGloves_New:
   JMP   .original_sprite
 
 .tmnt
-  LDA.b #$36 : STA $BC 
+  LDA.b #$35 : STA $BC 
   JSL UpdateTmntPalette
   RTL
 .stalfos
-  LDA.b #$37 : STA $BC 
+  LDA.b #$36 : STA $BC 
   JSL UpdateStalfosPalette
   RTL
 .fierce_deity
-  LDA.b #$38 : STA $BC 
+  LDA.b #$37 : STA $BC 
   JSL UpdateFierceDeityLinkPalette
   RTL
 

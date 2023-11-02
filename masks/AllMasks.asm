@@ -1,20 +1,21 @@
 
-org            $368000
+org            $358000
 incbin         masks/tmnt.bin
 
-!TurtleId      = #$36
+!TurtleId      = #$35
 
-org            $378000
+org            $368000
 incbin         masks/stalfos.bin
 
-!StalfosId     = #$37
+!StalfosId     = #$36
 
-org            $388000
+org            $378000
 incbin         masks/fierce_deity.bin
 
-!FierceDeityId = #$38
+!FierceDeityId = #$37
 
 pullpc
+print "AllMasks ", pc 
 UpdateTmntPalette:
 {
   REP #$30   ; change 16bit mode
@@ -80,10 +81,10 @@ LinkItem_Bombos:
 
   %PlayerTransform()
   
-  LDA $02B2 : CMP #$05 : BEQ .unequip ; is the hood already on?
+  LDA $02B2 : CMP #$01 : BEQ .unequip ; is the hood already on?
   JSL UpdateTmntPalette
   LDA !TurtleId : STA $BC             ; change link's sprite 
-  LDA #$05 : STA $02B2
+  LDA #$01 : STA $02B2
   BRA .return
   .unequip
   %ResetToLinkGraphics()
@@ -103,10 +104,10 @@ LinkItem_Quake:
 
   %PlayerTransform()
   
-  LDA $02B2 : CMP #$06 : BEQ .unequip ; is the hood already on?
+  LDA $02B2 : CMP #$02 : BEQ .unequip ; is the hood already on?
   JSL UpdateStalfosPalette
   LDA !StalfosId : STA $BC            ; change link's sprite 
-  LDA #$06 : STA $02B2
+  LDA #$02 : STA $02B2
   BRA .return
   .unequip 
   
@@ -126,10 +127,10 @@ LinkItem_Ether:
 
   %PlayerTransform()
   
-  LDA $02B2 : CMP #$04 : BEQ .unequip ; is the hood already on?
+  LDA $02B2 : CMP #$03 : BEQ .unequip ; is the hood already on?
   JSL UpdateFierceDeityLinkPalette
   LDA !FierceDeityId : STA $BC        ; change link's sprite 
-  LDA #$04 : STA $02B2
+  LDA #$03 : STA $02B2
   BRA .return
   
 .unequip
