@@ -76,6 +76,9 @@ incsrc StalfosLayeredOam.asm
 incsrc TitleScreen.asm
 incsrc UncleFlicker.asm
 
+incsrc masks/MaskRoutines.asm
+incsrc masks/AllMasks.asm
+
 pushpc
 incsrc ZSCustomOverworld.asm ; stripped of most functionality
 pullpc

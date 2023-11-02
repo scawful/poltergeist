@@ -37,6 +37,9 @@ endmacro
 ; Change Link's sprite by setting $BC to the bank containing a spritesheet.
 ; =============================================================================
 
+org $02A560
+  JSL ForceReset : NOP
+
 org $008827
   JSL StartupMasks
 
@@ -78,6 +81,17 @@ StartupMasks:
   ; set links sprite bank
   LDA #$10 : STA $BC
 
+  RTL
+}
+
+ForceReset:
+{
+  LDY.b #$04 : LDA.b #$23
+  JSL   AddTransformationCloud
+  %ResetToLinkGraphics()
+
+  STZ.w $0200
+  LDA #$07
   RTL
 }
 

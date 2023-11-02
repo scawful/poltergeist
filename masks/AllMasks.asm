@@ -110,7 +110,7 @@ LinkItem_Quake:
   LDA #$02 : STA $02B2
   BRA .return
   .unequip 
-  
+  %ResetToLinkGraphics()
 
 .return
   CLC 
