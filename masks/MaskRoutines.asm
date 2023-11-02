@@ -6,6 +6,7 @@
 !LinkGraphics = $BC
 
 ; =============================================================================
+pushpc
 
 org $09912C
   AddTransformationCloud:
@@ -85,13 +86,22 @@ StartupMasks:
 Palette_ArmorAndGloves_New:
 {
   LDA   $02B2 
-  CMP.b #$04 : BEQ .bunny_hood
+  CMP.b #$01 : BEQ .tmnt
+  CMP.b #$02 : BEQ .stalfos
+  CMP.b #$03 : BEQ .fierce_deity
   JMP   .original_sprite
 
-
-.bunny_hood
-  ; Load Bunny Hood Location
-  LDA.b #$37 : STA $BC : JSL   $37F000
+.tmnt
+  LDA.b #$36 : STA $BC 
+  JSL UpdateTmntPalette
+  RTL
+.stalfos
+  LDA.b #$37 : STA $BC 
+  JSL UpdateStalfosPalette
+  RTL
+.fierce_deity
+  LDA.b #$38 : STA $BC 
+  JSL UpdateFierceDeityLinkPalette
   RTL
 
 .original_sprite

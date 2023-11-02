@@ -65,7 +65,6 @@ UpdateFierceDeityLinkPalette:
   dw #$7BDE, #$7FFF, #$6318, #$3A14, #$4EDA, #$14A5, #$4629, #$1078
   dw #$3125, #$49A7, #$39CE, #$56ED, #$6350, #$1571, #$4A52, #$0F5F
 }
-
 pushpc
   
 ; =============================================================================
@@ -109,6 +108,12 @@ LinkItem_Quake:
   LDA !StalfosId : STA $BC            ; change link's sprite 
   LDA #$06 : STA $02B2
   BRA .return
+  .unequip 
+  
+
+.return
+  CLC 
+  RTS
 }
 
 ; Fierce Deity
@@ -136,5 +141,6 @@ LinkItem_Ether:
 }
 
 warnpc $07A4F6
+pullpc
 
 
