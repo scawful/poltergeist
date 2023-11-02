@@ -17,9 +17,6 @@ incsrc Tavern.asm
 incsrc HammerDamage.asm
 incsrc OverworldMap.asm
 
-
-
-
 ; ==============================================================================
 
 ; Music:
@@ -79,13 +76,9 @@ incsrc SpookyInventory.asm
 incsrc StalfosLayeredOam.asm
 incsrc TitleScreen.asm
 incsrc UncleFlicker.asm
+
 incsrc masks/MaskRoutines.asm
 incsrc masks/AllMasks.asm
-incsrc PoltergeistNew.asm
-incsrc DarkLinkBoss.asm
-incsrc SahasralalalalaFlippers.asm
-incsrc MagicMirror.asm
-incsrc LockedDoorsRainstate.asm
 
 pushpc
 incsrc ZSCustomOverworld.asm ; stripped of most functionality
