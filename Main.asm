@@ -30,6 +30,7 @@ incsrc GnarledRootThemeV1-00.asm ; sanctuary song 0x14
 incsrc GraveyardThemeV1-00.asm ; Dark World overworld song 0x09
 incsrc JabuJabuBellyThemeV1-00.asm ; zelda rescue song 0x19
 incsrc SwordTrainingThemeV1-00.asm ; shop ; song 0x17
+incsrc CitySymmetryThemeV1-00.asm ; vilalge ; song 0x07
 incsrc engine/Macros.asm
 incsrc engine/sprite_functions_hooks.asm
 
