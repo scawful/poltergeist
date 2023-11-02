@@ -1,18 +1,18 @@
 
-org            $358000
+org            $2B8000
 incbin         masks/tmnt.bin
 
-!TurtleId      = #$35
+!TurtleId      = #$2B
 
-org            $368000
+org            $2C8000
 incbin         masks/stalfos.bin
 
-!StalfosId     = #$36
+!StalfosId     = #$2C
 
-org            $378000
+org            $2D8000
 incbin         masks/fierce_deity.bin
 
-!FierceDeityId = #$37
+!FierceDeityId = #$2D
 
 pullpc
 print "AllMasks ", pc 

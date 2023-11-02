@@ -86,10 +86,11 @@ StartupMasks:
 
 ForceReset:
 {
+  LDA $02B2 : BEQ .still_link
   LDY.b #$04 : LDA.b #$23
   JSL   AddTransformationCloud
   %ResetToLinkGraphics()
-
+.still_link
   STZ.w $0200
   LDA #$07
   RTL
@@ -106,15 +107,15 @@ Palette_ArmorAndGloves_New:
   JMP   .original_sprite
 
 .tmnt
-  LDA.b #$35 : STA $BC 
+  LDA.b #$2B : STA $BC 
   JSL UpdateTmntPalette
   RTL
 .stalfos
-  LDA.b #$36 : STA $BC 
+  LDA.b #$2C : STA $BC 
   JSL UpdateStalfosPalette
   RTL
 .fierce_deity
-  LDA.b #$37 : STA $BC 
+  LDA.b #$2D : STA $BC 
   JSL UpdateFierceDeityLinkPalette
   RTL
 
