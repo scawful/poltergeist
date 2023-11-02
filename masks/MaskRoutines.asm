@@ -181,8 +181,10 @@ Overworld_CgramAuxToMain_Override:
   LDA $7EC480, X : STA $7EC680, X
   LDA $02B2 : BNE .has_mask_palette
   LDA $7EC4C0, X : STA $7EC6C0, X
+  JMP .skip
 .has_mask_palette
-
+  LDA $7EC4B0, X : STA $7EC6B0, X ; Don't overwrite global sprite palette
+.skip
   INX #2 : CPX.b #$40 : BNE .loop
 
   SEP #$20
