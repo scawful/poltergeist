@@ -150,7 +150,7 @@ messagedisplay:
 ; Whoops! There i go, talking
 ; too much again...
 LDA.w SprTimerA, X : BNE +
-	%ShowUnconditionalMessage(32)
+	%ShowUnconditionalMessage(288)
 	%GotoAction(3)
 	LDA #$30 : STA.w SprTimerA, X
 	STA.w SprTimerD, X
