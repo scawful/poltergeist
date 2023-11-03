@@ -1,40 +1,238 @@
 ; ==============================================================================
+; LW OVERWORLD MAP
+; ==============================================================================
 
-org $008E57
-LDA #WorldMap_Tiles>>16 ; bank id
-
-org $008E84 
-ADC.w #WorldMap_Tiles ; bank offset
+org $008E54 ;STZ $2115
+JSL DMAOwMap
+RTS
 
 
 org $00E399 
+JSL DMAOwMapGfx
+RTL
 
-; set source address bank to 0x18
-LDA.b #WorldMap_Gfx>>16 : STA.b $02
+; ==============================================================================
+; DW OVERWORLD MAP
+; ==============================================================================
+org $008FF3
+RTS ; do not do anything during the DW update we'll handle it in the LW routine
 
-; update vram address after writes to $2119
-LDA.b #$80 : STA.w $2115
 
-; vram target address = $0000 (word)
-STZ.w $2116 : STZ.w $2117
+
+
+org $368000
+LWWorldMap_Tiles:
+incbin LWMapFinal.bin
+LWWorldMap_Gfx:
+incbin LWMapGfxFinal.bin
+
+org $378000
+DWWorldMap_Tiles:
+incbin DWMapFinal.bin
+DWWorldMap_Gfx:
+incbin DWMapGfxFinal.bin
+
+
+DMAOwMap:
+LDA $8A : AND #$40 : BEQ .LWMAP
+JMP .DWMAP
+.LWMAP
+STZ.w $2115
+
+LDA.b #LWWorldMap_Tiles>>16
+STA.w $4304
+
+REP #$20
+
+LDA.w #$1800
+STA.w $4300
+
+STZ.b $04
+STZ.b $02
+
+LDY.b #$01
+LDX.b #$00
+
+.next_quadrant
+LDA.w #$0020
+STA.b $06
+
+LDA.l .vram_offset,X
+STA.b $00
+
+.next_row
+LDA.b $00
+STA.w $2116
+
+CLC
+ADC.w #$0080
+STA.b $00
+
+LDA.b $02
+CLC
+ADC.w #LWWorldMap_Tiles
+STA.w $4302
+
+LDA.w #$0020
+STA.w $4305
+
+STY.w $420B
+
+CLC
+ADC.b $02
+STA.b $02
+
+DEC.b $06
+BNE .next_row
+
+INC.b $04
+INC.b $04
+
+LDX.b $04
+CPX.b #$08
+BNE .next_quadrant
+
+SEP #$20
+
+RTL
+
+.vram_offset
+dw $0000, $0020, $1000, $1020
+
+.DWMAP
+STZ.w $2115
+
+LDA.b #DWWorldMap_Tiles>>16
+STA.w $4304
+
+REP #$20
+
+LDA.w #$1800
+STA.w $4300
+
+STZ.b $04
+STZ.b $02
+
+LDY.b #$01
+LDX.b #$00
+
+.next_quadrant2
+LDA.w #$0020
+STA.b $06
+
+LDA.l .vram_offset,X
+STA.b $00
+
+.next_row2
+LDA.b $00
+STA.w $2116
+
+CLC
+ADC.w #$0080
+STA.b $00
+
+LDA.b $02
+CLC
+ADC.w #DWWorldMap_Tiles
+STA.w $4302
+
+LDA.w #$0020
+STA.w $4305
+
+STY.w $420B
+
+CLC
+ADC.b $02
+STA.b $02
+
+DEC.b $06
+BNE .next_row2
+
+INC.b $04
+INC.b $04
+
+LDX.b $04
+CPX.b #$08
+BNE .next_quadrant2
+
+SEP #$20
+
+RTL
+
+
+
+DMAOwMapGfx:
+
+LDA $8A : AND #$40 : BNE .DWMAP
+LDA.b #LWWorldMap_Gfx>>16 : STA $02
+
+LDA.b #$80 : STA $2115
+
+STZ $2116 : STZ $2117
 
 REP #$10
 
-LDY.w #WorldMap_Gfx : STY $00
+LDY.w #LWWorldMap_Gfx : STY $00
 
-org $368000
-WorldMap_Tiles:
-incbin orig4quadrantmap.bin
-WorldMap_Gfx:
-incbin origmapgfx.bin
+LDY.w #$0000
+
+.writeChr
+
+LDA [$00], Y : STA $2119 : INY
+LDA [$00], Y : STA $2119 : INY
+LDA [$00], Y : STA $2119 : INY
+LDA [$00], Y : STA $2119 : INY
+
+CPY.w #$4000 : BNE .writeChr
+
+SEP #$10
+
+RTL
+
+.DWMAP
+
+
+LDA.b #DWWorldMap_Gfx>>16 : STA $02
+
+LDA.b #$80 : STA $2115
+
+STZ $2116 : STZ $2117
+
+REP #$10
+
+LDY.w #DWWorldMap_Gfx : STY $00
+
+LDY.w #$0000
+
+.writeChr2
+
+LDA [$00], Y : STA $2119 : INY
+LDA [$00], Y : STA $2119 : INY
+LDA [$00], Y : STA $2119 : INY
+LDA [$00], Y : STA $2119 : INY
+
+CPY.w #$4000 : BNE .writeChr2
+
+SEP #$10
+
+RTL
+
+
+
+
+
+
 
 
 org $0ADB27
-Palettes:
-dw #$21B1, #$46DB, #$0000, #$29B0, #$214C, #$0043, #$3A55, #$150B, #$216E, #$3613
-dw #$29F4, #$110B, #$0886, #$1D4C, #$14E9, #$0CA8, #$150A, #$10C9, #$0CA7, #$1D90
-dw #$29D2, #$112D, #$1D6F, #$3A78, #$1D2C, #$25F4, #$0016, #$194E, #$2DD1, #$3E99
-dw #$2DF3, #$10C8, #$2190, #$192C, #$531C
+LWPalettes:
+dw $0000, $0CA8, $150A, $10C9, $0CA7, $0886, $110B, $0043, $1D90, $29D2, $112D, $21B1, $1D6F, $25F4, $150B, $194E
+dw $29F4, $1D2C, $3A78, $1D4C, $2DD1, $3E99, $0016, $216E, $3613, $14E9, $10C8, $2DF3, $192C, $2190, $531C
+
+org $0ADC27
+DWPalettes:
+dw $0000, $0CA8, $10C9, $0CA7, $0043, $150A, $0886, $110B, $21B1, $112D, $29F4, $1D2C, $3A78, $46DB, $3A55, $29B0
+dw $214C, $150B, $531C, $3613, $216E, $1D90, $29D2, $194E, $1D6F, $25F4, $1D4C, $0016, $14EA
 
 
 org $0AC589
@@ -65,7 +263,50 @@ PHA
 ;---------------------------------------------------------------------------------------------------
 
 .draw_prizes
+LDA $8A : AND #$40 : BEQ .lwprizes
 
+
+LDA.l $7EF374 : AND #$04 : BNE .skip_draw_dw
+ ; X position
+LDA.b #$01 : STA.l $7EC10B
+LDA.b #$0E : STA.l $7EC10A
+ ; Y position
+LDA.b #$00 : STA.l $7EC109
+LDA.b #$0F : STA.l $7EC108
+
+
+;---------------------------------------------------------------------------------------------------
+LDA.b #$60
+BEQ .dont_adjust_dw
+
+LDA.b $1A
+AND.b #$10
+BNE .skip_draw_dw
+
+JSR WorldMapIcon_AdjustCoordinate
+
+.dont_adjust_dw
+LDX.b #$0E
+JSR WorldMap_CalculateOAMCoordinates
+BCC .skip_draw_dw
+
+LDA.b #$66 : STA.b $0D
+LDA.b #$34 : STA.b $0C ; Tile GFX
+
+LDA.b #$02
+BRA .continue_dw
+
+.continue_dw
+STA.b $0B
+
+LDX.b #$0E
+JSR WorldMap_HandleSpriteBlink
+
+
+.skip_draw_dw
+JMP restore_coords_and_exit
+
+ .lwprizes
 ; Draw Amulet 1
 LDA.l $7EF374 : AND #$04 : BNE .skip_draw_0
  ; X position
