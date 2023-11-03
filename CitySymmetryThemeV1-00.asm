@@ -7,9 +7,9 @@
 ; Ported by Letterbomb
 ;=====================================================================================
 
-org $1A9F05; Sections?
+org $1AB7D5; Sections?
 CitySymmetryTheme:
-!ARAMAddr = $D00C
+!ARAMAddr = $E8DC
 dw !ARAMAddr+$08
 dw $00FF
 dw !ARAMAddr

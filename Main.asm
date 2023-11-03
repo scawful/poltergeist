@@ -16,7 +16,7 @@ incsrc RainMusic.asm
 incsrc Tavern.asm
 incsrc HammerDamage.asm
 incsrc OverworldMap.asm
-
+incsrc Swordbeam.asm
 
 
 

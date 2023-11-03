@@ -39,6 +39,18 @@
 Sprite_DarkLink_Long:
 {  
   PHB : PHK : PLB
+
+  ; ADD GANON CODE if subtype == 05
+  LDA.w SprSubtype, X : CMP #$05 : BNE .NotGanon
+  JSR Sprite_Ganon_Draw 
+  JSL Sprite_CheckActive   ; Check if game is not paused (Prevent timers from running if game is paused)
+  BCC .SpriteIsNotActive2   ; Skip Main code is sprite is innactive
+  JSR Sprite_Ganon_Main ; do ganon instead
+  .SpriteIsNotActive2
+  PLB ; Get back the databank we stored previously
+  RTL ; Go back to original code
+
+  .NotGanon
   LDA.w SprAction, X : CMP.b #$01 : BNE .normaldraw
   ;JSR Sprite_DarkLink_Draw ; Call the draw code
   .sworddraw
@@ -79,6 +91,7 @@ Sprite_DarkLink_Long:
   .SpriteIsNotActive
   PLB ; Get back the databank we stored previously
   RTL ; Go back to original code
+  
 }
 
 ;==============================================================================
@@ -102,7 +115,9 @@ Sprite_DarkLink_Prep:
 
   PLB
 
-  LDA #$FF : STA.w SprTimerA, X ; wait timer before falling
+  JSL GanonInit
+
+  LDA #$CF : STA.w SprTimerA, X ; wait timer before falling
   LDA #$7F : STA.w SprHeight, X
 
   %GotoAction(4)
@@ -708,12 +723,13 @@ Sprite_DarkLink_Main:
 
   LDA.w $0F70,X : BPL .aloft
 
+
   STZ.w $0F70,X
 
   LDA.b #$90 : STA.w SprTimerC, X
   LDA.b #$10 : STA.w SprTimerA, X
 
-
+  LDA.b #$0C : STA $012E
   %GotoAction(06)
 
   .aloft
@@ -752,8 +768,7 @@ Sprite_DarkLink_Main:
   LDA #$01 : STA.w SprMiscA, X
   %ShowUnconditionalMessage($016F)
 
-  ;LDA.b #$1F : STA $012C
-  LDA.b #$05 : STA $012C
+  LDA.b #$1F : STA $012C
   .nomessage
 
 
@@ -776,7 +791,7 @@ Sprite_DarkLink_Main:
   .tilesAreFallingAlready
 
   %GotoAction(0)
-  LDA.b #$35 : STA $012E
+
   +
 
 
@@ -1064,6 +1079,7 @@ Sprite_DarkLink_Draw:
   PLX
 
   .justshadow
+  LDA.w SprHeight, X : CMP #$5F : BCS +
   LDA.w SprAction, X : CMP #11 : BCS +
   JSL Sprite_DrawShadow
   +
@@ -1507,3 +1523,168 @@ Sprite_DarkLink_Draw:
   db $02, $02
   db $02, $02
 }
+
+
+
+
+
+GanonInit:
+{
+LDA #$88
+JSL Sprite_SpawnDynamically
+    LDA #$05 : STA.w SprSubtype, Y
+    LDA $00 : STA $0D10, Y
+    LDA $01 : STA.w $0D30, Y
+    
+    LDA $02 : STA.w $0D00, Y
+    LDA $03 : STA.w $0D20, Y
+
+    LDA.b #$30 : STA.w SprTimerA, Y  
+    LDA #$1E : STA.w $012C
+RTL
+}
+
+
+Sprite_Ganon_Main:
+LDA.w SprAction, X; Load the SprAction
+JSL UseImplicitRegIndexedLocalJumpTable; Goto the SprAction we are currently in
+dw Wait
+dw ShowMessage
+dw Fall
+dw FellWait
+dw FadingAwait
+
+
+Wait:
+LDA.w SprTimerA, X : BNE .wait
+LDA.b #$30 : STA.w SprTimerA, X
+%ShowUnconditionalMessage($46)
+%GotoAction(1)
+.wait
+
+RTS
+
+ShowMessage:
+LDA.w SprTimerA, X : BNE .wait
+LDA.b #$90 : STA.w SprTimerA, X
+%GotoAction(2)
+.wait
+
+RTS
+
+Fall:
+LDA.w SprTimerA, X : BNE .wait
+LDA.b #$50 : STA.w SprTimerA, X
+LDA #$01 : STA.w SprFrame, X
+INC.w SprMiscA, X
+%GotoAction(3)
+.wait
+
+
+RTS
+
+FellWait:
+LDA.w SprTimerA, X : BNE .wait
+LDA.b #$30 : STA.w SprTimerA, X
+%GotoAction(4)
+.wait
+
+
+RTS
+
+FadingAwait:
+LDA.w SprTimerA, X : BNE .wait
+STZ.w SprState, X
+.wait
+
+
+RTS
+
+
+Sprite_Ganon_Draw:
+LDA.w SprAction, X : CMP #$04 : BNE +
+LDA.w SprTimerA, X : AND #$04 : BEQ +
+RTS
+
++
+JSL Sprite_PrepOamCoord
+LDA #$18
+JSL OAM_AllocateFromRegionB
+
+
+LDA $0DC0, X : CLC : ADC $0D90, X : TAY;Animation Frame
+LDA .start_index, Y : STA $06
+
+
+PHX
+LDX .nbr_of_tiles, Y ;amount of tiles -1
+LDY.b #$00
+.nextTile
+
+PHX ; Save current Tile Index?
+    
+TXA : CLC : ADC $06 ; Add Animation Index Offset
+
+PHA ; Keep the value with animation index offset?
+
+ASL A : TAX 
+
+REP #$20
+
+LDA $00 : CLC : ADC .x_offsets, X : STA ($90), Y
+AND.w #$0100 : STA $0E 
+INY
+LDA $02 : CLC : ADC .y_offsets, X : STA ($90), Y
+CLC : ADC #$0010 : CMP.w #$0100
+SEP #$20
+BCC .on_screen_y
+
+LDA.b #$F0 : STA ($90), Y ;Put the sprite out of the way
+STA $0E
+.on_screen_y
+
+PLX ; Pullback Animation Index Offset (without the *2 not 16bit anymore)
+INY
+LDA .chr, X : STA ($90), Y
+INY
+LDA .properties, X : STA ($90), Y
+
+PHY 
+    
+TYA : LSR #2 : TAY
+    
+LDA .sizes, X : ORA $0F : STA ($92), Y ; store size in oam buffer
+    
+PLY : INY
+    
+PLX : DEX : BPL .nextTile
+
+PLX
+
+RTS
+
+
+;==================================================================================================
+; Sprite Draw Generated Data
+; --------------------------------------------------------------------------------------------------
+; This is where the generated Data for the sprite go
+;==================================================================================================
+.start_index
+db $00, $0C
+.nbr_of_tiles
+db 11, 11
+.x_offsets
+dw 0, 16, 28, 28, 0, 0, 16, 16, 0, 16, -12, -12
+dw 22, 22, -5, -5, -3, 18, 0, 16, 0, 16, 0, 16
+.y_offsets
+dw 7, 7, -9, 7, -16, 0, 0, -16, -19, -19, -9, 7
+dw 10, 26, 11, 27, -21, -21, -11, -11, 5, 5, 10, 10
+.chr
+db $E0, $E0, $C4, $E4, $C2, $E2, $E2, $C2, $C0, $C0, $C4, $E4
+db $C4, $E4, $C4, $E4, $E6, $E6, $C8, $C8, $E8, $E8, $C6, $C6
+.properties
+db $3D, $7D, $7D, $7D, $3B, $3B, $7B, $7B, $3D, $7D, $3D, $3D
+db $7D, $7D, $3D, $3D, $3D, $7D, $3B, $7B, $3B, $7B, $3D, $7D
+.sizes
+db $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02
+db $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02

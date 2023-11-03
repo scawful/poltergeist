@@ -65,6 +65,8 @@ Vacuum:
     STZ.w $0B7B
 
     LDA.b $F0 : AND.b #$40 : BEQ .YNotPressed
+
+    
         STZ.b $26
         STZ.b $68
         STZ.b $69
@@ -74,13 +76,14 @@ Vacuum:
         STA.w $0B7B
         ; Make some dust particles appears randomly in front of link and move towards link
         ; Use sprites because they're easier to work with 
-
+        
         DEC.w $045F : BPL + ; Timer (If timer < 0)
             LDA.b #$08 : STA.w $045F ; set timer back to 08
             LDA.w $045E : CMP.b #$06 : BCS + ; if there is more than 6 dust sprite
                 INC.w $045E
                 LDA.b #$D5
                 JSL Sprite_SpawnDynamically ; never more than 6 at once
+                LDA #$1E : STA $012F
                 ;$00 low x, $01 high x
                 ;$02 low y, $03 high y
 
