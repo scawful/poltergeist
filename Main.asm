@@ -48,7 +48,6 @@ incsrc 4thAmulet.asm
 incsrc AgahnimTower.asm
 incsrc BigWhirlPool.asm
 incsrc BowTablet.asm
-incsrc BottleFix.asm
 incsrc BumperASM.asm
 incsrc Clown.asm
 incsrc DamageHole.asm
@@ -72,6 +71,7 @@ incsrc MapShop.asm
 incsrc Masks/MaskRoutines.asm
 incsrc Masks/AllMasks.asm
 incsrc MetroidCC.asm
+incsrc Misc.asm
 incsrc PoltergeistNew.asm
 incsrc PotNotAlive.asm
 incsrc PumpkinHeadCD.asm
