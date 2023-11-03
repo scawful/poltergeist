@@ -76,13 +76,14 @@ incsrc PoltergeistNew.asm
 incsrc PotNotAlive.asm
 incsrc PumpkinHeadCD.asm
 incsrc Snorlax.asm
-
-warnpc $39FFFF ; If it reaches the warning move some code in next bank.
-org $3A8000
 incsrc SahasralalalalaFlippers.asm
 incsrc SpikeSubtypes.asm
 incsrc SpookyInventory.asm
 incsrc TitleScreen.asm
+warnpc $39FFFF ; If it reaches the warning move some code in next bank.
+
+org $3A8000
+
 
 warnpc $3AFFFF ; If it reaches the warning move some code in next bank.
 
