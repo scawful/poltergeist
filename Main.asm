@@ -3,7 +3,7 @@
 lorom
 
 ; No expanded space:
-incsrc MusicEngine.asm
+incsrc Music/MusicEngine.asm
 incsrc BugNetKid.asm
 incsrc CollisionTables.asm
 incsrc CustomSprProperties.asm
@@ -78,7 +78,6 @@ incsrc PumpkinHeadCD.asm
 incsrc SahasralalalalaFlippers.asm
 incsrc SpikeSubtypes.asm
 incsrc SpookyInventory.asm
-incsrc StalfosLayeredOam.asm
 incsrc TitleScreen.asm
 
 pushpc
