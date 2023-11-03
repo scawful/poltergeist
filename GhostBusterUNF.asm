@@ -351,6 +351,7 @@ CaptureGhost:
 {
     LDA.b #$18 : STA.w $0E10, Y ; reset timer
     LDA.w $0DA0, Y : INC : STA.w $0DA0, Y : CMP.b #$08 : BCC .notCaptured
+        LDA #$2A : STA.w $012E
         LDA.b #$06 : STA.w $0DD0, Y ; kill it for test code
         LDA.b #$0F : STA.w $0DF0, Y
         DEC.w $1CDB
