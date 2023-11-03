@@ -37,6 +37,10 @@ endmacro
 org $09F347
   JSL ForceResetMask_GameOver
 
+; Module17_SaveAndQuit
+org $09F7B5
+  JSL ForceResetMask_SaveAndQuit
+
 org $02A560
   JSL ForceReset : NOP
 
@@ -115,6 +119,16 @@ ForceResetMask_GameOver:
 .still_link
   LDA.b #$30
   STA.b $98
+  RTL
+}
+
+ForceResetMask_SaveAndQuit:
+{
+  LDA $02B2 : BEQ .still_link
+  %ResetToLinkGraphics()
+.still_link
+  LDA.b #$0F
+  STA.b $95
   RTL
 }
 
