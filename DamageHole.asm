@@ -1,13 +1,17 @@
+; ==============================================================================
 
 pushpc
+
 org $0794D9
-JML HoleDamage
-NOP #$02
-RTLPitDamageOW:
-skip 5
-RTLPitWarpOW:
+    JML HoleDamage
+    NOP #$02
+    RTLPitDamageOW:
+    skip 5
+    RTLPitWarpOW:
 
 pullpc
+
+; ==============================================================================
 
 HoleDamage:
 LDA $8A : CMP.b #$35 : BNE .notmap35
@@ -32,3 +36,5 @@ LDA.b $22 : CMP.w #$0100 : BCS .tooleft ; too right but use label above
         JML RTLPitWarpOW
 .notmap40
 JML RTLPitWarpOW
+
+; ==============================================================================

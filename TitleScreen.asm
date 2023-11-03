@@ -1,4 +1,7 @@
+; ==============================================================================
+
 pushpc
+
 org $0CC341 ;initialize some gfx settings at the beginning so that it displays correctly after the 
     JSL Main1 ;history cut scene plays And inserts the gfx to the vram and inserts a custom palette
 

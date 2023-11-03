@@ -1,8 +1,20 @@
+; ==============================================================================
+
 org $07F4D0
     Sprite_CheckIfPlayerPreoccupied:
 
 org $06F154
     Sprite_CheckDamageToPlayer_same_layer:
+
+; Change the item give to the lamp.
+org $06B9C6
+    LDY.b #$12
+
+; Change the prep function to check for the lamp instead.
+org $068D7F ; probably not needed
+    ;LDA $7EF34A
+
+; ==============================================================================
 
 ; Remove the bottle condition for the bug net kid. Always give the item.
 org $06B962
@@ -31,10 +43,4 @@ BugNetKid_Resting:
     RTS
 }
 
-; Change the item give to the lamp.
-org $06B9C6
-    LDY.b #$12
-
-; Change the prep function to check for the lamp instead.
-org $068D7F ; probably not needed
-    ;LDA $7EF34A
+; ==============================================================================

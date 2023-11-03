@@ -1,16 +1,16 @@
 
 org            $2B8000
-incbin         masks/tmnt.bin
+incbin         tmnt.bin
 
 !TurtleId      = #$2B
 
 org            $2C8000
-incbin         masks/stalfos.bin
+incbin         stalfos.bin
 
 !StalfosId     = #$2C
 
 org            $2D8000
-incbin         masks/fierce_deity.bin
+incbin         fierce_deity.bin
 
 !FierceDeityId = #$2D
 

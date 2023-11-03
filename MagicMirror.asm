@@ -1,4 +1,7 @@
+; ==============================================================================
+
 pushpc
+
 org $07A91A
 NOP #04 ; remove the extra Y button check
 
@@ -10,7 +13,10 @@ RTS ; otherwise end the mirror code !
 
 org $07A93C
 warp:
+
 pullpc
+
+; ==============================================================================
 
 NewMirrorCode:
 STZ.b $3A
@@ -30,3 +36,5 @@ RTL
 SEP #$20 ; use that to clear carry at same time
 CLC
 RTL
+
+; ==============================================================================

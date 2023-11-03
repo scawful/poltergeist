@@ -1,3 +1,5 @@
+; ==============================================================================
+
 pushpc
 org $05F177
 JSL NewBootCheck
@@ -30,3 +32,5 @@ RTL ; we have everything just RTL vanilla code will handle the rest
 .notallpendant
 .alreadyhaveflippers
 RTL ; code will be handled already
+
+; ==============================================================================

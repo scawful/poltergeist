@@ -3,45 +3,41 @@
 lorom
 
 ; No expanded space:
-incsrc musicengine.asm
-incsrc BookRoom.asm
+incsrc MusicEngine.asm
 incsrc BugNetKid.asm
 incsrc CollisionTables.asm
 incsrc CustomSprProperties.asm
-incsrc DrawChanges.asm
-incsrc FixPumpkinDoor.asm
-incsrc SparkleTitlescreen.asm
 incsrc SpookyCredits.asm
-incsrc RainMusic.asm
-incsrc Tavern.asm
-incsrc HammerDamage.asm
 incsrc OverworldMap.asm
 incsrc Swordbeam.asm
-
-
 
 ; ==============================================================================
 
 ; Music:
-incsrc PalaceThemeV1-01.asm ; castle song 0x10
 ;incsrc CallingThatDetestableNameV1-00.asm
-incsrc MysteriousForestV1-00.asm ; Light World overworld song 0x02
-incsrc GnarledRootThemeV1-00.asm ; sanctuary song 0x14
-incsrc GraveyardThemeV1-00.asm ; Dark World overworld song 0x09
-incsrc JabuJabuBellyThemeV1-00.asm ; zelda rescue song 0x19
-incsrc SwordTrainingThemeV1-00.asm ; shop ; song 0x17
-incsrc CitySymmetryThemeV1-00.asm ; vilalge ; song 0x07
-incsrc engine/Macros.asm
-incsrc engine/sprite_functions_hooks.asm
+
+incsrc Music/MysteriousForestV1-00.asm ; Light World overworld song 0x02
+incsrc Music/CitySymmetryThemeV1-00.asm ; vilalge ; song 0x07
+incsrc Music/GraveyardThemeV1-00.asm ; Dark World overworld song 0x09
+incsrc Music/PalaceThemeV1-01.asm ; castle song 0x10
+incsrc Music/GnarledRootThemeV1-00.asm ; sanctuary song 0x14
+incsrc Music/SwordTrainingThemeV1-00.asm ; shop ; song 0x17
+incsrc Music/JabuJabuBellyThemeV1-00.asm ; zelda rescue song 0x19
+
+; ==============================================================================
+
+; Sprite engine stuff:
+incsrc Engine/Macros.asm
+incsrc Engine/sprite_functions_hooks.asm
 
 ; ==============================================================================
 
 ; ZS sprite library stuff
 org $388000; Might need to change that position.
-incsrc engine/sprite_new_table.asm
+incsrc Engine/sprite_new_table.asm
 
 org $398000; Might need to change that position.
-incsrc engine/sprite_new_functions.asm
+incsrc Engine/sprite_new_functions.asm
 
 ; ==============================================================================
 
@@ -56,7 +52,9 @@ incsrc BottleFix.asm
 incsrc BumperASM.asm
 incsrc Clown.asm
 incsrc DamageHole.asm
+incsrc DarkLinkBoss.asm
 incsrc Doll.asm
+incsrc DrawChanges.asm
 incsrc DWSpawn.asm
 incsrc EntranceAnimation.asm
 incsrc FacadeCB.asm
@@ -66,24 +64,22 @@ incsrc GhostBusterUNF.asm ; Unfinished (must limit ghost and give prize on certa
 incsrc GlowingPalette.asm
 incsrc GoriyaSubtype.asm
 incsrc IntroZelda.asm
+incsrc LockedDoorsRainstate.asm
 incsrc LongSwitch.asm
 incsrc MagicMirror.asm
 incsrc Mantle.asm
+incsrc MapShop.asm
+incsrc Masks/MaskRoutines.asm
+incsrc Masks/AllMasks.asm
 incsrc MetroidCC.asm
 incsrc PoltergeistNew.asm
 incsrc PotNotAlive.asm
 incsrc PumpkinHeadCD.asm
+incsrc SahasralalalalaFlippers.asm
 incsrc SpikeSubtypes.asm
 incsrc SpookyInventory.asm
 incsrc StalfosLayeredOam.asm
 incsrc TitleScreen.asm
-incsrc UncleFlicker.asm
-incsrc masks/MaskRoutines.asm
-incsrc masks/AllMasks.asm
-incsrc DarkLinkBoss.asm
-incsrc SahasralalalalaFlippers.asm
-incsrc LockedDoorsRainstate.asm
-incsrc MapShop.asm
 
 pushpc
 incsrc ZSCustomOverworld.asm ; stripped of most functionality

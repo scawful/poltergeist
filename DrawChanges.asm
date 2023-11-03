@@ -1,5 +1,7 @@
 ; ==============================================================================
 
+pushpc
+
 org $05FFAC ; Spiderman
 db $08
 org $05FFBC
@@ -80,12 +82,64 @@ Pool_Zol_DrawMultiple:
 
 ; ==============================================================================
 
-
 org $08EDF9 ; Gravestones moved to sheet00 instead of 03
-
     db $08, $08, $18, $18
 
 org $0DB393 ; Half Magic Fix
-db $59
+    db $59
+
 org $05FBA2
-NOP #$0B 
+    NOP #$0B 
+
+; ==============================================================================
+
+; Causes the intro uncle to flicker.
+org $05DE2C
+    JSL NewUncleDraw
+
+pullpc
+
+NewUncleDraw:
+{
+    LDA $1A : AND #$03 : BEQ + ; Change 03 to 01 if too slow
+        JSL $0DD391 ; Draw Uncle Sprite
+
+    +
+    RTL
+}
+
+; ==============================================================================
+
+; Fixes a bug with the stalfos OAM layering.
+pushpc
+
+org $0DC246
+    db $80 ; BRA
+
+pullpc
+
+; org $0DC25C
+; JSL StalfosCheckLayered
+; NOP
+; pullpc
+
+
+; StalfosCheckLayered:
+; AND #$8F : PHA ; keep that
+
+
+; LDA $0FB3 : BEQ +
+; PLA : ORA.l .head_properties_layered, X
+; RTL
+; +
+; PLA : ORA.l .head_properties, X
+; RTL
+
+
+; .head_properties_layered
+;     db $40, $00, $00, $00
+
+; .head_properties
+;     db $70, $30, $30, $30
+
+; ==============================================================================

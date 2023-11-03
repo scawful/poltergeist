@@ -38,10 +38,11 @@ org $07AF3E ; byrna     ;org $07A64B ; quake medallion
     JSL Vacuum
     RTS
 
+pullpc
+
 ; ==============================================================================
 
  ; New Item Use ( Vacuum )
-pullpc
 
 LendItem:
 JSL $07F1FA
