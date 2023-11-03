@@ -33,12 +33,18 @@ macro CheckNewR_ButtonPress()
   LDA.b $F6 : BIT.b #$10
 endmacro
 
+; GameOver_DelayBeforeIris
+org $09F347
+  JSL ForceResetMask_GameOver
+
+org $02A560
+  JSL ForceReset : NOP
+
 ; =============================================================================
 ; Change Link's sprite by setting $BC to the bank containing a spritesheet.
 ; =============================================================================
 
-org $02A560
-  JSL ForceReset : NOP
+
 
 org $008827
   JSL StartupMasks
@@ -99,6 +105,16 @@ ForceReset:
 .still_link
   STZ.w $0200
   LDA #$07
+  RTL
+}
+
+ForceResetMask_GameOver:
+{
+  LDA $02B2 : BEQ .still_link
+  %ResetToLinkGraphics()
+.still_link
+  LDA.b #$30
+  STA.b $98
   RTL
 }
 

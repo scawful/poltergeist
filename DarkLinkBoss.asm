@@ -172,7 +172,11 @@ Sprite_DarkLink_Main:
 
     LDA.w SprMiscF, X : BNE .nodamage
     JSL Sprite_CheckDamageFromPlayer : BCC .nodamage
-
+    LDA.w SprTimerA, X : BNE .alreadytakingdamage
+    LDA.w $02B2 : CMP #$03 : BNE .notmoredamage
+    LDA.w SprHealth, X : SEC : SBC #$04 : STA.w SprHealth, X
+    .notmoredamage
+    .alreadytakingdamage
 
 
     LDA #$20
@@ -557,6 +561,11 @@ Sprite_DarkLink_Main:
 
   SwordSlash:
   JSL Sprite_CheckDamageFromPlayer : BCC .nodamage
+  LDA.w SprTimerA, X : BNE .alreadytakingdamage
+  LDA.w $02B2 : CMP #$03 : BNE .notmoredamage
+  LDA.w SprHealth, X : SEC : SBC #$04 : STA.w SprHealth, X
+  .notmoredamage
+  .alreadytakingdamage
 
     LDA #$05 : STA.w $012E ; clinking sound
     LDA #$20
@@ -811,6 +820,12 @@ Sprite_DarkLink_Main:
   WalkAction:
 
   JSL Sprite_CheckDamageFromPlayer : BCC .nodamage
+  LDA.w SprTimerA, X : BNE .alreadytakingdamage
+  LDA.w $02B2 : CMP #$03 : BNE .notmoredamage
+  LDA.w SprHealth, X : SEC : SBC #$04 : STA.w SprHealth, X
+  .notmoredamage
+  .alreadytakingdamage
+
   LDA #$20
   JSL Sprite_ApplySpeedTowardsPlayer
   LDA.w SprXSpeed, X : EOR #$FF : STA.w SprXSpeed, X
