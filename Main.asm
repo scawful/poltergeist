@@ -79,6 +79,7 @@ incsrc SahasralalalalaFlippers.asm
 incsrc SpikeSubtypes.asm
 incsrc SpookyInventory.asm
 incsrc TitleScreen.asm
+incsrc Snorlax.asm
 
 pushpc
 incsrc ZSCustomOverworld.asm ; stripped of most functionality
