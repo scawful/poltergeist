@@ -31,51 +31,55 @@
 
 
 pushpc
+
 org $06C003 ; pull switch JSL
-
-JSL NewPullSwitchCheck
-
+    JSL NewPullSwitchCheck
 
 ; Are there only three rooms where these switches work? 0_o.
-
 org $068859 ; pull switch prep
-JSL NewPrepSwitch
-RTS
-
+    JSL NewPrepSwitch
+    RTS
 
 pullpc
 
 
 NewPullSwitchCheck:
-LDA.b $1B : BNE +
-LDA.w $0E20, X : CMP #$04 : BNE .badswitch
-JSL Sprite_LongSwitch_Long
-RTL
-.badswitch
-JSL Sprite_BadSwitch_Long
-RTL
-+
-JSL $05D6BC
-RTL
+{
+    LDA.b $1B : BNE +
+        LDA.w $0E20, X : CMP #$04 : BNE .badswitch
+            JSL Sprite_LongSwitch_Long
+            RTL
+            
+        .badswitch
+        JSL Sprite_BadSwitch_Long
+        RTL
 
+    +
+
+    JSL $05D6BC
+    RTL
+}
 
 NewPrepSwitch:
-LDA.b $1B : BNE +
-JSL Sprite_LongSwitch_Prep
-RTL
-+
-LDA $048E
+{
+    LDA.b $1B : BNE +
+        JSL Sprite_LongSwitch_Prep
+        RTL
+    +
 
-CMP.b #$CE : BEQ .alpha
-CMP.b #$04 : BEQ .alpha
-CMP.b #$3F : BNE .beta
+    LDA $048E
 
-.alpha
+    CMP.b #$CE : BEQ .alpha
+    CMP.b #$04 : BEQ .alpha
+    CMP.b #$3F : BNE .beta
+        .alpha
 
-LDA.b #$0D : STA $0F50, X
+        LDA.b #$0D : STA $0F50, X
 
-.beta
-RTL
+    .beta
+
+    RTL
+}
 
 ;%Set_Sprite_Properties(Sprite_LongSwitch_Prep, Sprite_LongSwitch_Long);
 ;==================================================================================================
@@ -85,16 +89,18 @@ RTL
 ; handle the draw code and if the sprite is active and should move or not
 ;==================================================================================================
 Sprite_LongSwitch_Long:
-PHB : PHK : PLB
-JSR Sprite_LongSwitch_Draw ; Call the draw code
-JSL Sprite_CheckActive   ; Check if game is not paused
-BCC .SpriteIsNotActive   ; Skip Main code is sprite is innactive
+{
+    PHB : PHK : PLB
+    JSR Sprite_LongSwitch_Draw ; Call the draw code
+    JSL Sprite_CheckActive   ; Check if game is not paused
+    BCC .SpriteIsNotActive   ; Skip Main code is sprite is innactive
+        JSR Sprite_LongSwitch_Main ; Call the main sprite code
 
-JSR Sprite_LongSwitch_Main ; Call the main sprite code
+    .SpriteIsNotActive
 
-.SpriteIsNotActive
-PLB ; Get back the databank we stored previously
-RTL ; Go back to original code
+    PLB ; Get back the databank we stored previously
+    RTL ; Go back to original code
+}
 
 ;==================================================================================================
 ; Sprite initialization
@@ -103,22 +109,24 @@ RTL ; Go back to original code
 ; this code as soon as the room transitions/ overworld transition occurs
 ;==================================================================================================
 Sprite_LongSwitch_Prep:
-PHB : PHK : PLB
+{
+    PHB : PHK : PLB
    
     ; Add more code here to initialize data
-LDA $0FDA : STA $0D00, X : CLC : ADC #$08 : STA $0D00, X : STA.w $0FDA
-;LDA $0FDB : STA $0D20, X : SBC.b #$00 : STA $0D20, X : STA.w $0FDB
-LDA.w $0F60, X : ORA #$20 : STA.w $0F60, X
+    LDA $0FDA : STA $0D00, X : CLC : ADC #$08 : STA $0D00, X : STA.w $0FDA
+    ;LDA $0FDB : STA $0D20, X : SBC.b #$00 : STA $0D20, X : STA.w $0FDB
+    LDA.w $0F60, X : ORA #$20 : STA.w $0F60, X
 
 
-REP #$20
+    REP #$20
 
-LDA.w $0FDA : STA $02B2
-SEP #$20
-STZ.w SprMiscA, X
-STZ.w SprMiscC, X
-PLB
-RTL
+    LDA.w $0FDA : STA $02B2
+    SEP #$20
+    STZ.w SprMiscA, X
+    STZ.w SprMiscC, X
+    PLB
+    RTL
+}
 
 ;==================================================================================================
 ; Sprite Main routines code
@@ -282,8 +290,9 @@ STZ $48 ; prevent pulling animation if we are not pushing A
 INC $0379 ; disable A button press if we collide that sprite
 
 LDA $F2 : BPL .ANotPressed
-LDA.w SprMiscA, X : BNE +
-INC.w SprMiscB, X
+    LDA.w SprMiscA, X : BNE +
+    INC.w SprMiscB, X
+
 +
 
 INC.w SprMiscA, X
@@ -295,31 +304,35 @@ LDA $0D00, X : STA $20
 LDA $0D20, X : STA $21
 LDA #$01 : STA $48 ; set link in pulling state
 
-
 .done
 .ANotPressed
 .nocollision
 
-
 RTS
 
 SetCollision:
-REP #$20
-LDA #$0334
-STA.l $7E2416
-STA.l $7E2496
-STA.l $7E2516
-;LDA #$0D23
-;STA.l $7E2596
-SEP #$20
-RTS
+{
+    REP #$20
+    LDA #$0334
+    STA.l $7E2416
+    STA.l $7E2496
+    STA.l $7E2516
+    ;LDA #$0D23
+    ;STA.l $7E2596
+    SEP #$20
 
+    RTS
+}
 
 CheckAnimation:
-LDA $7EF298 : AND #$20 : BNE .noanimation
-LDA #$04 : STA.w $04C6
-.noanimation
-RTS
+{
+    LDA $7EF298 : AND #$20 : BNE .noanimation
+        LDA #$04 : STA.w $04C6
+
+    .noanimation
+
+    RTS
+}
 
 ;==================================================================================================
 ; Sprite Draw code
@@ -328,7 +341,7 @@ RTS
 ;==================================================================================================
 Sprite_LongSwitch_Draw:
 JSL Sprite_PrepOamCoord
-LDA #$05
+LDA #$18
 JSL OAM_AllocateFromRegionB
 ;JSL Sprite_OAM_AllocateDeferToPlayer
 LDY #$00 ;Animation Frame
@@ -465,8 +478,8 @@ dw 0, 0, 0, 0
 db $0A, $26, $26, $26, $26
 db $08, $08
 .properties
-db $31, $31, $31, $31, $31
-db $31, $31
+db $3B, $3B, $3B, $3B, $3B
+db $3B, $3B
 .sizes
 db $02, $02, $02, $02, $02
 db $02, $02
@@ -585,10 +598,10 @@ db 0
 .x_offsets
 dw 0
 .y_offsets
-dw -8
+dw 0
 .chr
 db $0A
 .properties
-db $31
+db $3B
 .sizes
 db $02
