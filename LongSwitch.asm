@@ -64,7 +64,11 @@ RTL
 
 NewPrepSwitch:
 LDA.b $1B : BNE +
+LDA.w $0E20, X : CMP #$04 : BNE .badswitch
 JSL Sprite_LongSwitch_Prep
+RTL
+.badswitch
+JSL Sprite_BadSwitch_Prep
 RTL
 +
 LDA $048E
@@ -112,7 +116,8 @@ PHB : PHK : PLB
 LDA $0FDA : STA $0D00, X : CLC : ADC #$08 : STA $0D00, X : STA.w $0FDA
 ;LDA $0FDB : STA $0D20, X : SBC.b #$00 : STA $0D20, X : STA.w $0FDB
 LDA.w $0F60, X : ORA #$20 : STA.w $0F60, X
-
+DEC.w SprY, X
+DEC.w SprY, X
 
 REP #$20
 
@@ -156,6 +161,7 @@ LDA.w SprTimerE, X : BNE .timer
 LDA #$0F : STA.w SprTimerE, X
 
 LDA.b $F0 : AND.b #$04 : BNE .downpressed
+JSR PlayPullSound
 LDA #$01 : STA.w SprMiscB, X
 .downpressed
 
@@ -324,6 +330,10 @@ LDA #$04 : STA.w $04C6
 .noanimation
 RTS
 
+PlayPullSound:
+LDA #$18 : STA.w $012F
+RTS
+
 ;==================================================================================================
 ; Sprite Draw code
 ; --------------------------------------------------------------------------------------------------
@@ -331,10 +341,10 @@ RTS
 ;==================================================================================================
 Sprite_LongSwitch_Draw:
 JSL Sprite_PrepOamCoord
-LDA #$20
+LDA #$14
 JSL OAM_AllocateFromRegionB
 ;JSL Sprite_OAM_AllocateDeferToPlayer
-LDY #$00 ;Animation Frame
+LDY #$00 ; Animation Frame
 LDA .start_index, Y : STA $06
 LDA.w SprMiscC, X : STA $08
 STZ $09
@@ -393,8 +403,8 @@ PLX
 
 
 ;JSL Sprite_PrepOamCoord
-LDA #$04
-JSL OAM_AllocateFromRegionF
+LDA #$08
+JSL OAM_AllocateFromRegionC
 LDY #$01
 LDA .start_index, Y : STA $06
 
@@ -465,7 +475,7 @@ dw 0, 0, 0, 0, 0
 dw 0, -80
 .y_offsets
 dw -08, -24, -40, -56, -72
-dw -10, -10
+dw -8, -8
 .chr
 db $0A, $26, $26, $26, $26
 db $08, $08
@@ -479,6 +489,15 @@ db $02, $02
 
 
 
+
+Sprite_BadSwitch_Prep:
+PHB : PHK : PLB
+
+DEC.w SprY, X
+DEC.w SprY, X
+
+PLB ; Get back the databank we stored previously
+RTL ; Go back to original code
 
 ;==================================================================================================
 ; Sprite Long Hook for that sprite
@@ -593,7 +612,7 @@ db 0
 .x_offsets
 dw 0
 .y_offsets
-dw -8
+dw 0
 .chr
 db $0A
 .properties
