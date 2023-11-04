@@ -31,5 +31,5 @@ pullpc
 ; ==============================================================================
 
 ChangeSpriteToGreen:
-LDA.w $0F50, X : AND #$F1 : ORA #$0A : STA.w $0F50, X
+LDA.w $0F50, X : AND #$F1 : ORA #$0C : STA.w $0F50, X
 RTL
