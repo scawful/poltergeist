@@ -2,6 +2,8 @@
 
 lorom
 
+function hexto555(h) = ((((h&$FF)/8)<<10)|(((h>>8&$FF)/8)<<5)|(((h>>16&$FF)/8)<<0))
+
 ; No expanded space:
 incsrc Music/MusicEngine.asm
 incsrc BugNetKid.asm
@@ -17,7 +19,7 @@ incsrc Swordbeam.asm
 ;incsrc CallingThatDetestableNameV1-00.asm
 
 incsrc Music/MysteriousForestV1-00.asm ; Light World overworld song 0x02
-incsrc Music/CitySymmetryThemeV1-00.asm ; vilalge ; song 0x07
+incsrc Music/CitySymmetryThemeV1-00.asm ; village ; song 0x07
 incsrc Music/GraveyardThemeV1-00.asm ; Dark World overworld song 0x09
 incsrc Music/PalaceThemeV1-01.asm ; castle song 0x10
 incsrc Music/GnarledRootThemeV1-00.asm ; sanctuary song 0x14
