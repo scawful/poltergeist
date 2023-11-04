@@ -470,8 +470,8 @@ dw -10, -10
 db $0A, $26, $26, $26, $26
 db $08, $08
 .properties
-db $31, $21, $21, $21, $21
-db $31, $31
+db $3B, $2B, $2B, $2B, $2B
+db $3B, $3B
 .sizes
 db $02, $02, $02, $02, $02
 db $02, $02
@@ -597,6 +597,6 @@ dw -8
 .chr
 db $0A
 .properties
-db $21
+db $2B
 .sizes
 db $02
