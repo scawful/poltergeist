@@ -100,4 +100,24 @@ LDX #$05
 
 ; ==============================================================================
 
+;Master Sword Wind Fix
+org $08C5D3
+    LDA.b #$00
+    STA $012D
+
+org $09876D
+    db $80
+
+org $0987CA
+    db $80
+
+; ==============================================================================
+
+; Change the dungeon that makes it so the tower of hera pendant falls in a set
+; location to Letter's dungeon instead. Change to something else if this breaks it.
+org $098C25
+    db #$0C
+
+; ==============================================================================
+
 pullpc

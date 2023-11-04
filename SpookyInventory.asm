@@ -234,7 +234,7 @@ DrawProgressIcons:
     LDA.w #$13B6 : STA $00
     STZ $02
         
-    LDA $7EF374 : AND.w #$0001 : BEQ .pendant2
+    LDA $7EF374 : AND.w #$0002 : BEQ .pendant2
         INC $02
     
     .pendant2
@@ -246,7 +246,7 @@ DrawProgressIcons:
     LDA.w #$146E : STA $00
     STZ $02
         
-    LDA $7EF374 : AND.w #$0002 : BEQ .pendant3
+    LDA $7EF374 : AND.w #$0001 : BEQ .pendant3
         INC $02
     
     .pendant3
