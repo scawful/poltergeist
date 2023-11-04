@@ -80,6 +80,13 @@ Ancilla_BedSpread:
     db $06, $66, $A6, $E6
 }
 
+; Stop Zelda from playing her music 
+org $05ED10
+  NOP #4
+
+org $05ED63
+  RTS
+
 ; --------------------------------
 
 ; ; 76 Zelda Sprite Palette 
