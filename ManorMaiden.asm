@@ -1,6 +1,8 @@
 ; Jeibumpkin ? Room 7C
 ; Dialoge ID - 011D
 
+pushpc
+
 org $09A1EC
   JSL CheckForMaidenInLibrary
 
@@ -24,5 +26,3 @@ CheckForMaidenInLibrary:
   LDA.b $A0
   RTL
 }
-
-pushpc
