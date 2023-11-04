@@ -25,7 +25,7 @@ incsrc Music/PalaceThemeV1-01.asm ; castle song 0x10
 incsrc Music/GnarledRootThemeV1-00.asm ; sanctuary song 0x14
 incsrc Music/SwordTrainingThemeV1-00.asm ; shop ; song 0x17
 incsrc Music/JabuJabuBellyThemeV1-00.asm ; zelda rescue song 0x19
-
+incsrc Music/SkullDungeonThemeV1-00.asm ; fugitive song 0x0C
 ; ==============================================================================
 
 ; Sprite engine stuff:
