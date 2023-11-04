@@ -49,7 +49,7 @@ EntranceOpening2:
 
         SEP #$30
 
-        LDA.b #$01 : STA $14
+        JSL PlayThudSound
 
         LDA #$40 : STA $C8 ; Timer wait 40 frames before playing jingle and end the animation
         INC $B0 ; State of bombosentrance animation
@@ -84,7 +84,7 @@ EntranceOpening3:
         SEP #$30
         INC $B0
 
-        LDA.b #$01 : STA $14
+        JSL PlayThudSound
         LDA #$40 : STA $C8 ; Timer wait 40 frames before playing jingle and end the animation
 
     +
@@ -117,7 +117,7 @@ EntranceOpening4:
 
         SEP #$30
         INC $B0
-        LDA.b #$01 : STA $14
+        JSL PlayThudSound
         LDA #$40 : STA $C8 ; Timer wait 40 frames before playing jingle and end the animation
 
     +
@@ -150,7 +150,7 @@ EntranceOpening5:
 
         SEP #$30
 
-        LDA.b #$01 : STA $14
+        JSL PlayThudSound
 
         LDA.b #$1B : STA $012F
 
@@ -174,5 +174,18 @@ EntranceOpening5:
 warnpc $1BCF5F
 
 pullpc
+
+; ==============================================================================
+
+; Plays the thud sound.
+; Yeah I know this is dumb but theres no space.
+PlayThudSound:
+{
+    LDA.b #$01 : STA $14 ; replaced code
+
+    LDA.b #$03 : STA $012F
+
+    RTL
+}
 
 ; ==============================================================================
