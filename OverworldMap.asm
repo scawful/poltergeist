@@ -218,8 +218,49 @@ SEP #$10
 RTL
 
 
+SpritePalette:
+    REP #$20
+
+    ; Pendant 1 green -> orange.
+    LDA.w #hexto555($A9A9A9) : STA.l $7EC696
+    LDA.w #hexto555($E8E8E8) : STA.l $7EC698
+
+    LDA.w #hexto555($FFB345) : STA.l $7EC69C
+    LDA.w #hexto555($D58200) : STA.l $7EC69E
+
+    ; Pendant 2 blue -> purple.
+    LDA.w #hexto555($A9A9A9) : STA.l $7EC656
+    LDA.w #hexto555($E8E8E8) : STA.l $7EC658
+
+    LDA.w #hexto555($AD45FF) : STA.l $7EC65C
+    LDA.w #hexto555($7C00D5) : STA.l $7EC65E
+
+    ; Pendant 3 red -> green.
+    LDA.w #hexto555($A9A9A9) : STA.l $7EC636
+    LDA.w #hexto555($E8E8E8) : STA.l $7EC638
+
+    LDA.w #hexto555($15FF36) : STA.l $7EC63C
+    LDA.w #hexto555($00B51E) : STA.l $7EC63E
+
+    ; Pendant 4 crystal -> yellow.
+    LDA.w #hexto555($F8F8F8) : STA.l $7EC6D2
+
+    LDA.w #hexto555($A9A9A9) : STA.l $7EC6D6
+    LDA.w #hexto555($E8E8E8) : STA.l $7EC6D8
+    LDA.w #hexto555($282828) : STA.l $7EC6DA
+    LDA.w #hexto555($FFED23) : STA.l $7EC6DC
+    LDA.w #hexto555($BFB400) : STA.l $7EC6DE
 
 
+    SEP #$20
+
+    ;JSL $0ED6C0
+
+RTL
+
+
+org $0ABA67
+JSL SpritePalette
 
 
 
@@ -268,88 +309,47 @@ LDA $8A : AND #$40 : BEQ .lwprizes
 
 LDA.l $7EF374 : AND #$04 : BNE .skip_draw_dw
  ; X position
-LDA.b #$01 : STA.l $7EC10B
-LDA.b #$0E : STA.l $7EC10A
+LDA.b #$00 : STA.l $7EC10B
+LDA.b #$89 : STA.l $7EC10A ; Upper nybble control Zoomed low X pos
  ; Y position
 LDA.b #$00 : STA.l $7EC109
-LDA.b #$0F : STA.l $7EC108
-
-
-;---------------------------------------------------------------------------------------------------
-LDA.b #$60
-BEQ .dont_adjust_dw
-
-LDA.b $1A
-AND.b #$10
-BNE .skip_draw_dw
-
-JSR WorldMapIcon_AdjustCoordinate
-
-.dont_adjust_dw
-LDX.b #$0E
-JSR WorldMap_CalculateOAMCoordinates
-BCC .skip_draw_dw
-
+LDA.b #$E4 : STA.l $7EC108 ; Upper nybble control Zoomed low Y pos
+ ; Tile GFX
 LDA.b #$66 : STA.b $0D
-LDA.b #$34 : STA.b $0C ; Tile GFX
+LDA.b #$34 : STA.b $0C
+; Tile Size
+LDA.b #$02 : STA.b $0B ; 02 = 16x16, 00 = 8x8 
+LDA.b #$0E : STA.l $7EC025 ; OAM Slot used
 
-LDA.b #$02
-BRA .continue_dw
-
-.continue_dw
-STA.b $0B
-
-LDX.b #$0E
-JSR WorldMap_HandleSpriteBlink
-
+JSR HandleMapDrawIcon
 
 .skip_draw_dw
 JMP restore_coords_and_exit
+
+JSR HandleMapDrawIcon
 
  .lwprizes
 ; Draw Amulet 1
 LDA.l $7EF374 : AND #$04 : BNE .skip_draw_0
  ; X position
 LDA.b #$0E : STA.l $7EC10B
-LDA.b #$0E : STA.l $7EC10A
+LDA.b #$3E : STA.l $7EC10A
  ; Y position
 LDA.b #$04 : STA.l $7EC109
-LDA.b #$08 : STA.l $7EC108
-
-
-;---------------------------------------------------------------------------------------------------
-LDA.b #$60
-BEQ .dont_adjust_0
-
-LDA.b $1A
-AND.b #$10
-BNE .skip_draw_0
-
-JSR WorldMapIcon_AdjustCoordinate
-
-.dont_adjust_0
-LDX.b #$0E
-JSR WorldMap_CalculateOAMCoordinates
-BCC .skip_draw_0
-
+LDA.b #$68 : STA.l $7EC108
+ ; Tile GFX
 LDA.b #$60 : STA.b $0D
-LDA.b #$32 : STA.b $0C ; Tile GFX
-
-LDA.b #$02
-BRA .continue_0
-
-.continue_0
-STA.b $0B
-
-LDX.b #$0E
-JSR WorldMap_HandleSpriteBlink
-
+LDA.b #$38 : STA.b $0C
+; Tile Size
+LDA.b #$02 : STA.b $0B ; 02 = 16x16, 00 = 8x8 
+LDA.b #$0E : STA.l $7EC025 ; OAM Slot used
+JSR HandleMapDrawIcon
 
 .skip_draw_0
 
 
 ; Draw Amulet 1
-LDA.l $7EF374 : AND #$01 : BNE .skip_draw_1
+LDA.l $7EF374 : AND #$02 : BNE .skip_draw_1
  ; X position
 LDA.b #$0D : STA.l $7EC10B
 LDA.b #$05 : STA.l $7EC10A
@@ -357,123 +357,73 @@ LDA.b #$05 : STA.l $7EC10A
 LDA.b #$0D : STA.l $7EC109
 LDA.b #$09 : STA.l $7EC108
 
-
-;---------------------------------------------------------------------------------------------------
-LDA.b #$60
-BEQ .dont_adjust_1
-
-LDA.b $1A
-AND.b #$10
-BNE .skip_draw_1
-
-JSR WorldMapIcon_AdjustCoordinate
-
-.dont_adjust_1
-LDX.b #$0D
-JSR WorldMap_CalculateOAMCoordinates
-BCC .skip_draw_1
-
 LDA.b #$60 : STA.b $0D
 LDA.b #$34 : STA.b $0C ; Tile GFX
 
-LDA.b #$02
-BRA .continue_1
+LDA.b #$02 : STA.b $0B ; 02 = 16x16, 00 = 8x8 
+LDA.b #$0D : STA.l $7EC025
 
-.continue_1
-STA.b $0B
-
-LDX.b #$0D
-JSR WorldMap_HandleSpriteBlink
-
-
+JSR HandleMapDrawIcon
 .skip_draw_1
 
 
 
 
 ; Draw Amulet 3
-LDA.l $7EF374 : AND #$02 : BNE .skip_draw_2
+LDA.l $7EF374 : AND #$01 : BNE .skip_draw_2
  ; X position
 LDA.b #$09 : STA.l $7EC10B
-LDA.b #$04 : STA.l $7EC10A
+LDA.b #$34 : STA.l $7EC10A
  ; Y position
 LDA.b #$00 : STA.l $7EC109
 LDA.b #$0E : STA.l $7EC108
 
-
-;---------------------------------------------------------------------------------------------------
-LDA.b #$60
-BEQ .dont_adjust_2
-
-LDA.b $1A
-AND.b #$10
-BNE .skip_draw_2
-
-JSR WorldMapIcon_AdjustCoordinate
-
-.dont_adjust_2
-LDX.b #$0C
-JSR WorldMap_CalculateOAMCoordinates
-BCC .skip_draw_2
-
 LDA.b #$60 : STA.b $0D
-LDA.b #$38 : STA.b $0C ; Tile GFX
+LDA.b #$32 : STA.b $0C ; Tile GFX
 
-LDA.b #$02
-BRA .continue_2
-
-.continue_2
-STA.b $0B
-
-LDX.b #$0C
-JSR WorldMap_HandleSpriteBlink
+LDA.b #$02 : STA.b $0B ; 02 = 16x16, 00 = 8x8 
+LDA.b #$0C : STA.l $7EC025
 
 
+
+JSR HandleMapDrawIcon
 .skip_draw_2
-
-
 
 
 ; Draw Amulet 1
 LDA.l $7EF37A : AND #$01 : BNE .skip_draw_3
  ; X position
 LDA.b #$00 : STA.l $7EC10B
-LDA.b #$17 : STA.l $7EC10A
+LDA.b #$87 : STA.l $7EC10A
  ; Y position
 LDA.b #$06 : STA.l $7EC109
 LDA.b #$01 : STA.l $7EC108
 
-
-;---------------------------------------------------------------------------------------------------
-LDA.b #$60
-BEQ .dont_adjust_3
-
-LDA.b $1A
-AND.b #$10
-BNE .skip_draw_3
-
-JSR WorldMapIcon_AdjustCoordinate
-
-.dont_adjust_3
-LDX.b #$0B
-JSR WorldMap_CalculateOAMCoordinates
-BCC .skip_draw_3
-
 LDA.b #$60 : STA.b $0D
-LDA.b #$34 : STA.b $0C ; Tile GFX
+LDA.b #$3C : STA.b $0C ; Tile GFX
 
-LDA.b #$02
-BRA .continue_3
+LDA.b #$02 : STA.b $0B ; 02 = 16x16, 00 = 8x8 
+LDA.b #$0B : STA.l $7EC025
 
-.continue_3
-STA.b $0B
-
-LDX.b #$0B
-JSR WorldMap_HandleSpriteBlink
-
-
+JSR HandleMapDrawIcon
 .skip_draw_3
 JMP restore_coords_and_exit
+
+
+
+HandleMapDrawIcon:
+LDA.b $1A
+AND.b #$10
+BNE .skip_draw ; Timer to make it flash
+JSR WorldMapIcon_AdjustCoordinate
+LDA.l $7EC025 : TAX
+JSR WorldMap_CalculateOAMCoordinates
+BCC .skip_draw
+LDA.l $7EC025 : TAX
+LDA.b #$02
+JSR WorldMap_HandleSpriteBlink
+.skip_draw
+RTS
 
 
 
