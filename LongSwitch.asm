@@ -161,11 +161,11 @@ LDA.w SprTimerE, X : BNE .timer
 LDA #$0F : STA.w SprTimerE, X
 
 LDA.b $F0 : AND.b #$04 : BNE .downpressed
-JSR PlayPullSound
 LDA #$01 : STA.w SprMiscB, X
 .downpressed
 
 LDA.b $F0 : AND.b #$04 : BEQ .DownNotPressed
+JSR PlayPullSound
 INC.w SprMiscB, X
 LDA.w SprMiscB, X : CMP #$05 : BNE .noresetanim
 LDA #$02 : STA.w SprMiscB, X
