@@ -407,7 +407,34 @@ LDA.b #$0B : STA.l $7EC025
 
 JSR HandleMapDrawIcon
 .skip_draw_3
+
+
+
+; Draw Flute X
+LDA.l $7EF34C : CMP #$01 : BNE .skip_draw_flute
+ ; X position
+LDA.b #$09 : STA.l $7EC10B
+LDA.b #$00 : STA.l $7EC10A
+ ; Y position
+LDA.b #$02 : STA.l $7EC109
+LDA.b #$74 : STA.l $7EC108
+
+LDA.b #$68 : STA.b $0D
+LDA.b #$3C : STA.b $0C ; Tile GFX
+
+LDA.b #$00 : STA.b $0B ; 02 = 16x16, 00 = 8x8 
+LDA.b #$0A : STA.l $7EC025
+
+JSR HandleMapDrawIcon_noflash
+.skip_draw_flute
+
+
+
+
 JMP restore_coords_and_exit
+
+
+
 
 
 
@@ -415,6 +442,7 @@ HandleMapDrawIcon:
 LDA.b $1A
 AND.b #$10
 BNE .skip_draw ; Timer to make it flash
+.noflash
 JSR WorldMapIcon_AdjustCoordinate
 LDA.l $7EC025 : TAX
 JSR WorldMap_CalculateOAMCoordinates
