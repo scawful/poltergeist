@@ -31,7 +31,7 @@ dw $0000
 
 .Channel0
 %SetMasterVolume($9F)
-%SetChannelVolume($80)
+%SetChannelVolume($70)
 %SetTempo(90);
 %SetInstrument($0E) ; Chime
 %SetDurationN($24, $7F) ; 1/8
