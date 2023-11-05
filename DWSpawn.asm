@@ -12,7 +12,7 @@ pullpc
 NewDWExitLoad:
 {
     LDA.l $7EF367 : AND #$08 : BEQ .nobigkey
-        LDA.l $7EF354 : BEQ .nomitt
+        LDA.l $7EF354 : CMP #$02 : BNE .nomitt
             LDA #$14 : STA $A0 ; respawn at the tower
             RTL
 
