@@ -19,13 +19,15 @@ incsrc Swordbeam.asm
 ;incsrc CallingThatDetestableNameV1-00.asm
 
 incsrc Music/MysteriousForestV1-00.asm ; Light World overworld song 0x02
-incsrc Music/CitySymmetryThemeV1-00.asm ; village ; song 0x07
+;incsrc Music/CitySymmetryThemeV1-00.asm ; village ; song 0x07
 incsrc Music/GraveyardThemeV1-00.asm ; Dark World overworld song 0x09
 incsrc Music/PalaceThemeV1-01.asm ; castle song 0x10
 incsrc Music/GnarledRootThemeV1-00.asm ; sanctuary song 0x14
 incsrc Music/SwordTrainingThemeV1-00.asm ; shop ; song 0x17
 incsrc Music/JabuJabuBellyThemeV1-00.asm ; zelda rescue song 0x19
 incsrc Music/SkullDungeonThemeV1-00.asm ; fugitive song 0x0C
+incsrc Music/SadThemeV1-00.asm  ; village song 0x07
+incsrc Music/ThickFogV1-00.asm ; bunny theme song 0x04
 ; ==============================================================================
 
 ; Sprite engine stuff:
