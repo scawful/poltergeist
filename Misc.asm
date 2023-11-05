@@ -116,7 +116,7 @@ org $0987CA
 ; Change the dungeon that makes it so the tower of hera pendant falls in a set
 ; location to Letter's dungeon instead. Change to something else if this breaks it.
 org $098C25
-    db #$0C
+    db $0C
 
 ; ==============================================================================
 
