@@ -12,11 +12,11 @@ pullpc
 NewDWExitLoad:
 {
     LDA.l $7EF367 : AND #$08 : BEQ .nobigkey
-        LDA.l $7EF342 : BEQ .nohookshot
+        LDA.l $7EF354 : BEQ .nomitt
             LDA #$14 : STA $A0 ; respawn at the tower
             RTL
 
-        .nohookshot
+        .nomitt
 
         LDA #$05 : STA $A0 ; respawn at the yard
         RTL
