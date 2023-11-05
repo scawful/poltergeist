@@ -213,4 +213,14 @@ pushpc
 org $0DB359+$2C
 db $49
 
+
+; Bird palette
+org $08D331
+ORA #$36
+
+org $08DFE8
+ORA #$36
+
+
 pullpc
+
