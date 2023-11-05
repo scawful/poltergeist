@@ -160,10 +160,12 @@ CutsceneAgahnim_Main:
 
     ; Start the levitate sequence 
     LDA.b #$40 : STA $0DF0, X ; Set Timer0 for AltarZelda_Main
-    LDA.b #$01 : STA $0DC0, X ; Move Zelda to next anim frame
+    
     LDA.b #$0C : STA $0E60, X
 
       LDA $35 : CMP #$02 : BEQ .summoned
+        LDA.b #$01 : STA $0DC0, X ; Move Zelda to next anim frame
+        LDA SprY, X : CLC : ADC.b #$0C : STA $0D00, X
         JSL SummonRogueWallmaster
         LDA #$02 : STA $35 ; Advance the cutscene
     .summoned
@@ -208,7 +210,7 @@ CutsceneAgahnim_Main:
 
 }
 
-warnpc $1DD2D0
+warnpc $1DD2DA
 
 ; =============================================================================
 ; 0x76 Zelda Sprite Hooks
@@ -264,7 +266,7 @@ Zelda_RespondToPriest:
     LDA.b #$02 : STA $7FFE01 ; Zelda rescue dialog counter 
     LDA.b #$00 : STA $7EF3C8 ; Set Sanctuary Spawn point 
 
-    REP #$30 : LDA.b #$30 : STA SprTimerD, X : SEP   #$30
+    REP #$30 : LDA.b #$FF : STA SprTimerD, X : SEP   #$30
     
     RTS
 }
@@ -294,19 +296,7 @@ pullpc ; Expanded space
 Zelda_CheckForStartCutscene:
 {
     REP #$20
-    ; Sprite X - Player X
-    LDA $0FD8 : SEC : SBC $22 : BPL .positive_x
-    EOR #$FFFF
-  .positive_x
-    STA $00                                     ; Distance X (ABS)
-    ; Sprite Y - Player Y
-    LDA $0FDA : SEC : SBC $20 : BPL .positive_y
-    EOR #$FFFF
-  .positive_y
-    ; Add it back to X Distance
-    CLC : ADC $00 : STA $02    ; distance total X, Y (ABS)
-    ; Distance away from player
-    CMP #$0046 : BCS .no_zelda
+    JSR GetLinkDistance16bit : CMP #$0046 : BCS .no_zelda
     SEP #$20
 
     ; If player is near, check for Zelda follower
