@@ -303,7 +303,7 @@ Pool:
     dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
     dw $00FF, $009F, $009F, $009D, $009D, $009D, $00FF, $00FF
     dw $00FF, $00FF, $00FF, $00FF, $009D, $009D, $00FF, $00FF
-    dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
+    dw $00FF, $00FF, $00FF, $00FF, $009D, $00FF, $00FF, $00FF
     ;DW
     dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
     dw $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF, $00FF
