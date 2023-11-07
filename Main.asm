@@ -85,6 +85,7 @@ incsrc SpookyInventory.asm
 incsrc TitleScreen.asm
 incsrc Captain.asm
 incsrc Swordbeam.asm
+incsrc sage.asm
 warnpc $39FFFF ; If it reaches the warning move some code in next bank.
 
 org $3A8000
