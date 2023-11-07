@@ -60,7 +60,7 @@ PHB : PHK : PLB
     LDA.b #$6F : STA.w SprHeight, X
     LDA.b #$00 : STA.w SprFrame, X
     LDA.b #$01 : STA.w SprMiscF, X
-    LDA.b #$25 : STA.w SprHealth, X
+    LDA.b #$35 : STA.w SprHealth, X
     STX.w $0FC0 ; keep spirit id
     
     ; Spawn the head

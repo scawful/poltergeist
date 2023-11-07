@@ -41,8 +41,8 @@ dw $0000
 
 
 .Channel0Intro
-%SetMasterVolume($7F)
-%SetChannelVolume($7F)
+%SetMasterVolume($AF)
+%SetChannelVolume($AF)
 %SetTempo(40);
 %SetInstrument($18) ; Guitar
 %SetDurationN($48, $7F) ; 1/4
@@ -51,7 +51,7 @@ db $00 ; End of the channel
 
 
 .Channel1Intro
-%SetChannelVolume($79)
+%SetChannelVolume($A9)
 %SetInstrument($09) ; Strings
 %SetDurationN($48, $7F) ; 1/4
 %CallSubroutine(.sub1+!ARAMC, 1)
@@ -59,7 +59,7 @@ db $00 ; End of the channel
 
 
 .Channel4Intro
-%SetChannelVolume($65)
+%SetChannelVolume($95)
 %SetInstrument($18) ; Guitar
 %SetDurationN($48, $7F) ; 1/4
 %CallSubroutine(.sub0+!ARAMC, 1)
@@ -147,7 +147,7 @@ db $00 ; End
 
 
 .Channel2
-%SetChannelVolume($59)
+%SetChannelVolume($89)
 %SetInstrument($0E) ; Chime
 %SetDurationN($48, $7F) ; 1/4
 db Rest
@@ -165,7 +165,7 @@ db $00 ; End of the channel
 
 
 .Channel3
-%SetChannelVolume($60)
+%SetChannelVolume($90)
 %SetInstrument($02) ; Tympani
 %SetDurationN($48, $7F) ; 1/4
 db Rest
@@ -249,13 +249,13 @@ db $00 ; End
 
 
 .Channel5
-%SetChannelVolume($70)
+%SetChannelVolume($A0)
 %SetInstrument($11) ; Trumpet
 %SetDurationN($48, $7F) ; 1/4
 db Rest
 %CallSubroutine(.sub5+!ARAMC, 55)
 db D4s, $24, Tie, $12, C4s, D4s, $48, F4, $24, Tie, G3s, $48, G4, $24, Tie, $12, F4, D4s, A4s, $24, Tie, G4s, $12, Tie, G4s, A4s, $48, G4, Tie, Tie, $24, Tie, $12, F4, D4s, $48, F4, C4, $24, Tie, D4s, $12, C4s, D4s, F4, G4, G4s, Tie, $48, Tie, $12, C4s, C4, G4s, $24, Tie, G4s, $12, D4s, F4, G4, D5s, Tie, $48, Tie, $12, D4s, F4, F4s, Tie, $48, Tie, $24, F5, $48, F5s, Tie, Tie, Tie
-%SetChannelVolume($50)
+%SetChannelVolume($80)
 db G5, Tie, Tie, Tie
 db $00 ; End of the channel
 

@@ -106,7 +106,7 @@ PHB : PHK : PLB
 
 
 
-    LDA #$38 : STA.w SprHealth, X
+    LDA #$58 : STA.w SprHealth, X
     INC $15 ;Refresh Palettes
 PLB
 RTL

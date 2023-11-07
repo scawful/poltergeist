@@ -306,8 +306,6 @@ PHA
 .draw_prizes
 LDA $8A : AND #$40 : BEQ .lwprizes
 
-
-LDA.l $7EF374 : AND #$04 : BNE .skip_draw_dw
  ; X position
 LDA.b #$00 : STA.l $7EC10B
 LDA.b #$89 : STA.l $7EC10A ; Upper nybble control Zoomed low X pos

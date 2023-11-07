@@ -5,7 +5,7 @@
 !NbrTiles           = 4 ; Number of tiles used in a frame
 !Harmless           = 01  ; 00 = Sprite is Harmful,  01 = Sprite is Harmless
 !HVelocity          = 00  ; Is your sprite going super fast? put 01 if it is
-!Health             = 5  ; Number of Health the sprite have
+!Health             = 10  ; Number of Health the sprite have
 !Damage             = 0  ; (08 is a whole heart), 04 is half heart
 !DeathAnimation     = 00  ; 00 = normal death, 01 = no death animation
 !ImperviousAll      = 01  ; 00 = Can be attack, 01 = attack will clink on it
@@ -329,8 +329,14 @@ respawning:
 LDA.w SprTimerA, X : BNE +
 %SetTimerA(08)
 
+LDA.w SprHealth, X : CMP #$05 : BNE .noExtraBomb
 
+; Spawn Extra Bomb
+LDA.b #$DE
+JSL Sprite_SpawnDynamically
+JSL Sprite_SetSpawnedCoords
 
+.noExtraBomb
 ; if waiting timer is done start spawn
 ; reuse the timer to slow it down
 LDA.w SprFrame, X

@@ -11,8 +11,7 @@ incsrc CollisionTables.asm
 incsrc CustomSprProperties.asm
 incsrc SpookyCredits.asm
 incsrc OverworldMap.asm
-incsrc Swordbeam.asm
-
+incsrc FluteMap.asm
 ; ==============================================================================
 
 ; Music:
@@ -84,6 +83,8 @@ incsrc SahasralalalalaFlippers.asm
 incsrc SpikeSubtypes.asm
 incsrc SpookyInventory.asm
 incsrc TitleScreen.asm
+incsrc Captain.asm
+incsrc Swordbeam.asm
 warnpc $39FFFF ; If it reaches the warning move some code in next bank.
 
 org $3A8000
