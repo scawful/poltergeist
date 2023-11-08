@@ -71,13 +71,13 @@ RTL
 Sprite_Sage_Main:
 LDA.w SprAction, X; Load the SprAction
 JSL UseImplicitRegIndexedLocalJumpTable; Goto the SprAction we are currently in
-dw Action00
-dw Action01
-dw Action02
+dw SageAction00
+dw SageAction01
+dw SageAction02
 dw Sword
 
 
-Action00:
+SageAction00:
 JSL Sprite_PlayerCantPassThrough
 LDA.w SprSubtype, X : CMP #$01 : BNE .sage
 LDA.b #$02 : STA.w SprFrame, X
@@ -104,7 +104,7 @@ RTS
 %ShowSolicitedMessage($48)
 RTS
 
-Action01:
+SageAction01:
 LDA.w $1CE8 : BNE .No
 %PreventPlayerMovement()
 %GotoAction(2)
@@ -123,7 +123,7 @@ RTS
 %GotoAction(0)
 RTS
 
-Action02:
+SageAction02:
 %PreventPlayerMovement()
 LDA.b #$01 : STA.w SprFrame, X
 LDA.w SprTimerA, X : BNE +

@@ -6,7 +6,7 @@
 !Harmless           = 00  ; 00 = Sprite is Harmful,  01 = Sprite is Harmless
 !HVelocity          = 00  ; Is your sprite going super fast? put 01 if it is
 !Health             = 34  ; Number of Health the sprite have
-!Damage             = 0   ; (08 is a whole heart), 04 is half heart
+!Damage             = 5   ; (08 is a whole heart), 04 is half heart
 !DeathAnimation     = 00  ; 00 = normal death, 01 = no death animation
 !ImperviousAll      = 00  ; 00 = Can be attack, 01 = attack will clink on it
 !SmallShadow        = 00  ; 01 = small shadow, 00 = no shadow
@@ -774,6 +774,7 @@ Sprite_DarkLink_Main:
   LDA.w SprTimerA, X : BNE +
 
   LDA.w SprMiscA, X : BNE .nomessage
+  LDA #$20 : STA.w SprTimerD, X
   LDA #$01 : STA.w SprMiscA, X
   %ShowUnconditionalMessage($016F)
 
@@ -994,7 +995,7 @@ Sprite_DarkLink_Main:
   ;LDA #$1A : STA.b $11 ; ganon open door routine
   ; handled by the room tag?
   STZ.w $0DD0, X
-
+  LDA #$13 : STA.w $012C
   %GotoAction(14)
 
   RTS

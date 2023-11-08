@@ -131,4 +131,9 @@ pushpc
 org $08C2DD
 dw $FFFF
 
+
+org $05AF75
+RTS ; Remove portal warp
+
 pullpc
+

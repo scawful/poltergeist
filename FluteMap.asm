@@ -76,6 +76,21 @@ NOP
 JSL MapHandle6Icon
 STA.w $1AF0
 
+org $1BBE4B
+CMP #$000C
+org $1BBE50
+NOP #5
+;CPX.w #$049C
+
+
+org $098CA0
+LDA.b $20
+STA.b $00
+
+LDA.b $22
+STA.b $02
+NOP #2
+
 pullpc
 
 
@@ -89,3 +104,6 @@ RTL
 LDA #$05
 .return
 RTL
+
+
+

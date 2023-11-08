@@ -13,5 +13,5 @@ db $01 ; Original: 06
 org $0DB266+$C7 ; Snap Dragon bump damage
 db $01 ; Original: 06
 
-org $6B44C+$3B
+org $6B44C+$3B ; Book is dead
 db $40 ; original: 00
