@@ -44,6 +44,10 @@ org $09F7B5
 org $02A560
   JSL ForceReset : NOP
 
+; Triforce Room reset 
+org $02A021
+  JSL ForceResetMask_Triforce
+
 ; =============================================================================
 ; Change Link's sprite by setting $BC to the bank containing a spritesheet.
 ; =============================================================================
@@ -129,6 +133,15 @@ ForceResetMask_SaveAndQuit:
 .still_link
   LDA.b #$0F
   STA.b $95
+  RTL
+}
+
+ForceResetMask_Triforce:
+{
+  LDA $02B2 : BEQ .still_link
+  %ResetToLinkGraphics()
+.still_link
+  JSL $07F1A3
   RTL
 }
 
