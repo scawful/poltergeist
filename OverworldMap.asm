@@ -304,7 +304,7 @@ PHA
 ;---------------------------------------------------------------------------------------------------
 
 .draw_prizes
-LDA $8A : AND #$40 : BEQ .lwprizes
+LDA.b $8A : AND.b #$40 : BEQ .lwprizes
 
  ; X position
 LDA.b #$00 : STA.l $7EC10B
@@ -323,8 +323,6 @@ JSR HandleMapDrawIcon
 
 .skip_draw_dw
 JMP restore_coords_and_exit
-
-JSR HandleMapDrawIcon
 
  .lwprizes
 ; Draw Amulet 1
