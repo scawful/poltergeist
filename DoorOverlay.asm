@@ -7,7 +7,7 @@ BRA .continue
 RTS
 warnpc $1EE07A
 
-org $1EE07A
+org $1EE07C
 .wasnoroomF0
 .continue
 
