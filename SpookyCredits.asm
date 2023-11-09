@@ -6,7 +6,7 @@ org $0EBC51
 
 ; Changes which save values corrispond to which death counter.
 org $0EBE08
-    dw $0004, $0006, $0008, $000A, $000C, $001E, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000 
+    dw $0004, $0006, $0014, $000C, $0008, $001E, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000 
 
 ; Skip end cutscene.
 org $0E9889
@@ -17,5 +17,6 @@ org $0E9889
 
 org $0EB038
 incbin SpookyCredits.bin
+warnpc $0EBC51
 
 ; ==============================================================================
