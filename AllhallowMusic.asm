@@ -77,8 +77,8 @@ LDX #$0C ; Load Song 0C (Soldier)
 CMP #$E8 : BNE +
 JML $028467 ; room was E8 Play soldier song         (Pirate Ship 1)
 +
-CMP #$11 : BNE +
-JML $028467 ; room was 11 Play soldier song        (Pirate Ship 2)
+CMP #$F7 : BNE +
+JML $028467 ; room was F7 Play soldier song        (Pirate Ship 2)
 +
 CMP #$ED : BNE +
 JML $028467 ; room was ED Play soldier song        (Pirate Ship 3)
