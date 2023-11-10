@@ -427,6 +427,7 @@ OldMan_AdvanceGameState:
   LDA.b #$02 : STA $7EF3C5
   LDA.b #$00 : STA $7EF3C8
   LDA.b #$11 : STA $7EF3C6
+  LDA.b #$01 : STA $7EF357
   
   ; Sprite_LoadGfxProperties.justLightWorld
   PHX : JSL $00FC62 : PLX
