@@ -12,6 +12,7 @@ CheckForMaidenInLibrary:
 {
   LDA $A0 : CMP.b #$7C : BNE .notTheLibrary
 
+  LDA $11 : BNE .notTheLibrary
   LDA $7FF9D2 : BNE .dialogue_played
 
     LDA #$1D : LDY #$01

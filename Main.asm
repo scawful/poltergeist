@@ -71,6 +71,7 @@ incsrc LockedDoorsRainstate.asm
 incsrc LongSwitch.asm
 incsrc MagicMirror.asm
 incsrc Mantle.asm
+incsrc ManorMaiden.asm
 incsrc MapShop.asm
 incsrc Masks/MaskRoutines.asm
 incsrc Masks/AllMasks.asm
