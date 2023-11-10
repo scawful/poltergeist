@@ -59,7 +59,10 @@ Sprite_DarkLink_Long:
   .normaldraw
   CMP.b #$09 : BEQ .sworddraw
   LDA.w SprSubtype, X : BNE .skipnormaldraw
+
+  JSR Sprite_Damage_Flash
   JSR Sprite_DarkLink_Draw 
+
   .skipnormaldraw
 
   LDA.w SprAction, X : CMP.b #11 : BCS .notdying
@@ -573,6 +576,11 @@ Sprite_DarkLink_Main:
     ;restore life removed by the checkdamage
     STZ.w $0CE2, X
 
+    ;reset the flashing timer as well
+    STZ.w $0EF0, X
+
+    ;Cancel the damage sound
+    STZ.w $012F
           
       LDA #$20 : STA $29 : STA $C7
       
@@ -713,9 +721,6 @@ Sprite_DarkLink_Main:
   SEP #$20
 
 
-
-
-
   RTS
 
   JumpAttackDown:
@@ -773,12 +778,18 @@ Sprite_DarkLink_Main:
   PLX
   LDA.w SprTimerA, X : BNE +
 
-  LDA.w SprMiscA, X : BNE .nomessage
-  LDA #$20 : STA.w SprTimerD, X
-  LDA #$01 : STA.w SprMiscA, X
-  %ShowUnconditionalMessage($016F)
+  ; Check if he already said his line
+  LDA $7A : BNE .nomessage
+    LDA.w SprMiscA, X : BNE .nomessage
+      LDA #$20 : STA.w SprTimerD, X
+      LDA #$01 : STA.w SprMiscA, X
+      %ShowUnconditionalMessage($016F)
 
-  LDA.b #$1F : STA $012C
+      LDA.b #$1F : STA $012C
+
+      ; Don't say the line again.
+      INC $7A
+
   .nomessage
 
 
@@ -803,8 +814,6 @@ Sprite_DarkLink_Main:
   %GotoAction(0)
 
   +
-
-
 
 
   RTS
@@ -1039,6 +1048,8 @@ Sprite_DarkLink_Main:
 ;==================================================================================================
 Sprite_DarkLink_Draw:
 {
+  LDA $0DA0, X : AND.b #$0E : STA $08
+
   JSL Sprite_PrepOamCoord
   JSL Sprite_OAM_AllocateDeferToPlayer
 
@@ -1080,7 +1091,7 @@ Sprite_DarkLink_Draw:
   INY
   LDA .chr, X : STA ($90), Y
   INY
-  LDA .properties, X : STA ($90), Y
+  LDA .properties, X : EOR $08 : STA ($90), Y
 
   PHY 
       
@@ -1546,8 +1557,11 @@ Sprite_DarkLink_Draw:
 
 GanonInit:
 {
-LDA #$88
-JSL Sprite_SpawnDynamically
+    LDA #$88
+    JSL Sprite_SpawnDynamically
+
+    ; Set a free ram flag to have dark link say his line.
+    STZ $7A
     LDA #$05 : STA.w SprSubtype, Y
     LDA $00 : STA $0D10, Y
     LDA $01 : STA.w $0D30, Y
@@ -1557,7 +1571,7 @@ JSL Sprite_SpawnDynamically
 
     LDA.b #$30 : STA.w SprTimerA, Y  
     LDA #$1E : STA.w $012C
-RTL
+    RTL
 }
 
 
@@ -1704,3 +1718,28 @@ db $7D, $7D, $3D, $3D, $3D, $7D, $3B, $7B, $3B, $7B, $3D, $7D
 .sizes
 db $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02
 db $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02
+
+; ==============================================================================
+
+Sprite_Damage_Flash:
+{
+    LDA $0EF0, X : BEQ .dontFlash
+        ; Change the palette to the next in the cycle
+        LDA $0DA0, X : INC : CMP.b #$08 : BNE .dontReset
+            LDA.b #$00
+
+        .dontReset
+        STA $0DA0, X
+
+        BRA .flash
+
+    .dontFlash
+
+    STZ $0DA0, X
+
+    .flash
+
+    RTS
+}
+
+; ==============================================================================
