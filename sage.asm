@@ -84,7 +84,7 @@ LDA.b #$02 : STA.w SprFrame, X
 %GotoAction(3)
 .sage
 LDA.l $7EF281 : AND #$40 : BNE .alreadyimproved
-
+LDA.l $7EF359 : CMP #$02 : BNE .noMS
 
 ; Message 121
 ; I can improve your sword
@@ -95,7 +95,10 @@ LDA.l $7EF281 : AND #$40 : BNE .alreadyimproved
 %ShowSolicitedMessage($121) : BCC .no_message
 %GotoAction(01)
 .no_message
+
 RTS
+
+.noMS
 
 .alreadyimproved
 ; Message 48

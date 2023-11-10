@@ -11,6 +11,7 @@ incsrc CollisionTables.asm
 incsrc CustomSprProperties.asm
 incsrc SpookyCredits.asm
 incsrc OverworldMap.asm
+incsrc DoorOverlay.asm
 ; ==============================================================================
 
 ; Music:
@@ -26,6 +27,7 @@ incsrc Music/JabuJabuBellyThemeV1-00.asm ; zelda rescue song 0x19
 incsrc Music/SkullDungeonThemeV1-00.asm ; fugitive song 0x0C
 incsrc Music/SadThemeV1-00.asm  ; village song 0x07
 incsrc Music/ThickFogV1-00.asm ; bunny theme song 0x04
+incsrc Music/SubrosiaThemeV1-00.asm 
 ; ==============================================================================
 
 ; Sprite engine stuff:
@@ -85,8 +87,8 @@ incsrc TitleScreen.asm
 incsrc Captain.asm
 incsrc Swordbeam.asm
 incsrc sage.asm
-incsrc DoorOverlay.asm
 incsrc FluteMap.asm
+incsrc AllhallowMusic.asm
 warnpc $39FFFF ; If it reaches the warning move some code in next bank.
 
 org $3A8000

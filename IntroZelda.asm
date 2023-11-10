@@ -186,7 +186,6 @@ CutsceneAgahnim_Main:
     LDA #$FF : STA SprTimerA, X  ; Start the timer
     LDA #$4F : STA $7E010E ; Set destination of old man
     LDA #$04 : STA $35 ; Advance the cutscene
-    JSL OldMan_AdvanceGameState
 
     ; Run some dialogue from the bad guy
     LDA #$0E : LDY #$00
@@ -205,6 +204,7 @@ CutsceneAgahnim_Main:
   .this_isnt_funny
     LDA SprTimerA, X : BNE .return
     JSL $0BFFA8 ; WallMaster_SendPlayerToLastEntrance
+    JSL OldMan_AdvanceGameState
     LDA #$06 : STA $35 ; End the cutscene 
     RTS
 

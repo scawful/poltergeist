@@ -88,7 +88,8 @@ org $0CEEF8
 
 ; org $0CEEF0 ; ThroneRoom table pos 
 org $0CEEEE
-  dw $F0DC
+  dw $F700
+  ;dw $F0DC
 
 ; =============================================================================
 ; EXPANDED SPACE
@@ -158,24 +159,24 @@ SkipCutscenePrologue:
 {
 #_0CEFC0: INC.b $22
 
-#_0CEFC2: STZ.b $13
-#_0CEFC4: STZ.b $EA
+; #_0CEFC2: STZ.b $13
+; #_0CEFC4: STZ.b $EA
 
-#_0CEFC6: LDA.w $011F
-#_0CEFC9: AND.b #$01
-#_0CEFCB: STA.w $011F
+; #_0CEFC6: LDA.w $011F
+; #_0CEFC9: AND.b #$01
+; #_0CEFCB: STA.w $011F
 
-#_0CEFCE: LDA.w $0123
-#_0CEFD1: AND.b #$01
-#_0CEFD3: STA.w $0123
+; #_0CEFCE: LDA.w $0123
+; #_0CEFD1: AND.b #$01
+; #_0CEFD3: STA.w $0123
 
-#_0CEFD6: LDA.b $E3
-#_0CEFD8: AND.b #$01
-#_0CEFDA: STA.b $E3
+; #_0CEFD6: LDA.b $E3
+; #_0CEFD8: AND.b #$01
+; #_0CEFDA: STA.b $E3
 
-#_0CEFDC: LDA.b $E9
-#_0CEFDE: AND.b #$01
-#_0CEFE0: STA.b $E9
+; #_0CEFDC: LDA.b $E9
+; #_0CEFDE: AND.b #$01
+; #_0CEFE0: STA.b $E9
   STZ.b $13 
   RTL
 }
