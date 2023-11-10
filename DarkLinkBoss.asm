@@ -1588,7 +1588,7 @@ dw FadingAwait
 Wait:
 LDA.w SprTimerA, X : BNE .wait
 LDA.b #$30 : STA.w SprTimerA, X
-%ShowUnconditionalMessage($149)
+%ShowUnconditionalMessage($46)
 %GotoAction(1)
 .wait
 
