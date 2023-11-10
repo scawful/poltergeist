@@ -1,4 +1,6 @@
-; Changes the draw of the transport whirlpools to be big like the zora king's and changes the hitbox to match.
+; ==============================================================================
+; Changes the draw of the transport whirlpools to be big like the zora king's
+; and changes the hitbox to match.
 pushpc
 
 org $06F129
@@ -13,9 +15,22 @@ org $0DB506
 
 ; Replace the draw and use the warp code instead of the whirlpool code.
 org $1EEEA5
+{
+    ; This is a dumb fix because I had to shift the draw over a bit to be centered.
+    ; If we are more than 0x0180 away don't run this code at all to prevent random flickering.
+    JSL Sprite_Get_Distance_From_Player
+
+    REP #$20
+    LDA $00 : STA $35 : CMP.w #$0180 : BCC .notTooFar
+        SEP #$30
+        RTS
+
+    .notTooFar
+    SEP #$30
+
     JSL BigWhirlpoolDrawLONG
     JSR Sprite3_CheckIfActive
-        
+     
     JSL Sprite_CheckDamageToPlayerSameLayerLong : BCC .didnt_touch
         ; \task Note sure if this name is right, or how this variable could
         ; be set...?
@@ -33,9 +48,10 @@ org $1EEEA5
     STZ $0D90, X
         
     RTS
+}
+warnpc $1EEEEE
 
 pullpc
-
 
 ; ==============================================================================
 
@@ -166,6 +182,34 @@ WhirlpoolAnimation:
     .dontStep
 
     RTS
+}
+
+; ==============================================================================
+
+;store the distance from the player in $00
+Sprite_Get_Distance_From_Player:
+{
+    REP #$20
+
+    STZ $00
+
+    LDA $0FDA : SEC : SBC $20 : CMP.w #$8000 : BCC .dontFlipY ;if delta Y is negative times by -1
+        EOR.w #$FFFF : INC A ;times by -1
+
+    .dontFlipY
+
+    STA $00 ;delta Y
+
+    LDA $0FD8 : SEC : SBC $22 : CMP.w #$8000 : BCC .dontFlipX ;if delta X is negative times by -1
+        EOR.w #$FFFF : INC A ;times by -1
+
+    .dontFlipX
+
+    CLC : ADC $00 : STA $00 ;add delta Y to delta X
+
+    SEP #$20
+
+    RTL
 }
 
 ; ==============================================================================
