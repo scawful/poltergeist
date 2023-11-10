@@ -75,87 +75,155 @@ dw SageAction00
 dw SageAction01
 dw SageAction02
 dw Sword
-
+dw SageAction04
+dw SageAction05
+dw SageAction06
 
 SageAction00:
-JSL Sprite_PlayerCantPassThrough
-LDA.w SprSubtype, X : CMP #$01 : BNE .sage
-LDA.b #$02 : STA.w SprFrame, X
-%GotoAction(3)
-.sage
-LDA.l $7EF281 : AND #$40 : BNE .alreadyimproved
-LDA.l $7EF359 : CMP #$02 : BNE .noMS
+{
+    JSL Sprite_PlayerCantPassThrough
+    LDA.w SprSubtype, X : CMP #$01 : BNE .sage
+        LDA.b #$02 : STA.w SprFrame, X
+        %GotoAction(3)
 
-; Message 121
-; I can improve your sword
-; by adding sword beams to it
-; Do you want me to?
-; >  Yes
-;    Get the fuck out
-%ShowSolicitedMessage($121) : BCC .no_message
-%GotoAction(01)
-.no_message
+    .sage
 
-RTS
+    LDA.l $7EF359 : CMP #$02 : BCC .noMS1
+        LDA.l $7EF281 : AND #$40 : BEQ .notImprovedYet
+            %GotoAction(4)
 
-.noMS
+            RTS
 
-.alreadyimproved
-; Message 48
-; I already improved your
-; sword blablabla...
-%ShowSolicitedMessage($48)
-RTS
+        .notImprovedYet
+    .noMS1
+
+    ; Message 121
+    ; I can improve your sword
+    ; by adding sword beams to it
+    ; Do you want me to?
+    ; >  Yes
+    ;    Get the fuck out
+    %ShowSolicitedMessage($121) : BCC .no_message2
+        LDA.l $7EF359 : CMP #$02 : BCC .noMS2
+            %GotoAction(01)
+
+            RTS
+
+        .noMS2
+
+        %GotoAction(06)
+
+    .no_message2
+
+    RTS
+}
 
 SageAction01:
-LDA.w $1CE8 : BNE .No
-%PreventPlayerMovement()
-%GotoAction(2)
-LDA.b #$1A
-JSL Sprite_SpawnDynamically
-JSL Sprite_SetSpawnedCoords
-LDA.b $22 : STA.w SprX, Y
-LDA.b $20 : STA.w SprY, Y
-LDA.b #$01 : STA.w SprSubtype, Y
-LDA.b #$A0 : STA.w SprTimerA, Y
-LDA.w SprX, X : STA.w SprMiscA, Y
-LDA.w SprY, X : STA.w SprMiscB, Y
-LDA.b #$C0 : STA.w SprTimerA, X
-RTS
-.No
-%GotoAction(0)
-RTS
+{
+    LDA.w $1CE8 : BNE .No
+        %PreventPlayerMovement()
+        %GotoAction(2)
+        LDA.b #$1A
+        JSL Sprite_SpawnDynamically
+        JSL Sprite_SetSpawnedCoords
+        LDA.b $22 : STA.w SprX, Y
+        LDA.b $20 : STA.w SprY, Y
+        LDA.b #$01 : STA.w SprSubtype, Y
+        LDA.b #$A0 : STA.w SprTimerA, Y
+        LDA.w SprX, X : STA.w SprMiscA, Y
+        LDA.w SprY, X : STA.w SprMiscB, Y
+        LDA.b #$C0 : STA.w SprTimerA, X
+        RTS
+
+    .No
+
+    %GotoAction(0)
+    RTS
+}
 
 SageAction02:
-%PreventPlayerMovement()
-LDA.b #$01 : STA.w SprFrame, X
-LDA.w SprTimerA, X : BNE +
-LDA.l $7EF281 : ORA #$40 : STA.l $7EF281
-LDA.b #$00 : STA.w SprFrame, X
-%GotoAction(00)
-%AllowPlayerMovement()
-+
-RTS
+{
+    %PreventPlayerMovement()
+    LDA.b #$01 : STA.w SprFrame, X
+    LDA.w SprTimerA, X : BNE +
+        LDA.l $7EF281 : ORA #$40 : STA.l $7EF281
+        LDA.b #$00 : STA.w SprFrame, X
+        %GotoAction(0)
+        %AllowPlayerMovement()
+
+    +
+
+    RTS
+}
 
 Sword:
+{
+    LDA.w SprMiscA, X : STA $04
+    LDA.w SprXH, X : STA $05
+    LDA.w SprMiscB, X : SEC : SBC #$1D : STA $06
+    LDA.w SprYH, X : STA $07
+    LDA #$05
+    JSL Sprite_ProjectSpeedTowardsEntityLong
+    LDA $00 : STA.w SprYSpeed, X
+    LDA $01 : STA.w SprXSpeed, X
+    JSL Sprite_MoveLong
 
+    LDA.w SprTimerA, X : BNE +
+        STZ $0DD0, X
+    +
 
-LDA.w SprMiscA, X : STA $04
-LDA.w SprXH, X : STA $05
-LDA.w SprMiscB, X : SEC : SBC #$1D : STA $06
-LDA.w SprYH, X : STA $07
-LDA #$05
-JSL Sprite_ProjectSpeedTowardsEntityLong
-LDA $00 : STA.w SprYSpeed, X
-LDA $01 : STA.w SprXSpeed, X
-JSL Sprite_MoveLong
+    RTS
+}
 
+SageAction04:
+{
+    JSL Sprite_PlayerCantPassThrough
 
-LDA.w SprTimerA, X : BNE +
-STZ $0DD0, X
-+
-RTS
+    ; Message 48
+    ; I already improved your
+    ; sword blablabla...
+    %ShowSolicitedMessage($48) : BCC .no_message
+        LDA.w $1CE8 : BNE .No
+            %GotoAction(5)
+                        
+        .No
+                
+    .no_message
 
+    RTS
+}
+
+SageAction05:
+{
+    LDA.w $1CE8 : BNE .No
+        ; Message 40
+        ;Alright if you insist...
+        ;Poof!
+        ;It is done.
+        %ShowUnconditionalMessage($40)
+        LDA.l $7EF281 : AND #$BF : STA.l $7EF281
+                
+    .No
+
+    %GotoAction(0)
+
+    RTS
+}
+
+SageAction06:
+{
+    JSL Sprite_PlayerCantPassThrough
+
+    ; Message 47
+    ;It seems you do not yet
+    ;possess a blade powerful
+    ;enough to contain this power[...]
+    %ShowUnconditionalMessage($47)
+            
+    %GotoAction(0)
+
+    RTS
+}
 
 
 ;==================================================================================================
@@ -243,7 +311,7 @@ db $6A
 .properties
 db $37, $37, $77, $77
 db $37, $77, $37, $77
-db $3B
+db $39
 .sizes
 db $02, $02, $02, $02
 db $02, $02, $02, $02
