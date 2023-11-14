@@ -55,8 +55,8 @@ LDX #$05 ; Load Song 05 (Forest)
 CMP #$14 : BNE +
 JML $028467 ; room was 14 Play forest song         (Flying Guy House)
 +
-CMP #$12 : BNE +
-JML $028467 ; room was 12 Play forest song        (Stalfos Guy House)
+CMP #$1A : BNE +
+JML $028467 ; room was 1A Play forest song        (Stalfos Guy House)
 +
 CMP #$1E : BNE +
 JML $028467 ; room was 1E Play forest song         (Anti-Fairy Cave)
