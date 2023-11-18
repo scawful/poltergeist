@@ -42,3 +42,6 @@ db $05
 
 org $0DB266+$CF ; Swamola (2 Hearts)
 db $05
+
+org $0DB725+$D5 ; Digging guy 
+db $10 ; original: 00

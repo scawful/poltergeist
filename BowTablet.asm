@@ -24,7 +24,7 @@ NOP #04
 
 org $05F285
 JSL EtherCheckBowInstead
-db $D0
+db $90
 
 org $0DD142
     dw -8, -16 : db $8C, $00, $00, $02
