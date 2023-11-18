@@ -6,7 +6,7 @@
 !Harmless           = 00  ; 00 = Sprite is Harmful,  01 = Sprite is Harmless
 !HVelocity          = 00  ; Is your sprite going super fast? put 01 if it is
 !Health             = 25  ; Number of Health the sprite have
-!Damage             = 0  ; (08 is a whole heart), 04 is half heart
+!Damage             = 01  ; (08 is a whole heart), 04 is half heart
 !DeathAnimation     = 00  ; 00 = normal death, 01 = no death animation
 !ImperviousAll      = 00  ; 00 = Can be attack, 01 = attack will clink on it
 !SmallShadow        = 00  ; 01 = small shadow, 00 = no shadow
@@ -61,6 +61,7 @@ PHB : PHK : PLB
     LDA.b #$00 : STA.w SprFrame, X
     LDA.b #$01 : STA.w SprMiscF, X
     LDA.b #$35 : STA.w SprHealth, X
+	LDA.b !Damage : STA $0CD2, X
     STX.w $0FC0 ; keep spirit id
     
     ; Spawn the head
@@ -72,9 +73,10 @@ PHB : PHK : PLB
     LDA.b #$01 : STA.w SprAction, Y 
     LDA.b #$04 : STA.w SprFrame, Y
     LDA.b #$01 : STA.w SprMiscF, Y
+	LDA.b !Damage : STA $0CD2, Y
     STA.w SprMiscG, Y ; on body
     
-        ; Spawn the body
+    ; Spawn the body
     LDA #$CD
     JSL Sprite_SpawnDynamically
     JSL Sprite_SetSpawnedCoords
@@ -86,6 +88,7 @@ PHB : PHK : PLB
     LDA.b #$40 : STA.w SprTimerA, Y  : STA.w SprTimerB, Y
     LDA.b #$03 : STA.w SprMiscG, Y ; Body Health
     LDA.b #$01 : STA.w SprMiscF, Y ; Visibility (invisible if zero)
+	LDA.b !Damage : STA $0CD2, Y
 
 PLB
 RTL
