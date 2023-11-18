@@ -69,7 +69,7 @@ incsrc GoriyaSubtype.asm
 incsrc IntroZelda.asm
 incsrc LockedDoorsRainstate.asm
 incsrc LongSwitch.asm
-incsrc MagicMirror.asm
+;incsrc MagicMirror.asm
 incsrc Mantle.asm
 incsrc ManorMaiden.asm
 incsrc MapShop.asm

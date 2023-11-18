@@ -24,7 +24,7 @@
 !Sound              = 00  ; 01 = Play different sound when taking damage
 !Interaction        = 00  ; ?? No documentation
 !Statue             = 00  ; 01 = Sprite is statue
-!DeflectProjectiles = 00  ; 01 = Sprite will deflect ALL projectiles
+!DeflectProjectiles = 01  ; 01 = Sprite will deflect ALL projectiles
 !ImperviousArrow    = 01  ; 01 = Impervious to arrows
 !ImpervSwordHammer  = 01  ; 01 = Impervious to sword and hammer attacks
 !Boss               = 00  ; 00 = normal sprite, 01 = sprite is a boss

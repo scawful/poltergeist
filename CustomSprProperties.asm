@@ -15,3 +15,6 @@ db $01 ; Original: 06
 
 org $6B44C+$3B ; Book is dead
 db $40 ; original: 00
+
+org $0DB173+$6A ; Ball and chain soldier health
+db $08 ; original: 10

@@ -251,7 +251,6 @@ dw 0, 0, -4, 12, 12, -5
 .y_offsets
 dw 0, -8, -15, -15, -7, 1
 .chr
-print "test ", pc
 db $88, $86, $8A, $8C, $9C, $8D
 .properties
 db $39, $39, $33, $33, $33, $33
