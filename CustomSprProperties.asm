@@ -13,5 +13,26 @@ db $01 ; Original: 06
 org $0DB266+$C7 ; Snap Dragon bump damage
 db $01 ; Original: 06
 
-org $6B44C+$3B ; Book is dead
+org $6B44C+$3B ; Book is dead yo
 db $40 ; original: 00
+
+org $0DB266+$8B ; Gibdo (1 Heart)
+db $03
+
+org $0DB266+$91 ; Stalfos Knight (1 Heart)
+db $03
+
+org $0DB266+$9B ; Wizzrobe (2 Hearts)
+db $05
+
+org $0DB266+$0E ; Snapdragon (1 Heart)
+db $03
+
+org $0DB266+$19 ; Poe (1 Heart)
+db $03
+
+org $0DB266+$11 ; Hinox (2 Hearts)
+db $05
+
+org $0DB266+$CF ; Swamola (2 Hearts)
+db $05
