@@ -11,6 +11,7 @@ incsrc CollisionTables.asm
 incsrc CustomSprProperties.asm
 incsrc SpookyCredits.asm
 incsrc OverworldMap.asm
+incsrc SanctuaryMusicTransitionNOP.asm
 incsrc DoorOverlay.asm
 ; ==============================================================================
 
