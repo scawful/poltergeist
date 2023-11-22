@@ -803,11 +803,7 @@ MoveTowardFast: ; 0x07
 
     LDA.w SprHeight, X : DEC : STA.w SprHeight, X : CMP #$06 : BCS +
         %GotoAction(9)
-
-        LDA.b #$DF : JSL Sprite_SpawnDynamically : BMI .nospawn
-            JSL Sprite_SetSpawnedCoords
-
-        .nospawn
+        
     +
 
     JSL Sprite_MoveLong
