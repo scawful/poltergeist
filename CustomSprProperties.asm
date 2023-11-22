@@ -45,3 +45,15 @@ db $05
 
 org $0DB725+$D5 ; Digging guy 
 db $10 ; original: 00
+
+org $0DB266+$95 ; Left eye lasers set to 2 hearts instead of 4
+db $05
+
+org $0DB266+$96 ; Right eye lasers set to 2 hearts instead of 4
+db $05
+
+org $0DB266+$97 ; Top eye lasers set to 2 hearts instead of 4
+db $05
+
+org $0DB266+$98 ; Down eye lasers set to 2 hearts instead of 4
+db $05

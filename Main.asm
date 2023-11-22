@@ -13,6 +13,7 @@ incsrc SpookyCredits.asm
 incsrc OverworldMap.asm
 incsrc SanctuaryMusicTransitionNOP.asm
 incsrc DoorOverlay.asm
+incsrc DungeonMaps.asm
 ; ==============================================================================
 
 ; Music:
