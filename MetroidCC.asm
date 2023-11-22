@@ -412,6 +412,12 @@ DrainHP: ; 0x02
     LDA SprMiscE, X : CMP #$20 : BCC + ; wiggled the dpad enough?
         LDA #$40 : STA.w SprTimerA, X
         %GotoAction(04)
+
+        ; Spawn a small magic
+        LDA.b #$DF : JSL Sprite_SpawnDynamically : BMI .nospawn
+            JSL Sprite_SetSpawnedCoords
+
+        .nospawn
     +
 
     LDA.w SprTimerD, X : BNE +
@@ -798,7 +804,6 @@ MoveTowardFast: ; 0x07
     LDA.w SprHeight, X : DEC : STA.w SprHeight, X : CMP #$06 : BCS +
         %GotoAction(9)
 
-        ; Spawn a small magic
         LDA.b #$DF : JSL Sprite_SpawnDynamically : BMI .nospawn
             JSL Sprite_SetSpawnedCoords
 
