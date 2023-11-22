@@ -295,7 +295,3 @@ db $00 ; End
 .sub17
 db D3, D3, D3, C3, D3, F3s, D3, D3, F3s, D3, D3, F3s, D3, D3, D3
 db $00 ; End
-
-
-
-print pc

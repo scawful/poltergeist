@@ -362,6 +362,3 @@ db $24
 %CallSubroutine(.sub35+!ARAMC, 3)
 %CallSubroutine(.sub36+!ARAMC, 1)
 db $00 ; End of the channel
-
-
-print pc

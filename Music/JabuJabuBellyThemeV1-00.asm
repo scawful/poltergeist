@@ -96,7 +96,3 @@ db $00 ; End
 .sub7
 db B3, F3s, G3, D3s
 db $00 ; End
-
-
-
-print pc

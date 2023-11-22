@@ -79,7 +79,3 @@ db $00 ; End
 db Rest, $48
 %CallSubroutine(.sub4+!ARAMC, 1)
 db $00 ; End of the channel
-
-
-
-print pc

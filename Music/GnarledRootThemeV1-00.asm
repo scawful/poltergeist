@@ -156,7 +156,3 @@ db A2, A2, Tie, D2s, A2, A2, Tie, D2s, A2, A2, D2, F2, Tie, D2, F2, Tie
 db F2s, F2s, $48, D2
 %CallSubroutine(.sub3+!ARAMC, 5)
 db $00 ; End of the channel
-
-
-
-print pc

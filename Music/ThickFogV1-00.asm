@@ -156,7 +156,3 @@ db $00 ; End
 .sub9
 db G3s, G3s, G4s, Tie, G4s, Tie, G3s, G3s, Tie, G4s, Tie, G4s
 db $00 ; End
-
-
-
-print pc

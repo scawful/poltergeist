@@ -15,9 +15,7 @@ NewObjectsCode:
     ASL : TAX
     LDA .objOffset, X
     TAX
-
-    print pc
-
+    
     .lineLoop
         LDA .objData, X : BEQ .done
             PHY ; Keep current position in the buffer.

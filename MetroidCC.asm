@@ -83,6 +83,16 @@ Sprite_Metroid_Prep:
 {
     PHB : PHK : PLB
     STZ.w SprMiscB, X
+
+    ; Check if we have the pendant yet.
+    LDA $7EF374 : AND.b #$02 : BEQ .noPendant2
+        STZ $0DD0, X
+
+        PLB
+        RTL
+    
+    .noPendant2
+
     PHX : PHP
     REP #$20 ; P is still on stack, so we don't even need to fix this
 
@@ -803,7 +813,7 @@ MoveTowardFast: ; 0x07
 
     LDA.w SprHeight, X : DEC : STA.w SprHeight, X : CMP #$06 : BCS +
         %GotoAction(9)
-        
+
     +
 
     JSL Sprite_MoveLong

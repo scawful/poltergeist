@@ -132,5 +132,3 @@ db $00 ; End
 .sub9
 db B2, A2s
 db $00 ; End
-
-print pc

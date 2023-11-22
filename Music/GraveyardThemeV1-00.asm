@@ -259,6 +259,3 @@ db D4s, $24, Tie, $12, C4s, D4s, $48, F4, $24, Tie, G3s, $48, G4, $24, Tie, $12,
 db G5, Tie, Tie, Tie
 db $00 ; End of the channel
 
-
-
-print pc

@@ -12,7 +12,6 @@ dw Sahasrahla_ShowMessage   ; 0x01 Message 12
 dw Sahasrahla_GiveFlippers ; 0x02 - no message just to give you flippers
 dw Sahasrahla_HaveFlippers ; 0x03 Message 17 if we have flippers
 
-print pc
 Sahasrahla_Idle:
 LDA.l $7EF356 : BEQ .donthaveflippers
 LDA #$03 : STA.w SprAction, X

@@ -54,7 +54,17 @@ RTL ; Go back to original code
 ; this code as soon as the room transitions/ overworld transition occurs
 ;==================================================================================================
 Sprite_PumpkinHead_Prep:
-PHB : PHK : PLB
+{	
+	PHB : PHK : PLB
+
+	; Check if we have the pendant yet.
+    LDA $7EF374 : AND.b #$04 : BEQ .noPendant1
+        STZ $0DD0, X
+
+        PLB
+        RTL
+    
+    .noPendant1
 
     ; Add more code here to initialize data
     LDA.b #$6F : STA.w SprHeight, X
@@ -90,8 +100,9 @@ PHB : PHK : PLB
     LDA.b #$01 : STA.w SprMiscF, Y ; Visibility (invisible if zero)
 	LDA.b !Damage : STA $0CD2, Y
 
-PLB
-RTL
+	PLB
+	RTL
+}
 
 ;==================================================================================================
 ; Sprite Main routines code

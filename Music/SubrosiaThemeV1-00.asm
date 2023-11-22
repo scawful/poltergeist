@@ -80,5 +80,3 @@ db B3, Tie, F4, F4s, A4, A4, G4s, G4, F4, Tie, F4s
 %CallSubroutine(.sub1+!ARAMC, 8)
 db F4s, E4, Tie, D4, Tie, $48, C4, Tie, B3, Tie, A3s, Tie, A3, Tie, G3s, Tie, F3s, Tie, C4, $24, Tie, $09, B3, A3s, A3, G3s, G3, F3s, Tie, Tie, $24, Tie, $09, F3, F3s, Tie, Tie, $24, Tie
 db $00 ; End of the channel
-
-print pc

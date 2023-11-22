@@ -134,7 +134,3 @@ db $00 ; End of the channel
 %SetDurationN($24, $7F) ; 1/8
 db Rest, Tie, Tie, $48, C5, Tie, C5, Tie, Tie, Tie, C4, Tie, A4s, Tie, A4s, Tie, A4s, Tie, A4s, Tie, C5, Tie, C5, Tie, E5, Tie, C4, Tie, F5, Tie, F5, Tie, C5, Tie, C5, Tie, F5, Tie, $24, F5
 db $00 ; End of the channel
-
-
-
-print pc
