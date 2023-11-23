@@ -890,11 +890,14 @@ org $02AF58 ; $012F58
                 LDA.b $8A : ASL : TAX
                 LDA.l Pool_OverlayTable, X : TAX
 
+                ; Save the overlay for later
+                PHX
+
                 JMP .loadSubScreenOverlay
     
         .notMasterSwordArea
     
-        ; $0189 is the exit room number used for getting to the Triforce room? TODO: Confirm this.
+        ; $0189 is the exit room number used for getting to the Triforce room.
         CMP.w #$0189 : BEQ .loadOverlayShortcut
             ; The second mastersword/under the bridge area.
             LDX.w #$0094
