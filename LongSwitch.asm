@@ -29,60 +29,69 @@
 !ImpervSwordHammer  = 00  ; 01 = Impervious to sword and hammer attacks
 !Boss               = 00  ; 00 = normal sprite, 01 = sprite is a boss
 
-
-
 pushpc
+
+;==============================================================================
+
 org $06C003 ; pull switch JSL
+    JSL NewPullSwitchCheck
 
-JSL NewPullSwitchCheck
+    ; Are there only three rooms where these switches work? 0_o.
 
-
-; Are there only three rooms where these switches work? 0_o.
-
-org $068859 ; pull switch prep
-JSL NewPrepSwitch
-RTS
-
+    org $068859 ; pull switch prep
+    JSL NewPrepSwitch
+    RTS
 
 pullpc
 
+;==============================================================================
 
 NewPullSwitchCheck:
-LDA.b $1B : BNE +
-LDA.w $0E20, X : CMP #$04 : BNE .badswitch
-JSL Sprite_LongSwitch_Long
-RTL
-.badswitch
-JSL Sprite_BadSwitch_Long
-RTL
-+
-JSL $05D6BC
-RTL
+{
+    LDA.b $1B : BNE +
+        LDA.w $0E20, X : CMP #$04 : BNE .badswitch
+            JSL Sprite_LongSwitch_Long
+            RTL
 
+        .badswitch
 
+        JSL Sprite_BadSwitch_Long
+        RTL
+    +
 
+    JSL $05D6BC
+    RTL
+}
+
+;==============================================================================
 
 NewPrepSwitch:
-LDA.b $1B : BNE +
-LDA.w $0E20, X : CMP #$04 : BNE .badswitch
-JSL Sprite_LongSwitch_Prep
-RTL
-.badswitch
-JSL Sprite_BadSwitch_Prep
-RTL
-+
-LDA $048E
+{
+    LDA.b $1B : BNE +
+        LDA.w $0E20, X : CMP #$04 : BNE .badswitch
+            JSL Sprite_LongSwitch_Prep
+            
+            RTL
 
-CMP.b #$CE : BEQ .alpha
-CMP.b #$04 : BEQ .alpha
-CMP.b #$3F : BNE .beta
+        .badswitch
 
-.alpha
+        JSL Sprite_BadSwitch_Prep
+        RTL
+    +
 
-LDA.b #$0D : STA $0F50, X
+    LDA $048E
 
-.beta
-RTL
+    CMP.b #$CE : BEQ .alpha
+    CMP.b #$04 : BEQ .alpha
+    CMP.b #$3F : BNE .beta
+        .alpha
+
+        LDA.b #$0D : STA $0F50, X
+
+    .beta
+
+    RTL
+}
 
 ;%Set_Sprite_Properties(Sprite_LongSwitch_Prep, Sprite_LongSwitch_Long);
 ;==================================================================================================
@@ -92,16 +101,18 @@ RTL
 ; handle the draw code and if the sprite is active and should move or not
 ;==================================================================================================
 Sprite_LongSwitch_Long:
-PHB : PHK : PLB
-JSR Sprite_LongSwitch_Draw ; Call the draw code
-JSL Sprite_CheckActive   ; Check if game is not paused
-BCC .SpriteIsNotActive   ; Skip Main code is sprite is innactive
+{
+    PHB : PHK : PLB
+    JSR Sprite_LongSwitch_Draw ; Call the draw code
+    JSL Sprite_CheckActive   ; Check if game is not paused
+    BCC .SpriteIsNotActive   ; Skip Main code is sprite is innactive
+        JSR Sprite_LongSwitch_Main ; Call the main sprite code
 
-JSR Sprite_LongSwitch_Main ; Call the main sprite code
+    .SpriteIsNotActive
 
-.SpriteIsNotActive
-PLB ; Get back the databank we stored previously
-RTL ; Go back to original code
+    PLB ; Get back the databank we stored previously
+    RTL ; Go back to original code
+}
 
 ;==================================================================================================
 ; Sprite initialization
@@ -110,23 +121,25 @@ RTL ; Go back to original code
 ; this code as soon as the room transitions/ overworld transition occurs
 ;==================================================================================================
 Sprite_LongSwitch_Prep:
-PHB : PHK : PLB
+{
+    PHB : PHK : PLB
    
     ; Add more code here to initialize data
-LDA $0FDA : STA $0D00, X : CLC : ADC #$08 : STA $0D00, X : STA.w $0FDA
-;LDA $0FDB : STA $0D20, X : SBC.b #$00 : STA $0D20, X : STA.w $0FDB
-LDA.w $0F60, X : ORA #$20 : STA.w $0F60, X
-DEC.w SprY, X
-DEC.w SprY, X
+    LDA $0FDA : STA $0D00, X : CLC : ADC #$08 : STA $0D00, X : STA.w $0FDA
+    ;LDA $0FDB : STA $0D20, X : SBC.b #$00 : STA $0D20, X : STA.w $0FDB
+    LDA.w $0F60, X : ORA #$20 : STA.w $0F60, X
+    DEC.w SprY, X
+    DEC.w SprY, X
 
-REP #$20
+    REP #$20
 
-LDA.w $0FDA : STA $02B2
-SEP #$20
-STZ.w SprMiscA, X
-STZ.w SprMiscC, X
-PLB
-RTL
+    LDA.w $0FDA : STA $02B2
+    SEP #$20
+    STZ.w SprMiscA, X
+    STZ.w SprMiscC, X
+    PLB
+    RTL
+}
 
 ;==================================================================================================
 ; Sprite Main routines code
@@ -135,204 +148,206 @@ RTL
 ; This contains all the Subroutines of your sprites you can add more below
 ;==================================================================================================
 Sprite_LongSwitch_Main:
-LDA.w SprAction, X; Load the SprAction
-JSL UseImplicitRegIndexedLocalJumpTable; Goto the SprAction we are currently in
-dw Action00
+{
+    LDA.w SprAction, X; Load the SprAction
+    JSL UseImplicitRegIndexedLocalJumpTable; Goto the SprAction we are currently in
 
+    dw Action00
+}
 
 Action00:
+{
+    LDA.w SprMiscC, X : CMP #$30 : BCC .removecollision
+        JSR SetCollision
+        BRA .coll
 
-LDA.w SprMiscC, X : CMP #$30 : BCC .removecollision
-JSR SetCollision
-BRA .coll
-.removecollision
+    .removecollision
 
-REP #$20
-LDA #$00DA
-STA.l $7E2416
-STA.l $7E2516
-LDA #$00E1
-STA.l $7E2496
-SEP #$20
-.coll
-LDA.w SprMiscA, X : BEQ +
+    REP #$20
+    LDA #$00DA
+    STA.l $7E2416
+    STA.l $7E2516
+    LDA #$00E1
+    STA.l $7E2496
+    SEP #$20
 
-LDA.w SprTimerE, X : BNE .timer
-LDA #$0F : STA.w SprTimerE, X
+    .coll
 
-LDA.b $F0 : AND.b #$04 : BNE .downpressed
-LDA #$01 : STA.w SprMiscB, X
-.downpressed
+    LDA.w SprMiscA, X : BEQ +
+        LDA.w SprTimerE, X : BNE .timer
+            LDA #$0F : STA.w SprTimerE, X
 
-LDA.b $F0 : AND.b #$04 : BEQ .DownNotPressed
-JSR PlayPullSound
-INC.w SprMiscB, X
-LDA.w SprMiscB, X : CMP #$05 : BNE .noresetanim
-LDA #$02 : STA.w SprMiscB, X
+            LDA.b $F0 : AND.b #$04 : BNE .downpressed
+                LDA #$01 : STA.w SprMiscB, X
 
-.noresetanim
-.DownNotPressed
-.timer
+            .downpressed
 
+            LDA.b $F0 : AND.b #$04 : BEQ .DownNotPressed
+                JSR PlayPullSound
+                INC.w SprMiscB, X
 
-LDA.b $F0 : AND.b #$04 : BEQ .DownNotPressed2
-LDA.w SprTimerD, X : BNE .pulltimer
-LDA #$04 : STA.w SprTimerD, X
-INC.w SprMiscC, X
+                LDA.w SprMiscB, X : CMP #$05 : BNE .noresetanim
+                    LDA #$02 : STA.w SprMiscB, X
 
-LDA.w SprMiscC, X : CMP #$30 : BCC .notend
+                .noresetanim
+            .DownNotPressed
+        .timer
 
-; we reached the end
-STZ.w SprMiscA, X ; remove grab animation
-STZ.b $48
-STZ.w $0377
-STZ.w $0379
-JSR CheckAnimation
-JSR SetCollision
-.notend
+        LDA.b $F0 : AND.b #$04 : BEQ .DownNotPressed2
+            LDA.w SprTimerD, X : BNE .pulltimer
+                LDA #$04 : STA.w SprTimerD, X
+                INC.w SprMiscC, X
 
+                LDA.w SprMiscC, X : CMP #$30 : BCC .notend
+                    ; we reached the end
+                    STZ.w SprMiscA, X ; remove grab animation
+                    STZ.b $48
+                    STZ.w $0377
+                    STZ.w $0379
+                    JSR CheckAnimation
+                    JSR SetCollision
 
-REP #$20
-INC.w $0FDA
-SEP #$20
+                .notend
 
-LDA $0D10, X : SEC : SBC #$04 : STA $22
-LDA $0D30, X : SBC #$00 : STA $23
-LDA $0FDA : STA $0D00, X : STA $20
-LDA $0FDB : STA $0D20, X : STA $21
-.pulltimer
+                REP #$20
+                INC.w $0FDA
+                SEP #$20
 
-.DownNotPressed2
-+
+                LDA $0D10, X : SEC : SBC #$04 : STA $22
+                LDA $0D30, X : SBC #$00 : STA $23
+                LDA $0FDA : STA $0D00, X : STA $20
+                LDA $0FDB : STA $0D20, X : STA $21
 
+            .pulltimer
+        .DownNotPressed2
+    +
 
-LDA.w SprMiscA, X : BEQ + ; if we are NOT pulling ignore this code
+    LDA.w SprMiscA, X : BEQ + ; if we are NOT pulling ignore this code
+        LDA.w SprMiscB, X ; update pulling animation frames
+        STA.w $0377 ; update pulling animation frames
 
-LDA.w SprMiscB, X ; update pulling animation frames
-STA.w $0377 ; update pulling animation frames
+        LDA $F2 : BMI .APressed ; a was pressed so do not reset 
+            STZ.w SprMiscA, X
+            STZ.b $48
+            STZ.w $0377
+            STZ.w $0379
+            STZ.w SprMiscB, X
 
-LDA $F2 : BMI .APressed ; a was pressed so do not reset 
+            LDA.w SprMiscC, X : CMP #$30 : BCS + ; is it pulled more than 0x50 pixels already?
+                LDA #$01 : STA.w SprMiscD, X
+                ; if we released here and miscc was not higher than 40
 
-STZ.w SprMiscA, X
-STZ.b $48
-STZ.w $0377
-STZ.w $0379
-STZ.w SprMiscB, X
-LDA.w SprMiscC, X : CMP #$30 : BCS + ; is it pulled more than 0x50 pixels already?
+        .APressed
+    +
 
-LDA #$01 : STA.w SprMiscD, X
-; if we released here and miscc was not higher than 40
-+
+    LDA.w SprMiscD, X : BEQ +
+        LDA.w SprMiscC, X : BEQ .noswitchreturn
+            DEC.w SprMiscC, X : BNE .notreachedstart
+                STZ.w SprMiscE, X
+                STZ.w SprMiscC, X
+                STZ.w SprMiscD, X
+                STZ.w SprMiscB, X
+                STZ.w SprMiscA, X
+                STZ.b $48
+                STZ.w $0377
+                STZ.w $0379
 
-.APressed
+            .notreachedstart
+            
+            REP #$20
+            DEC.w $0FDA
+            SEP #$20
 
-LDA.w SprMiscD, X : BEQ +
-LDA.w SprMiscC, X : BEQ .noswitchreturn
-DEC.w SprMiscC, X : BNE .notreachedstart
+            LDA $0FDA : STA $0D00, X
+            LDA $0FDB : STA $0D20, X
+    +
 
-STZ.w SprMiscE, X
-STZ.w SprMiscC, X
-STZ.w SprMiscD, X
-STZ.w SprMiscB, X
-STZ.w SprMiscA, X
-STZ.b $48
-STZ.w $0377
-STZ.w $0379
+    ;DEC.w SprMiscC, X : BNE .noswitchreturn ; if not decrease it back
+        ;REP #$20
+        ;DEC.w $0FDA
+        ;SEP #$20
 
+        ;LDA $0FDA : STA $0D00, X
+        ;LDA $0FDB : STA $0D20, X
 
-.notreachedstart
-REP #$20
-DEC.w $0FDA
-SEP #$20
+    .noswitchreturn
 
-LDA $0FDA : STA $0D00, X
-LDA $0FDB : STA $0D20, X
-+
-;DEC.w SprMiscC, X : BNE .noswitchreturn ; if not decrease it back
+    STZ.w $0379
 
-;REP #$20
-;DEC.w $0FDA
-;SEP #$20
+    LDA.b #$08 : STA $02
+                 STA $03
 
-;LDA $0FDA : STA $0D00, X
-;LDA $0FDB : STA $0D20, X
+    LDA $22 : STA $00
+    LDA $23 : STA $08
 
-.noswitchreturn
-+
-.APressed2
+    LDA $20 : ADC.b #$08 : STA $01
+    LDA $21 : ADC.b #$00 : STA $09
+            
+    JSL $0683EA ; setup sprite collision
 
+    LDA.w SprMiscC, X : CMP #$30 : BCS .done
+        JSL CheckIfHitBoxesOverlap : BCC .nocollision
+            STZ $27 ; prevent recoiling
+            STZ $28 ; prevent recoiling
+                    
+            JSL $079291 ; Sprite_RepelDashAttackLong
+                    
+            STZ $48 ; prevent pulling animation if we are not pushing A
 
-STZ.w $0379
+            INC $0379 ; disable A button press if we collide that sprite
 
+            LDA $F2 : BPL .ANotPressed
+                LDA.w SprMiscA, X : BNE +
+                    INC.w SprMiscB, X
+                +
 
-LDA.b #$08 : STA $02
-             STA $03
+                INC.w SprMiscA, X
 
-LDA $22 : STA $00
-LDA $23 : STA $08
+                LDA $0D10, X : STA $22
+                LDA $0D30, X : STA $23
 
-LDA $20 : ADC.b #$08 : STA $01
-LDA $21 : ADC.b #$00 : STA $09
-        
-JSL $0683EA ; setup sprite collision
+                LDA $0D00, X : STA $20
+                LDA $0D20, X : STA $21
+                LDA #$01 : STA $48 ; set link in pulling state
 
-
-LDA.w SprMiscC, X : CMP #$30 : BCS .done
-JSL CheckIfHitBoxesOverlap : BCC .nocollision
-
-
-STZ $27 ; prevent recoiling
-STZ $28 ; prevent recoiling
-        
-JSL $079291 ; Sprite_RepelDashAttackLong
-        
-STZ $48 ; prevent pulling animation if we are not pushing A
-
-INC $0379 ; disable A button press if we collide that sprite
-
-LDA $F2 : BPL .ANotPressed
-LDA.w SprMiscA, X : BNE +
-INC.w SprMiscB, X
-+
-
-INC.w SprMiscA, X
-
-LDA $0D10, X : STA $22
-LDA $0D30, X : STA $23
-
-LDA $0D00, X : STA $20
-LDA $0D20, X : STA $21
-LDA #$01 : STA $48 ; set link in pulling state
-
-
-.done
-.ANotPressed
-.nocollision
-
-
-RTS
+            .ANotPressed
+        .nocollision
+    .done
+    
+    RTS
+}
 
 SetCollision:
-REP #$20
-LDA #$0334
-STA.l $7E2416
-STA.l $7E2496
-STA.l $7E2516
-;LDA #$0D23
-;STA.l $7E2596
-SEP #$20
-RTS
+{
+    REP #$20
 
+    LDA #$0334
+    STA.l $7E2416
+    STA.l $7E2496
+    STA.l $7E2516
+    ;LDA #$0D23
+    ;STA.l $7E2596
+
+    SEP #$20
+
+    RTS
+}
 
 CheckAnimation:
-LDA $7EF298 : AND #$20 : BNE .noanimation
-LDA #$04 : STA.w $04C6
-.noanimation
-RTS
+{
+    LDA $7EF298 : AND #$20 : BNE .noanimation
+        LDA #$04 : STA.w $04C6
+
+    .noanimation
+
+    RTS
+}
 
 PlayPullSound:
-LDA #$18 : STA.w $012F
-RTS
+{
+    LDA #$18 : STA.w $012F
+    RTS
+}
 
 ;==================================================================================================
 ; Sprite Draw code
@@ -340,126 +355,143 @@ RTS
 ; Draw the tiles on screen with the data provided by the sprite maker editor
 ;==================================================================================================
 Sprite_LongSwitch_Draw:
-JSL Sprite_PrepOamCoord
-LDA #$14
-JSL OAM_AllocateFromRegionB
-;JSL Sprite_OAM_AllocateDeferToPlayer
-LDY #$00 ; Animation Frame
-LDA .start_index, Y : STA $06
-LDA.w SprMiscC, X : STA $08
-STZ $09
+{
+    ; Draw the covers first.
 
+    ;JSL Sprite_PrepOamCoord
 
-PHX
-LDA.w SprMiscC, X : CMP #$08 : BCS +
-LDX #$00 : BRA ++
-+
-SEC : SBC #$08 : LSR : LSR : LSR : LSR : INC : TAX
-CMP #$05 : BNE ++
-DEX
-++
-LDY.b #$00
-.nextTile
+    ; Do the PrepOamCoord manually so the covers don't move.
+    REP #$20
+    LDA #$00B0 : SEC : SBC $E2 : STA $00 ; X
+    LDA #$0676 : SEC : SBC $E8 : STA $02 ; Y
+    SEP #$20
 
-PHX ; Save current Tile Index?
-    
-TXA : CLC : ADC $06 ; Add Animation Index Offset
+    LDA #$20
+    JSL OAM_AllocateFromRegionB
 
-PHA ; Keep the value with animation index offset?
+    ; draw is dumb and stupid so we have to save this for the dumb and stupid draw later.
+    REP #$20
+    LDA $90 : STA $02B2
+    LDA $92 : STA $02B4
+    SEP #$20
 
-ASL A : TAX 
+    LDA .start_index+$01 : STA $06
 
-REP #$20
+    PHX
+    LDY.b #$00
 
-LDA $00 : CLC : ADC .x_offsets, X : STA ($90), Y
-AND.w #$0100 : STA $0E 
-INY
-LDA $02 : CLC : ADC .y_offsets, X : STA ($90), Y
-CLC : ADC #$0010 : CMP.w #$0100
-SEP #$20
-BCC .on_screen_y
+    LDX .nbr_of_tiles+$01
 
-LDA.b #$F0 : STA ($90), Y ;Put the sprite out of the way
-STA $0E
-.on_screen_y
+    .nextTile2
 
-PLX ; Pullback Animation Index Offset (without the *2 not 16bit anymore)
-INY
-LDA .chr, X : STA ($90), Y
-INY
-LDA .properties, X : STA ($90), Y
+        PHX ; Save current Tile Index?
+            
+        TXA : CLC : ADC $06 ; Add Animation Index Offset
 
-PHY 
-    
-TYA : LSR #2 : TAY
-    
-LDA .sizes, X : ORA $0F : STA ($92), Y ; store size in oam buffer
-    
-PLY : INY
-    
-PLX : DEX : BPL .nextTile
+        PHA ; Keep the value with animation index offset?
 
-PLX
+        ASL A : TAX 
 
+        REP #$20
 
-;JSL Sprite_PrepOamCoord
-LDA #$08
-JSL OAM_AllocateFromRegionC
-LDY #$01
-LDA .start_index, Y : STA $06
+        LDA $00 : CLC : ADC .x_offsets, X : STA ($90), Y
+        AND.w #$0100 : STA $0E 
+        INY
+        LDA $02 : CLC : ADC .y_offsets, X : STA ($90), Y
+        CLC : ADC #$0010 : CMP.w #$0100
+        SEP #$20
 
+        BCC .on_screen_y2
+            LDA.b #$F0 : STA ($90), Y ;Put the sprite out of the way
+            STA $0E
 
-PHX
-LDY.b #$00
-.nextTile2
+        .on_screen_y2
 
-PHX ; Save current Tile Index?
-    
-TXA : CLC : ADC $06 ; Add Animation Index Offset
+        PLX ; Pullback Animation Index Offset (without the *2 not 16bit anymore)
+        INY
+        LDA .chr, X : STA ($90), Y
+        INY
+        LDA .properties, X : STA ($90), Y
 
-PHA ; Keep the value with animation index offset?
+        PHY 
+            
+        TYA : LSR #2 : TAY
+            
+        LDA .sizes, X : ORA $0F : STA ($92), Y ; store size in oam buffer
+            
+        PLY : INY 
+    PLX : DEX : BPL .nextTile2
 
-ASL A : TAX 
+    PLX
 
-REP #$20
+    PHY
 
-LDA $00 : CLC : ADC .x_offsets, X : STA ($90), Y
-AND.w #$0100 : STA $0E 
-INY
-LDA.b $02
-CLC : ADC .y_offsets, X
-SEC : SBC $08
+    ; Now draw the lever.
 
-STA ($90), Y
-CLC : ADC #$0010 : CMP.w #$0100
-SEP #$20
-BCC .on_screen_y2
+    JSL Sprite_PrepOamCoord
+    ;LDA #$08
+    ;JSL OAM_AllocateFromRegionC
 
-LDA.b #$F0 : STA ($90), Y ;Put the sprite out of the way
+    LDA .start_index : STA $06
+    LDA.w SprMiscC, X : STA $08
+    STZ $09
 
-STA $0E
-.on_screen_y2
+    PLY
 
-PLX ; Pullback Animation Index Offset (without the *2 not 16bit anymore)
-INY
-LDA .chr, X : STA ($90), Y
-INY
-LDA .properties, X : STA ($90), Y
+    PHX
+    LDA.w SprMiscC, X : CMP #$08 : BCS +
+        LDX #$00 : BRA ++
+    +
 
-PHY 
-    
-TYA : LSR #2 : TAY
-    
-LDA .sizes, X : ORA $0F : STA ($92), Y ; store size in oam buffer
-    
-PLY : INY
-    
-PLX : DEX : BPL .nextTile2
+    SEC : SBC #$08 : LSR : LSR : LSR : LSR : INC : TAX
+    CMP #$05 : BNE ++
+        DEX
+    ++
 
-PLX
+    .nextTile
 
-RTS
+        PHX ; Save current Tile Index?
+            
+        TXA : CLC : ADC $06 ; Add Animation Index Offset
 
+        PHA ; Keep the value with animation index offset?
+
+        ASL A : TAX 
+
+        REP #$20
+
+        LDA $00 : CLC : ADC .x_offsets, X : STA ($90), Y
+        AND.w #$0100 : STA $0E 
+        INY
+        LDA $02 : CLC : ADC .y_offsets, X : STA ($90), Y
+        CLC : ADC #$0010 : CMP.w #$0100
+        SEP #$20
+
+        BCC .on_screen_y
+            LDA.b #$F0 : STA ($90), Y ;Put the sprite out of the way
+            STA $0E
+
+        .on_screen_y
+
+        PLX ; Pullback Animation Index Offset (without the *2 not 16bit anymore)
+        INY
+        LDA .chr, X : STA ($90), Y
+        INY
+        LDA .properties, X : STA ($90), Y
+
+        PHY 
+            
+        TYA : LSR #2 : TAY
+            
+        LDA .sizes, X : ORA $0F : STA ($92), Y ; store size in oam buffer
+            
+        PLY : INY 
+    PLX : DEX : BPL .nextTile
+
+    PLX
+
+    RTS
+}
 
 ;==================================================================================================
 ; Sprite Draw Generated Data
@@ -468,36 +500,42 @@ RTS
 ;==================================================================================================
 .start_index
 db $00, $05
+
 .nbr_of_tiles
 db 4, 1
+
 .x_offsets
 dw 0, 0, 0, 0, 0
 dw 0, -80
+
 .y_offsets
 dw -08, -24, -40, -56, -72
 dw -8, -8
+
 .chr
 db $0A, $26, $26, $26, $26
 db $08, $08
+
 .properties
 db $3B, $2B, $2B, $2B, $2B
 db $3B, $3B
+
 .sizes
 db $02, $02, $02, $02, $02
 db $02, $02
 
-
-
-
-
 Sprite_BadSwitch_Prep:
-PHB : PHK : PLB
+{
+    PHB : PHK : PLB
 
-DEC.w SprY, X
-DEC.w SprY, X
+    DEC.w SprY, X
+    ;DEC.w SprY, X
 
-PLB ; Get back the databank we stored previously
-RTL ; Go back to original code
+    ; reset draw flag
+
+    PLB ; Get back the databank we stored previously
+    RTL ; Go back to original code
+}
 
 ;==================================================================================================
 ; Sprite Long Hook for that sprite
@@ -506,18 +544,20 @@ RTL ; Go back to original code
 ; handle the draw code and if the sprite is active and should move or not
 ;==================================================================================================
 Sprite_BadSwitch_Long:
-PHB : PHK : PLB
+{
+    PHB : PHK : PLB
 
-JSR Sprite_BadSwitch_Draw ; Call the draw code
-JSL Sprite_CheckActive   ; Check if game is not paused
-BCC .SpriteIsNotActive   ; Skip Main code is sprite is innactive
+    JSR Sprite_BadSwitch_Draw ; Call the draw code
+    JSL Sprite_CheckActive   ; Check if game is not paused
 
-JSR Sprite_BadSwitch_Main ; Call the main sprite code
+    BCC .SpriteIsNotActive   ; Skip Main code is sprite is innactive
+        JSR Sprite_BadSwitch_Main ; Call the main sprite code
 
-.SpriteIsNotActive
-PLB ; Get back the databank we stored previously
-RTL ; Go back to original code
+    .SpriteIsNotActive
 
+    PLB ; Get back the databank we stored previously
+    RTL ; Go back to original code
+}
 
 ;==================================================================================================
 ; Sprite Main routines code
@@ -526,18 +566,21 @@ RTL ; Go back to original code
 ; This contains all the Subroutines of your sprites you can add more below
 ;==================================================================================================
 Sprite_BadSwitch_Main:
-LDA.w SprAction, X; Load the SprAction
-JSL UseImplicitRegIndexedLocalJumpTable; Goto the SprAction we are currently in
-dw Action000
+{
+    LDA.w SprAction, X; Load the SprAction
+    JSL UseImplicitRegIndexedLocalJumpTable; Goto the SprAction we are currently in
 
+    dw Action000
+}
 
 Action000:
-JSL $06AA0C ; lift
+{
+    JSL $06AA0C ; Sprite_CheckIfLiftedPermissiveLong
 
-JSL Sprite_MoveXyz
+    JSL Sprite_MoveXyz
 
-RTS
-
+    RTS
+}
 
 ;==================================================================================================
 ; Sprite Draw code
@@ -545,60 +588,67 @@ RTS
 ; Draw the tiles on screen with the data provided by the sprite maker editor
 ;==================================================================================================
 Sprite_BadSwitch_Draw:
-JSL Sprite_PrepOamCoord
-JSL Sprite_OAM_AllocateDeferToPlayer
+{
+    JSL Sprite_PrepOamCoord
 
-LDA $0DC0, X : CLC : ADC $0D90, X : TAY;Animation Frame
-LDA .start_index, Y : STA $06
+    ; Because the left sprite almost always loads first we have to do this dumb manual
+    ; allocation so that it alwasy draws below the other lever.
+    REP #$20
+    LDA $02B2 : STA $90
+    LDA $02B4 : STA $92
+    SEP #$20
 
+    LDA $0DC0, X : CLC : ADC $0D90, X : TAY ;Animation Frame
+    LDA .start_index, Y : STA $06
 
-PHX
-LDX .nbr_of_tiles, Y ;amount of tiles -1
-LDY.b #$00
-.nextTile
+    PHX
+    LDX .nbr_of_tiles, Y ;amount of tiles -1
+    LDY.b #$1C
 
-PHX ; Save current Tile Index?
-    
-TXA : CLC : ADC $06 ; Add Animation Index Offset
+    .nextTile
 
-PHA ; Keep the value with animation index offset?
+        PHX ; Save current Tile Index?
+            
+        TXA : CLC : ADC $06 ; Add Animation Index Offset
 
-ASL A : TAX 
+        PHA ; Keep the value with animation index offset?
 
-REP #$20
+        ASL A : TAX 
 
-LDA $00 : CLC : ADC .x_offsets, X : STA ($90), Y
-AND.w #$0100 : STA $0E 
-INY
-LDA $02 : CLC : ADC .y_offsets, X : STA ($90), Y
-CLC : ADC #$0010 : CMP.w #$0100
-SEP #$20
-BCC .on_screen_y
+        REP #$20
 
-LDA.b #$F0 : STA ($90), Y ;Put the sprite out of the way
-STA $0E
-.on_screen_y
+        LDA $00 : CLC : ADC .x_offsets, X : STA ($90), Y
+        AND.w #$0100 : STA $0E 
+        INY
+        LDA $02 : CLC : ADC .y_offsets, X : STA ($90), Y
+        CLC : ADC #$0010 : CMP.w #$0100
+        SEP #$20
 
-PLX ; Pullback Animation Index Offset (without the *2 not 16bit anymore)
-INY
-LDA .chr, X : STA ($90), Y
-INY
-LDA .properties, X : STA ($90), Y
+        BCC .on_screen_y
+            LDA.b #$F0 : STA ($90), Y ;Put the sprite out of the way
+            STA $0E
 
-PHY 
-    
-TYA : LSR #2 : TAY
-    
-LDA .sizes, X : ORA $0F : STA ($92), Y ; store size in oam buffer
-    
-PLY : INY
-    
-PLX : DEX : BPL .nextTile
+        .on_screen_y
 
-PLX
+        PLX ; Pullback Animation Index Offset (without the *2 not 16bit anymore)
+        INY
+        LDA .chr, X : STA ($90), Y
+        INY
+        LDA .properties, X : STA ($90), Y
 
-RTS
+        PHY 
+            
+        TYA : LSR #2 : TAY
+            
+        LDA .sizes, X : ORA $0F : STA ($92), Y ; store size in oam buffer
+            
+        PLY : INY
+    PLX : DEX : BPL .nextTile
 
+    PLX
+
+    RTS
+}
 
 ;==================================================================================================
 ; Sprite Draw Generated Data
@@ -607,15 +657,21 @@ RTS
 ;==================================================================================================
 .start_index
 db $00
+
 .nbr_of_tiles
 db 0
+
 .x_offsets
 dw 0
+
 .y_offsets
 dw 0
+
 .chr
 db $0A
+
 .properties
 db $2B
+
 .sizes
 db $02
