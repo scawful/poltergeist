@@ -511,7 +511,6 @@ MaidenDisappear:
 ;==================================================================================================
 Sprite_Facade_Draw:
 {
-	print pc
 	LDA $0DA0, X : AND.b #$0E : STA $08
 
 	JSL Sprite_PrepOamCoord
