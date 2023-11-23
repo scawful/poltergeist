@@ -23,18 +23,17 @@ NewSpawnFlyingTile:
         LDA $A0 : CMP #$8D : BNE +
             LDA.l TilesRoom8DX, X : STA $0D10, Y
             LDA.l TilesRoom8DY, X : SEC : SBC #$08 : STA $0D00, Y
-
         +
+
         ;LDA $A0 : CMP #$08 : BNE +
 
         ;+
+
         ;LDA $A0 : CMP #$08 : BNE +
 
         ;+
-
 
         ; Add more room here
-
 
         ; Default code
         LDA.l DefaultTilesX, X : STA $0D10, Y
@@ -62,7 +61,6 @@ NewSpawnFlyingTile:
 
     RTL
 
-
     DefaultTilesX:
     db $70, $80, $60, $90, $90, $60, $70, $80
     db $80, $70, $50, $A0, $A0, $50, $50, $A0
@@ -82,7 +80,6 @@ NewSpawnFlyingTile:
     db $40, $40, $60, $80, $60, $90, $60, $A0
     db $60, $A0, $60, $B0, $60, $B0, $80, $90
     db $80, $90, $70, $90, $70, $90
-
 }
 
 ; ==============================================================================
@@ -94,7 +91,6 @@ NewTileReplace:
     LDA $A0 : CMP #$8D : BNE +
         LDY #$04
         RTL
-
     +
 
     LDY #$06

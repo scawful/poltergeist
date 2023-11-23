@@ -21,110 +21,109 @@ org $05DEA5 ; nothing for now
 org $028465
     LDX.b #$07
     
+org $0083F8
+{
+    LDA InCutScene : BEQ .notInCutscene
+        STZ $F0
+        STZ $F2
+        STZ $F4
+        STZ $F6
+        STZ $F8
+        STZ $FA ; kill all input
 
-org        $0083F8
-LDA        InCutScene : BEQ .notInCutscene
-    STZ $F0
-    STZ $F2
-    STZ $F4
-    STZ $F6
-    STZ $F8
-    STZ $FA ; kill all input
+    .notInCutscene
 
-.notInCutscene
-
-RTS
+    RTS
+}
 
 ; Hooked routines 
 org $1D8549
-Sprite4_DrawMultiple:
+    Sprite4_DrawMultiple:
 
 org $05F93F
-Sprite2_DirectionToFacePlayer:
+    Sprite2_DirectionToFacePlayer:
 
 ; Aginah in room 11
 org $068CE3
-CMP.b #$11 : BNE .notAginah
-        
-      INC $0E80, X
+    CMP.b #$11 : BNE .notAginah
+        INC $0E80, X
       
-      ; Basically changes him to Aginah rather than Sahasralah
-      LDA.b #$0F : STA $0F50, X
+        ; Basically changes him to Aginah rather than Sahasralah
+        LDA.b #$0F : STA $0F50, X
     
     .notAginah
 
 ; -------- Orange Dress ----------
 ; 76 Zelda Sprite Palette 
 org $0DB3CF
-  db $1F 
+    db $1F 
 
 ; C1 
 org $0DB41A
-  db $0E 
+    db $0E 
 
 ; Follower palettes 
 org $09A8F9
-  db $00
-  db $07 ; Zelda
+    db $00
+    db $07 ; Zelda
 
 org $08C003
 Ancilla_BedSpread:
 {
-
-.chr
+    .chr
     db $0A, $0A, $0A, $0A
     db $0C, $0C, $0A, $0A
     
-.properties
+    .properties
     db $06, $66, $A6, $E6
     db $06, $66, $A6, $E6
 }
 
 ; Stop Zelda from playing her music 
 org $05ED10
-  NOP #4
+    NOP #4
 
 org $05ED63
-  RTS
+    RTS
 
 ; --------------------------------
 
-; ; 76 Zelda Sprite Palette 
-; org $0DB3CF
-;   db $1D 
+; 76 Zelda Sprite Palette 
+;org $0DB3CF
+;    db $1D 
 
-; ; C1 
-; org $0DB41A
-;   db $0C ; yellow 
-;   ; db $02 ; weird yellow index $9X
-;   ; db $06    ; $BX
+; C1 
+;org $0DB41A
+;    db $0C ; yellow 
+;    ; db $02 ; weird yellow index $9X
+;    ; db $06    ; $BX
 
-; ; Follower palettes 
-; org $09A8F9
-;   db $00
-;   db $0E ; Zelda
+; Follower palettes 
+;org $09A8F9
+;    db $00
+;    db $0E ; Zelda
 
 ; Snitch Draw code ? 
 org $1AF8AC
-dw 0, -8 : db $E0, $20, $00, $02
-dw 0, 0 : db $E8, $20, $00, $02
-dw 0, -7 : db $E0, $20, $00, $02
-dw 0, 1 : db $E8, $60, $00, $02
+  dw 0, -8 : db $E0, $20, $00, $02
+  dw 0, 0 : db $E8, $20, $00, $02
+  dw 0, -7 : db $E0, $20, $00, $02
+  dw 0, 1 : db $E8, $60, $00, $02
 
-dw 0, -8 : db $C0, $20, $00, $02
-dw 0, 0 : db $C2, $20, $00, $02
-dw 0, -7 : db $C0, $20, $00, $02
-dw 0, 1 : db $C2, $60, $00, $02
+  dw 0, -8 : db $C0, $20, $00, $02
+  dw 0, 0 : db $C2, $20, $00, $02
+  dw 0, -7 : db $C0, $20, $00, $02
+  dw 0, 1 : db $C2, $60, $00, $02
 
-dw 0, -8 : db $E2, $20, $00, $02
-dw 0, 0 : db $E4, $20, $00, $02
-dw 0, -7 : db $E2, $20, $00, $02
-dw 0, 1 : db $E6, $20, $00, $02
+  dw 0, -8 : db $E2, $20, $00, $02
+  dw 0, 0 : db $E4, $20, $00, $02
+  dw 0, -7 : db $E2, $20, $00, $02
+  dw 0, 1 : db $E6, $20, $00, $02
 
-dw 0, -8 : db $E2, $60, $00, $02
-dw 0, 0 : db $E4, $60, $00, $02
-dw 0, -7 : db $E2, $60, $00, $02
-dw 0, 1 : db $E6, $60, $00, $02
+  dw 0, -8 : db $E2, $60, $00, $02
+  dw 0, 0 : db $E4, $60, $00, $02
+  dw 0, -7 : db $E2, $60, $00, $02
+  dw 0, 1 : db $E6, $60, $00, $02
 
 ; =============================================================================
 
@@ -135,12 +134,12 @@ org $06893B
 SpritePrep_ChattyAgahnim:
 {
     LDA $0403 : AND.b #$40 : BEQ .not_triggered
-    
-    STZ $0DD0, X
-    
-    RTS
+        STZ $0DD0, X
+        
+        RTS
 
-.not_triggered
+    .not_triggered
+    
     JMP $8BA7 ; SpritePrep_IgnoresProjectiles
 }
 
@@ -148,38 +147,41 @@ SpritePrep_ChattyAgahnim:
 org $1DD23F
 CutsceneAgahnim_Main:
 {
-  LDA $35 : BNE .start_cutscene
-  JSL Zelda_CheckForStartCutscene
-  JMP .return
+    LDA $35 : BNE .start_cutscene
+        JSL Zelda_CheckForStartCutscene
+        JMP .return
 
-  .start_cutscene
-  CMP.b #$03 : BEQ .old_man_save_me
-  CMP.b #$04 : BEQ .no_really_please
-  CMP.b #$05 : BEQ .this_isnt_funny
-  CMP.b #$06 : BEQ .return
+    .start_cutscene
 
-    ; Start the levitate sequence 
-    LDA.b #$40 : STA $0DF0, X ; Set Timer0 for AltarZelda_Main
-    
-    LDA.b #$0C : STA $0E60, X
+    CMP.b #$03 : BEQ .old_man_save_me
+    CMP.b #$04 : BEQ .no_really_please
+    CMP.b #$05 : BEQ .this_isnt_funny
+    CMP.b #$06 : BEQ .return
+        ; Start the levitate sequence 
+        LDA.b #$40 : STA $0DF0, X ; Set Timer0 for AltarZelda_Main
+        
+        LDA.b #$0C : STA $0E60, X
 
-      LDA $35 : CMP #$02 : BEQ .summoned
-        LDA.b #$01 : STA $0DC0, X ; Move Zelda to next anim frame
-        LDA SprY, X : CLC : ADC.b #$0C : STA $0D00, X
-        JSL SummonRogueWallmaster
-        LDA #$02 : STA $35 ; Advance the cutscene
-    .summoned
+        LDA $35 : CMP #$02 : BEQ .summoned
+            LDA.b #$01 : STA $0DC0, X ; Move Zelda to next anim frame
+            LDA SprY, X : CLC : ADC.b #$0C : STA $0D00, X
+            JSL SummonRogueWallmaster
+            LDA #$02 : STA $35 ; Advance the cutscene
 
-    JSL Zelda_LevitateAway
+        .summoned
 
-  .draw_zelda
-    LDA $0D80, X : JSL UseImplicitRegIndexedLocalJumpTable
-    dw $D5A1 ; AltarZelda_Main
+        JSL Zelda_LevitateAway
 
-  .return
+        .draw_zelda
+        LDA $0D80, X : JSL UseImplicitRegIndexedLocalJumpTable
+        dw $D5A1 ; AltarZelda_Main
+
+    .return
+
     RTS
 
-  .old_man_save_me
+    .old_man_save_me
+
     ; Old man needs a minute to prepare his spells
     STZ $02F5
     LDA #$00 : STA InCutScene ; Allow Link to move again
@@ -190,24 +192,28 @@ CutsceneAgahnim_Main:
     ; Run some dialogue from the bad guy
     LDA #$0E : LDY #$00
     JSL Sprite_ShowMessageUnconditional
+
     RTS
 
-  .no_really_please
+    .no_really_please
+
     ; Wait for it...
     LDA SprTimerA, X : BNE .return
-    LDA #$FF : STA SprTimerA, X ; Start the timer again
-    
-    LDA #$11 : STA $012D ; Play the church music
-    LDA #$05 : STA $35 ; Advance the cutscene 
-    RTS
+        LDA #$FF : STA SprTimerA, X ; Start the timer again
+          
+        LDA #$11 : STA $012D ; Play the church music
+        LDA #$05 : STA $35 ; Advance the cutscene 
 
-  .this_isnt_funny
+        RTS
+
+    .this_isnt_funny
+
     LDA SprTimerA, X : BNE .return
-    JSL $0BFFA8 ; WallMaster_SendPlayerToLastEntrance
-    JSL OldMan_AdvanceGameState
-    LDA #$06 : STA $35 ; End the cutscene 
-    RTS
+        JSL $0BFFA8 ; WallMaster_SendPlayerToLastEntrance
+        JSL OldMan_AdvanceGameState
+        LDA #$06 : STA $35 ; End the cutscene 
 
+        RTS
 }
 
 warnpc $1DD2DA
@@ -219,22 +225,21 @@ org $05ECFA
 Zelda_ApproachingPlayer:
 {
     LDA $0DF0, X : BNE .still_approaching
-    
-    INC $0D80, X
-    
-    ; "Thank you, [Name]. I had a feeling you were getting close."
-    LDA.b #$1C
-    LDY.b #$00
-    
-    JSL Sprite_ShowMessageUnconditional
-    
-    STZ $0D50, X
-    STZ $0D40, X
-    
-    ; Play you saved the day durp durp music.
-    ; LDA.b #$19 : STA $012C
+        INC $0D80, X
+        
+        ; "Thank you, [Name]. I had a feeling you were getting close."
+        LDA.b #$1C
+        LDY.b #$00
+        
+        JSL Sprite_ShowMessageUnconditional
+        
+        STZ $0D50, X
+        STZ $0D40, X
+        
+        ; Play you saved the day durp durp music.
+        ; LDA.b #$19 : STA $012C
 
-.still_approaching
+    .still_approaching
 
     LDA $1A : LSR #3 : AND.b #$01 : STA $0DC0, X
     
@@ -245,15 +250,16 @@ Zelda_ApproachingPlayer:
 org    $05ED76
 Zelda_WalkTowardsPriest:
 {
-  .timers
+    .timers
     ;db $26, $1A, $2C, $01
     db $1A, $1A, $2C, $01
-  .directions
+
+    .directions
     ; db $04, $03, $02, $01
-    db   $00, $00, $00, $00
+    db $00, $00, $00, $00
 }
 
-; *$2EDC4-$2EDEB JUMP LOCATION
+; $2EDC4-$2EDEB JUMP LOCATION
 org $05EDC4
 Zelda_RespondToPriest:
 {
@@ -276,13 +282,12 @@ Zelda_BeCarefulOutThere:
     JSR Sprite2_DirectionToFacePlayer : TYA : EOR.b #$03 : STA $0EB0, X
 
     LDA SprTimerD, X : BNE .didnt_speak
-    
-    LDA #$01 : STA $35   ; Advance the cutscene state
-    LDA #$27 : STA $012F ; Levitate charge sfx 
+        LDA #$01 : STA $35   ; Advance the cutscene state
+        LDA #$27 : STA $012F ; Levitate charge sfx 
 
-    STZ $0DD0, X ; Dismiss Zelda
+        STZ $0DD0, X ; Dismiss Zelda
 
-  .didnt_speak
+    .didnt_speak
 
     RTS
 }
@@ -297,34 +302,35 @@ Zelda_CheckForStartCutscene:
 {
     REP #$20
     JSR GetLinkDistance16bit : CMP #$0046 : BCS .no_zelda
-    SEP #$20
+        SEP #$20
 
-    ; If player is near, check for Zelda follower
-    LDA $7EF3CC : CMP.b #$01 : BNE .no_zelda
+        ; If player is near, check for Zelda follower
+        LDA $7EF3CC : CMP.b #$01 : BNE .no_zelda
+            LDA #$02 : STA $02F5 ; prevent link from moving 
 
-    LDA #$02 : STA $02F5 ; prevent link from moving 
+            LDA.b #$21 : LDY.b #$00
+            JSL   Sprite_ShowMessageUnconditional
 
-    LDA.b #$21 : LDY.b #$00
-    JSL   Sprite_ShowMessageUnconditional
+            JSR Uncle_GiveSwordAndShield
+            JSR Zelda_TransitionFromTagalong
 
-    JSR Uncle_GiveSwordAndShield
-    JSR Zelda_TransitionFromTagalong
+            LDA #$99 : STA SprTimerC, X
+            
+            RTL
 
-    LDA #$99 : STA SprTimerC, X
-    
-    RTL
+    .no_zelda
 
-  .no_zelda
     SEP #$20
     RTL
 }
 
 Uncle_GiveSwordAndShield:
 {
-  LDY.b #$00 : STZ $02E9
-  JSL   Link_ReceiveItem
-  LDA.b #$01 : STA $0DC0, X
-  RTS
+    LDY.b #$00 : STZ $02E9
+    JSL Link_ReceiveItem
+    LDA.b #$01 : STA $0DC0, X
+
+    RTS
 }
 
 Zelda_TransitionFromTagalong:
@@ -362,77 +368,78 @@ Zelda_TransitionFromTagalong:
 
 SummonRogueWallmaster:
 {
-  LDA #$90 : JSL Sprite_SpawnDynamically
-  JSL Sprite_SetSpawnedCoords
-  
-  LDA $0F70 : CLC : ADC #$40 : STA $0F70, Y
-  LDA $0D00, Y : SEC : SBC.b #$06 : STA $0D00, Y
-  LDA #$0C : STA $0F50, Y 
-  LDA #$01 : STA InCutScene
+    LDA #$90 : JSL Sprite_SpawnDynamically
+    JSL Sprite_SetSpawnedCoords
+    
+    LDA $0F70 : CLC : ADC #$40 : STA $0F70, Y
+    LDA $0D00, Y : SEC : SBC.b #$06 : STA $0D00, Y
+    LDA #$0C : STA $0F50, Y 
+    LDA #$01 : STA InCutScene
 
-  TYA : STA $0FA6
-  RTL
+    TYA : STA $0FA6
+    RTL
 }
 
 Zelda_LevitateAway:
 {
-  LDA.w SprTimerC, X : BNE .dont_levitate
-    ; Increase the sprite height with the wallmaster ID in $0FA6
-    PHX : LDA $0FA6 : TAX : LDA SprHeight, X : PLX
-    STA SprHeight, X
-    LDA #$28 : STA $012F ; Play warp away sfx
-  .dont_levitate
+    LDA.w SprTimerC, X : BNE .dont_levitate
+        ; Increase the sprite height with the wallmaster ID in $0FA6
+        PHX : LDA $0FA6 : TAX : LDA SprHeight, X : PLX
+        STA SprHeight, X
+        LDA #$28 : STA $012F ; Play warp away sfx
 
-  ; Check the height of the sprite, dismiss once its gone 
-  LDA SprHeight, X : CMP.b #$9F : BCC .draw_zelda
+    .dont_levitate
 
-    ; Spawn a rogue wallmaster
-    LDA #$90 : JSL Sprite_SpawnDynamically
-    LDA #$0C : STA $0F50, Y 
-    PHX
+    ; Check the height of the sprite, dismiss once its gone 
+    LDA SprHeight, X : CMP.b #$9F : BCC .draw_zelda
+        ; Spawn a rogue wallmaster
+        LDA #$90 : JSL Sprite_SpawnDynamically
+        LDA #$0C : STA $0F50, Y 
+        PHX
+        
+        LDX $02CF
+        
+        LDA $1A64, X : AND.b #$03 : STA $0EB0, Y : STA $0DE0, Y
+        LDA $20 : STA $0D00, Y ; SprY Low
+        LDA $21 : STA $0D20, Y ; SprY High
+        LDA $22 : STA $0D10, Y ; SprX Low
+        LDA $23 : STA $0D30, Y ; SprX High
+
+        LDA $24 : CLC : ADC #$80 : STA $0F70, Y ; SprZ Low
+        LDA.b #$01 : STA $0E80, Y ; SprDelayso yea
+        LDA $0BA0, Y : INC A : STA $0BA0, Y
+        
+        ; ISPH HHHH - [I ignore collisions][S Statis (not alive eg beamos)][P Persist code still run outside of camera][H Hitbox] 
+        LDA.b #$03 : STA $0F60, Y ; SprHitbox
+        
+        PLX
+
+        ; Set destination after Link is kidnapped by Wallmaster
+        LDA #$4E : STA $7E010E
+
+        ; Advance the cutscene state 
+        LDA #$03 : STA $35
+
+        ; Goodbye Zelda
+        STZ $0DD0,     X
+
+    .draw_zelda
     
-    LDX $02CF
-    
-    LDA $1A64, X : AND.b #$03 : STA $0EB0, Y : STA $0DE0, Y
-    LDA $20 : STA $0D00, Y ; SprY Low
-    LDA $21 : STA $0D20, Y ; SprY High
-    LDA $22 : STA $0D10, Y ; SprX Low
-    LDA $23 : STA $0D30, Y ; SprX High
-
-    LDA $24 : CLC : ADC #$80 : STA $0F70, Y ; SprZ Low
-    LDA.b #$01 : STA $0E80, Y ; SprDelayso yea
-    LDA $0BA0, Y : INC A : STA $0BA0, Y
-    
-    ; ISPH HHHH - [I ignore collisions][S Statis (not alive eg beamos)][P Persist code still run outside of camera][H Hitbox] 
-    LDA.b #$03 : STA $0F60, Y ; SprHitbox
-    
-    PLX
-
-    ; Set destination after Link is kidnapped by Wallmaster
-    LDA #$4E : STA $7E010E
-
-    ; Advance the cutscene state 
-    LDA #$03 : STA $35
-
-    ; Goodbye Zelda
-    STZ $0DD0,     X
-
-.draw_zelda
-  RTL
+    RTL
 }
 
 OldMan_AdvanceGameState:
 {
-  ; Change the game state
-  LDA.b #$02 : STA $7EF3C5
-  LDA.b #$00 : STA $7EF3C8
-  LDA.b #$11 : STA $7EF3C6
-  LDA.b #$01 : STA $7EF357
-  
-  ; Sprite_LoadGfxProperties.justLightWorld
-  PHX : JSL $00FC62 : PLX
+    ; Change the game state
+    LDA.b #$02 : STA $7EF3C5
+    LDA.b #$00 : STA $7EF3C8
+    LDA.b #$11 : STA $7EF3C6
+    LDA.b #$01 : STA $7EF357
+    
+    ; Sprite_LoadGfxProperties.justLightWorld
+    PHX : JSL $00FC62 : PLX
 
-  RTL
+    RTL
 }
 
 pushpc
@@ -449,11 +456,11 @@ AltarZelda_DrawBody:
 org $1DD581
 AltarZelda_OamGroups:
 {
-  dw -4,   0 : db $03, $01, $00, $02
-  dw 4,   0 : db $04, $01, $00, $02
+    dw -4,   0 : db $03, $01, $00, $02
+    dw 4,   0 : db $04, $01, $00, $02
 
-  dw -4,   0 : db $00, $01, $00, $02
-  dw 4,   0 : db $01, $01, $00, $02
+    dw -4,   0 : db $00, $01, $00, $02
+    dw 4,   0 : db $01, $01, $00, $02
 }
 
 ; Main fn for the Zelda subtype of the Cutscene Agahnim sprite
@@ -463,21 +470,19 @@ AltarZelda_Main:
 {
     LDA.w $0DF0, X
     BEQ   .not_telewarping_zelda
-    
-    ; Draw telewarp effect
-    PHA   : JSR AltarZelda_DrawWarpEffect : PLA
-    CMP.b #$01 : BNE .delay_self_termination
-    
-    STZ.w $0DD0, X
+        ; Draw telewarp effect
+        PHA : JSR AltarZelda_DrawWarpEffect : PLA
 
-  .delay_self_termination
+        CMP.b #$01 : BNE .delay_self_termination
+            STZ.w $0DD0, X
 
-    CMP.b #$0C : BCS .also_draw_zelda_body
-    
-    RTS
+        .delay_self_termination
 
-  .also_draw_zelda_body
-  .not_telewarping_zelda
+        CMP.b #$0C : BCS .also_draw_zelda_body
+            RTS
+
+        .also_draw_zelda_body
+    .not_telewarping_zelda
 
     LDA.b #$08 : JSL OAM_AllocateFromRegionA
     LDA.b #$00 : XBA

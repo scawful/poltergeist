@@ -1,6 +1,7 @@
 ;==============================================================================
 ; Sprite Properties
 ;==============================================================================
+
 !SPRID              = $CD; The sprite ID you are overwriting (HEX)
 !NbrTiles           = 4 ; Number of tiles used in a frame
 !Harmless           = 00  ; 00 = Sprite is Harmful,  01 = Sprite is Harmless
@@ -28,24 +29,28 @@
 !ImperviousArrow    = 00  ; 01 = Impervious to arrows
 !ImpervSwordHammer  = 00  ; 01 = Impervious to sword and hammer attacks
 !Boss               = 01  ; 00 = normal sprite, 01 = sprite is a boss
-%Set_Sprite_Properties(Sprite_PumpkinHead_Prep, Sprite_PumpkinHead_Long);
+%Set_Sprite_Properties(Sprite_PumpkinHead_Prep, Sprite_PumpkinHead_Long)
+
 ;==================================================================================================
 ; Sprite Long Hook for that sprite
 ; --------------------------------------------------------------------------------------------------
 ; This code can be left unchanged
 ; handle the draw code and if the sprite is active and should move or not
 ;==================================================================================================
+
 Sprite_PumpkinHead_Long:
-PHB : PHK : PLB
+{
+	PHB : PHK : PLB
 
-JSR Sprite_PumpkinHead_Draw ; Call the draw code
-JSL Sprite_CheckActive   ; Check if game is not paused
-BCC .SpriteIsNotActive   ; Skip Main code is sprite is innactive
-	JSR Sprite_PumpkinHead_Main ; Call the main sprite code
+	JSR Sprite_PumpkinHead_Draw ; Call the draw code
+	JSL Sprite_CheckActive   ; Check if game is not paused
+	BCC .SpriteIsNotActive   ; Skip Main code is sprite is innactive
+		JSR Sprite_PumpkinHead_Main ; Call the main sprite code
 
-.SpriteIsNotActive
-PLB ; Get back the databank we stored previously
-RTL ; Go back to original code
+	.SpriteIsNotActive
+	PLB ; Get back the databank we stored previously
+	RTL ; Go back to original code
+}
 
 ;==================================================================================================
 ; Sprite initialization
@@ -53,6 +58,7 @@ RTL ; Go back to original code
 ; this code only get called once perfect to initialize sprites substate or timers
 ; this code as soon as the room transitions/ overworld transition occurs
 ;==================================================================================================
+
 Sprite_PumpkinHead_Prep:
 {	
 	PHB : PHK : PLB
@@ -110,19 +116,21 @@ Sprite_PumpkinHead_Prep:
 ; This is the main local code of your sprite
 ; This contains all the Subroutines of your sprites you can add more below
 ;==================================================================================================
+
 Sprite_PumpkinHead_Main:
-LDA.w SprAction, X; Load the SprAction
-CMP #$80 : BNE +
-	RTS
+{
+	LDA.w SprAction, X; Load the SprAction
+	CMP #$80 : BNE +
+		RTS
+	+
 
-+
+	JSL UseImplicitRegIndexedLocalJumpTable; Goto the SprAction we are currently in
 
-JSL UseImplicitRegIndexedLocalJumpTable; Goto the SprAction we are currently in
 	dw Spiritx
 	dw Head
 	dw Body
 	dw DyingPumpkin
-
+}
 
 Spiritx:
 ; SUBTYPE 00 spirit

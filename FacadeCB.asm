@@ -1,6 +1,7 @@
 ;==============================================================================
 ; Sprite Properties
 ;==============================================================================
+
 !SPRID              = $cb; The sprite ID you are overwriting (HEX)
 !NbrTiles           = 4 ; Number of tiles used in a frame
 !Harmless           = 01  ; 00 = Sprite is Harmful,  01 = Sprite is Harmless
@@ -61,6 +62,7 @@ coordxtable:
 coordytable:
 	db $38, $B8, $38, $B8, $38, $B8, $38, $B8, $38, $B8, $38, $B8, $38, $B8, $38, $B8
 	db $48, $A8, $58, $98, $68, $88, $78, $78, $88, $68, $98, $58, $A8, $48
+
 ;==================================================================================================
 ; Sprite initialization
 ; --------------------------------------------------------------------------------------------------
@@ -101,6 +103,7 @@ Sprite_Facade_Prep:
 ; This is the main local code of your sprite
 ; This contains all the Subroutines of your sprites you can add more below
 ;==================================================================================================
+
 Sprite_Facade_Main:
 {
 	LDA.w SprAction, X; Load the SprAction
@@ -509,6 +512,7 @@ MaidenDisappear:
 ; --------------------------------------------------------------------------------------------------
 ; Draw the tiles on screen with the data provided by the sprite maker editor
 ;==================================================================================================
+
 Sprite_Facade_Draw:
 {
 	LDA $0DA0, X : AND.b #$0E : STA $08
@@ -593,6 +597,7 @@ Sprite_Facade_Draw:
 ; --------------------------------------------------------------------------------------------------
 ; This is where the generated Data for the sprite go
 ;==================================================================================================
+	
 	.start_index
 	db $00, $04, $08, $0C, $10, $14, $18, $1C, $20, $21, $22, $23, $24, $25, $26, $27, $28, $2A, $2B, $2D
 	

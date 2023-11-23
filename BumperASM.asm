@@ -19,6 +19,7 @@ NewBumper:
 
     CMP #$01 : BEQ .withcollision
         JML withoutcollision
+
     .withcollision
 
     PHB : PHK : PLB
@@ -125,7 +126,6 @@ withoutcollision:
         LDA $0D10, X : STA $0D90, X
         LDA $0D00, X : STA $0DB0, X
         INC $0EB0, X
-
     +
 
     LDA.w $0D80, X : BNE .SpikeTrap_InMotion   

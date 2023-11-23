@@ -23,7 +23,7 @@ NewMantlePrep:
     LDA $0D10, X : CLC : ADC.b #$08 : STA $0D10, X
 
     LDA $7EF0DA : AND #$0F : BEQ +
-    LDA $0D10, X : CLC : ADC.b #$28 : STA $0D10, X
+        LDA $0D10, X : CLC : ADC.b #$28 : STA $0D10, X
     +
 
     RTL

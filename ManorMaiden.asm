@@ -4,26 +4,26 @@
 pushpc
 
 org $09A1EC
-  JSL CheckForMaidenInLibrary
+    JSL CheckForMaidenInLibrary
 
 pullpc 
 
 CheckForMaidenInLibrary:
 {
-  LDA $A0 : CMP.b #$7C : BNE .notTheLibrary
+    LDA $A0 : CMP.b #$7C : BNE .notTheLibrary
+        LDA $11 : BNE .notTheLibrary
+            LDA $7FF9D2 : BNE .dialogue_played
+                LDA #$1D : LDY #$01
+                JSL Sprite_ShowMessageUnconditional
+                LDA #$01 : STA $7FF9D2
 
-  LDA $11 : BNE .notTheLibrary
-  LDA $7FF9D2 : BNE .dialogue_played
+            .dialogue_played
 
-    LDA #$1D : LDY #$01
-    JSL Sprite_ShowMessageUnconditional
-    LDA #$01 : STA $7FF9D2
+    .notTheLibrary
 
-    .dialogue_played
+    ; Check for blind room vanilla
+    REP #$20
+    LDA.b $A0
 
-  .notTheLibrary
-  ; Check for blind room vanilla
-  REP #$20
-  LDA.b $A0
-  RTL
+    RTL
 }

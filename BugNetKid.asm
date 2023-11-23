@@ -23,7 +23,6 @@ BugNetKid_Resting:
     JSL Sprite_CheckIfPlayerPreoccupied : BCS .dont_awaken
         JSR Sprite_CheckDamageToPlayer_same_layer : BCC .dont_awaken
             LDA $7EF34A : BNE .hasLamp
-            
                 INC $0D80, X
                 
                 INC $02E4

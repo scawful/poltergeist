@@ -97,10 +97,6 @@ org $05FBA2
 org $05DE2C
     JSL NewUncleDraw
 
-
-
-
-
 ;-------------------------------------------------------------------------------------
 ;Uncle No Sword or Shield
 ;-------------------------------------------------------------------------------------
@@ -168,8 +164,8 @@ NewUncleDraw:
 {
     LDA $1A : AND #$08 : BEQ + ; Change 03 to 01 if too slow
         JSL $0DD391 ; Draw Uncle Sprite
-
     +
+
     RTL
 }
 
@@ -184,22 +180,21 @@ org $0DC246
 pullpc
 
 ; org $0DC25C
-; JSL StalfosCheckLayered
-; NOP
-; pullpc
+    ; JSL StalfosCheckLayered
+    ; NOP
+    ; pullpc
 
 
 ; StalfosCheckLayered:
-; AND #$8F : PHA ; keep that
+    ; AND #$8F : PHA ; keep that
 
+    ; LDA $0FB3 : BEQ +
+        ; PLA : ORA.l .head_properties_layered, X
+        ; RTL
+    ; +
 
-; LDA $0FB3 : BEQ +
-; PLA : ORA.l .head_properties_layered, X
-; RTL
-; +
-; PLA : ORA.l .head_properties, X
-; RTL
-
+    ; PLA : ORA.l .head_properties, X
+    ; RTL
 
 ; .head_properties_layered
 ;     db $40, $00, $00, $00
@@ -212,15 +207,14 @@ pullpc
 pushpc
 ; Lumberjacks palette to blue
 org $0DB359+$2C
-db $49
-
+    db $49
 
 ; Bird palette
 org $08D331
-ORA #$36
+    ORA #$36
 
 org $08DFE8
-ORA #$36
+    ORA #$36
 
 ; ==============================================================================
 

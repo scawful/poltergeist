@@ -1,6 +1,7 @@
 ;==============================================================================
 ; Sprite Properties
 ;==============================================================================
+
 !SPRID              = $88 ; The sprite ID you are overwriting (HEX)
 !NbrTiles           = 4   ; Number of tiles used in a frame
 !Harmless           = 00  ; 00 = Sprite is Harmful,  01 = Sprite is Harmless

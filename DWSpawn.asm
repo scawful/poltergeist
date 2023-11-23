@@ -6,7 +6,8 @@ org $0281AB
     JSL NewDWExitLoad
     
 org $09F524
-CMP #$02 ; check for gamestate 02 instead of 03
+    CMP #$02 ; check for gamestate 02 instead of 03
+    
 pullpc
 
 ; ==============================================================================

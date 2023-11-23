@@ -1,6 +1,7 @@
 ;==============================================================================
 ; Sprite Properties
 ;==============================================================================
+
 !SPRID              = $04; The sprite ID you are overwriting (HEX)
 !NbrTiles           = 0 ; Number of tiles used in a frame
 !Harmless           = 00  ; 00 = Sprite is Harmful,  01 = Sprite is Harmless
@@ -29,9 +30,9 @@
 !ImpervSwordHammer  = 00  ; 01 = Impervious to sword and hammer attacks
 !Boss               = 00  ; 00 = normal sprite, 01 = sprite is a boss
 
-pushpc
-
 ;==============================================================================
+
+pushpc
 
 org $06C003 ; pull switch JSL
     JSL NewPullSwitchCheck
@@ -498,31 +499,31 @@ Sprite_LongSwitch_Draw:
 ; --------------------------------------------------------------------------------------------------
 ; This is where the generated Data for the sprite go
 ;==================================================================================================
-.start_index
-db $00, $05
+    .start_index
+    db $00, $05
 
-.nbr_of_tiles
-db 4, 1
+    .nbr_of_tiles
+    db 4, 1
 
-.x_offsets
-dw 0, 0, 0, 0, 0
-dw 0, -80
+    .x_offsets
+    dw 0, 0, 0, 0, 0
+    dw 0, -80
 
-.y_offsets
-dw -08, -24, -40, -56, -72
-dw -8, -8
+    .y_offsets
+    dw -08, -24, -40, -56, -72
+    dw -8, -8
 
-.chr
-db $0A, $26, $26, $26, $26
-db $08, $08
+    .chr
+    db $0A, $26, $26, $26, $26
+    db $08, $08
 
-.properties
-db $3B, $2B, $2B, $2B, $2B
-db $3B, $3B
+    .properties
+    db $3B, $2B, $2B, $2B, $2B
+    db $3B, $3B
 
-.sizes
-db $02, $02, $02, $02, $02
-db $02, $02
+    .sizes
+    db $02, $02, $02, $02, $02
+    db $02, $02
 
 Sprite_BadSwitch_Prep:
 {
@@ -655,23 +656,23 @@ Sprite_BadSwitch_Draw:
 ; --------------------------------------------------------------------------------------------------
 ; This is where the generated Data for the sprite go
 ;==================================================================================================
-.start_index
-db $00
+    .start_index
+    db $00
 
-.nbr_of_tiles
-db 0
+    .nbr_of_tiles
+    db 0
 
-.x_offsets
-dw 0
+    .x_offsets
+    dw 0
 
-.y_offsets
-dw 0
+    .y_offsets
+    dw 0
 
-.chr
-db $0A
+    .chr
+    db $0A
 
-.properties
-db $2B
+    .properties
+    db $2B
 
-.sizes
-db $02
+    .sizes
+    db $02

@@ -30,7 +30,7 @@ org $09EE57
 
 ; Tavern Backdoor Fix
 org $02D7AA
-dw $FFFF
+    dw $FFFF
 
 ; ==============================================================================
 
@@ -90,13 +90,13 @@ org $0CFF55
 
 ; Rain music? I can't remember exactly what this one does.
 org $0AFD59
-LDA #$05 ; change ambient song to nothing indoor
+    LDA #$05 ; change ambient song to nothing indoor
 
 org $0283AD
-LDA #$05 ; change ambient song to nothing outdoor
+    LDA #$05 ; change ambient song to nothing outdoor
 
 org $0284F2
-LDX #$05
+    LDX #$05
 
 ; ==============================================================================
 
@@ -129,11 +129,10 @@ pullpc
 pushpc
 
 org $08C2DD
-dw $FFFF
-
+    dw $FFFF
 
 org $05AF75
-RTS ; Remove portal warp
+    RTS ; Remove portal warp
 
 ; ==============================================================================
 

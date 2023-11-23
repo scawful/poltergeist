@@ -36,232 +36,233 @@
 
 Sprite_Poltergeist_Long:
 {
-  PHB : PHK : PLB
+	PHB : PHK : PLB
 
-  JSR Sprite_Poltergeist_Draw ; Call the draw code
-  JSL Sprite_DrawShadow
-  JSL Sprite_CheckActive   ; Check if game is not paused
-  BCC .SpriteIsNotActive   ; Skip Main code is sprite is innactive
+	JSR Sprite_Poltergeist_Draw ; Call the draw code
+	JSL Sprite_DrawShadow
+	JSL Sprite_CheckActive   ; Check if game is not paused
 
-  JSR Sprite_Poltergeist_Main ; Call the main sprite code
+	BCC .SpriteIsNotActive   ; Skip Main code is sprite is innactive
+		JSR Sprite_Poltergeist_Main ; Call the main sprite code
 
-.SpriteIsNotActive
-  
-  PLB ; Get back the databank we stored previously
-  RTL ; Go back to original code
+	.SpriteIsNotActive
+	
+	PLB ; Get back the databank we stored previously
+	RTL ; Go back to original code
 }
 
 ;===============================================
 
 Sprite_Poltergeist_Prep:
 {  
-  PHB : PHK : PLB
-    
-  ; Set initial sprite properties
-  LDA #$00 : STA $0CAA, X
+	PHB : PHK : PLB
+		
+	; Set initial sprite properties
+	LDA #$00 : STA $0CAA, X
 
-  PLB
-  RTL
+	PLB
+	RTL
 }
 
 ;===============================================
 
 Sprite_Poltergeist_Main:
 {
-  LDA.w SprAction, X ; Load the current action of the sprite
-  JSL UseImplicitRegIndexedLocalJumpTable
+	LDA.w SprAction, X ; Load the current action of the sprite
+	JSL UseImplicitRegIndexedLocalJumpTable
 
-  dw Poltergeist_Dictate
-  dw Poltergeist_Chair
-  dw Poltergeist_Axe
-  dw Poltergeist_Dish
-  dw Poltergeist_Fork
-  dw Poltergeist_Knife
-  dw Poltergeist_Window
-  dw Poltergeist_Frame
-  dw Poltergeist_Bed
-  dw Poltergeist_Table
-  dw Poltergeist_Ghost
+	dw Poltergeist_Dictate
+	dw Poltergeist_Chair
+	dw Poltergeist_Axe
+	dw Poltergeist_Dish
+	dw Poltergeist_Fork
+	dw Poltergeist_Knife
+	dw Poltergeist_Window
+	dw Poltergeist_Frame
+	dw Poltergeist_Bed
+	dw Poltergeist_Table
+	dw Poltergeist_Ghost
+}
 
-  ; 0x00
-  Poltergeist_Dictate:
-  {
+; 0x00
+Poltergeist_Dictate:
+{
     ; Set the sprite subtype to the current action
     LDA.w SprSubtype,X
     STA.w SprAction
-    RTS
-  }
 
-  ; 0x01
-  Poltergeist_Chair:
-  {
+    RTS
+}
+
+; 0x01
+Poltergeist_Chair:
+{
     JSR ISUUMV
-    RTS
-  }
 
-  ; 0x02
-  Poltergeist_Axe:
-  {
+    RTS
+}
+
+; 0x02
+Poltergeist_Axe:
+{
     JSR NATAMV
-    RTS
-  }
 
-  ; 0x03
-  Poltergeist_Dish:
-  {
+    RTS
+}
+
+; 0x03
+Poltergeist_Dish:
+{
     JSR SARAMV
-    RTS
-  }
 
-  ; 0x04
-  Poltergeist_Fork:
-  {
+    RTS
+}
+
+; 0x04
+Poltergeist_Fork:
+{
     JSR FOOKMV
-    RTS
-  }
 
-  ; 0x05
-  Poltergeist_Knife:
-  {
+    RTS
+}
+
+; 0x05
+Poltergeist_Knife:
+{
     JSR KNIFMV
-    RTS
-  }
-
-  ; 0x06
-  Poltergeist_Window:
-  {
-    
-    RTS
-  }
-
-  ; 0x07
-  Poltergeist_Frame:
-  {
 
     RTS
-  }
+}
 
-  ; 0x08
-  Poltergeist_Bed:
-  {
+; 0x06
+Poltergeist_Window:
+{
+    RTS
+}
+
+; 0x07
+Poltergeist_Frame:
+{
+    RTS
+}
+
+; 0x08
+Poltergeist_Bed:
+{
+    RTS
+}
+
+; 0x09
+Poltergeist_Table:
+{
+    RTS
+}
+
+; 0x0A
+Poltergeist_Ghost:
+{
 
     RTS
-  }
-
-  ; 0x09
-  Poltergeist_Table:
-  {
-
-    RTS
-  }
-
-  ; 0x0A
-  Poltergeist_Ghost:
-  {
-
-    RTS
-  }
 }
 
 ;===============================================
 
 Sprite_Poltergeist_Draw:
 {
-  LDA.w SprAction, X ; Load the current action of the sprite
-  JSL UseImplicitRegIndexedLocalJumpTable
+	LDA.w SprAction, X ; Load the current action of the sprite
+	JSL UseImplicitRegIndexedLocalJumpTable
 
-  dw Poltergeist_EmptyDraw
-  dw Poltergeist_ChairDraw
-  dw Poltergeist_AxeDraw
-  dw Poltergeist_DishDraw
-  dw Poltergeist_ForkDraw
-  dw Poltergeist_KnifeDraw
-  dw Poltergeist_WindowDraw
-  dw Poltergeist_FrameDraw
-  dw Poltergeist_BedDraw
-  dw Poltergeist_TableDraw
-  dw Poltergeist_GhostDraw
+	dw Poltergeist_EmptyDraw
+	dw Poltergeist_ChairDraw
+	dw Poltergeist_AxeDraw
+	dw Poltergeist_DishDraw
+	dw Poltergeist_ForkDraw
+	dw Poltergeist_KnifeDraw
+	dw Poltergeist_WindowDraw
+	dw Poltergeist_FrameDraw
+	dw Poltergeist_BedDraw
+	dw Poltergeist_TableDraw
+	dw Poltergeist_GhostDraw
+}
 
-  ; 0x00
-  Poltergeist_EmptyDraw:
-  {
+; 0x00
+Poltergeist_EmptyDraw:
+{
     ; Nothing draws 
     RTS
-  }
+}
 
-  ; 0x01
-  Poltergeist_ChairDraw:
-  {
+; 0x01
+Poltergeist_ChairDraw:
+{
     JSR ISUUCS
-    RTS
-  }
 
-  ; 0x02
-  Poltergeist_AxeDraw:
-  {
+    RTS
+}
+
+; 0x02
+Poltergeist_AxeDraw:
+{
     JSR E21CST
-    RTS
-  }
 
-  ; 0x03
-  Poltergeist_DishDraw:
-  { 
+    RTS
+}
+
+; 0x03
+Poltergeist_DishDraw:
+{ 
     JSR SARACS
-    RTS
-  }
 
-  ; 0x04
-  Poltergeist_ForkDraw:
-  {
+    RTS
+}
+
+; 0x04
+Poltergeist_ForkDraw:
+{
     JSR FOOKMV
-    RTS
-  }
 
-  ; 0x05
-  Poltergeist_KnifeDraw:
-  {
+    RTS
+}
+
+; 0x05
+Poltergeist_KnifeDraw:
+{
     JSR KNIFMV
-    RTS
-  }
 
-  ; 0x06
-  Poltergeist_WindowDraw:
-  {
-    
+	RTS
+}
+
+; 0x06
+Poltergeist_WindowDraw:
+{
     RTS
-  }
+}
 
   ; 0x07
   Poltergeist_FrameDraw:
   {
-
     RTS
   }
 
-  ; 0x08
-  Poltergeist_BedDraw:
-  {
-
+; 0x08
+Poltergeist_BedDraw:
+{
     RTS
-  }
+}
 
-  ; 0x09
-  Poltergeist_TableDraw:
-  {
-
+; 0x09
+Poltergeist_TableDraw:
+{
     RTS
-  }
+}
 
-  ; 0x0A
-  Poltergeist_GhostDraw:
-  {
-
+; 0x0A
+Poltergeist_GhostDraw:
+{
     RTS
-  }
 }
 
 ;===============================================
-
 
 ;ISUU        EQU    $01 - chair
 ;NATA        EQU    $02 - axe
@@ -303,93 +304,112 @@ Sprite_Poltergeist_Draw:
 
 ISUUMV:
 {
-;       	LDA	KEYA2 : AND	#00001100B : BEQ	WQWQA
-;		LDA	$1A : AND	#$03 : BNE	WQWQA
-;;
-		LDA	$7FF9FE,X : INC	A : CMP	#$0A : BNE	WEWEA
+	;       LDA	KEYA2 : AND	#00001100B : BEQ	WQWQA
+	;		LDA	$1A : AND	#$03 : BNE	WQWQA
+	;
+	LDA	$7FF9FE,X : INC	A : CMP	#$0A : BNE	WEWEA
 		LDA	#$00
-WEWEA:
-		STA	$7FF9FE,X
-WQWQA:
-		JMP ISUUCS
+
+	WEWEA:
+
+	STA	$7FF9FE,X
+
+	WQWQA:
+	
+	JMP ISUUCS
 }
+
 ;
 ISCXAD:
-		db $00,$00,$00,$00,$00,$00
-		db $00,$00,$04,$04,$04,$04
-		db $00,$00,$00,$00,$00,$00
-		db $00,$00,$04,$04,$04,$04
-;
-		db $00,$00,$00,$00,$00,$00
-		db $00,$00,$FD,$09,$09,$09
-		db $00,$00,$FB,$FB,$0A,$0D
-		db $00,$00,$FA,$F9,$0E,$0F
-		db $00,$00,$F5,$13,$12,$12
-		db $00,$00,$00,$00,$00,$00
+	db $00,$00,$00,$00,$00,$00
+	db $00,$00,$04,$04,$04,$04
+	db $00,$00,$00,$00,$00,$00
+	db $00,$00,$04,$04,$04,$04
+
+	;
+	db $00,$00,$00,$00,$00,$00
+	db $00,$00,$FD,$09,$09,$09
+	db $00,$00,$FB,$FB,$0A,$0D
+	db $00,$00,$FA,$F9,$0E,$0F
+	db $00,$00,$F5,$13,$12,$12
+	db $00,$00,$00,$00,$00,$00
+
 ISCYAD:
-		db $01,$00,$00,$00,$00,$00
-		db $04,$FC,$0C,$0C,$0C,$0C
-		db $01,$00,$00,$00,$00,$00
-		db $04,$FC,$0C,$0C,$0C,$0C
-;
-		db $01,$FD,$FD,$FD,$FD,$FD
-		db $01,$FD,$07,$FC,$FC,$FC
-		db $01,$FD,$FA,$08,$FA,$0A
-		db $FE,$FE,$FA,$0A,$FA,$0C
-		db $FF,$FF,$FA,$FB,$0F,$0F
-		db $00,$00,$00,$00,$00,$00
+	db $01,$00,$00,$00,$00,$00
+	db $04,$FC,$0C,$0C,$0C,$0C
+	db $01,$00,$00,$00,$00,$00
+	db $04,$FC,$0C,$0C,$0C,$0C
+	;
+	db $01,$FD,$FD,$FD,$FD,$FD
+	db $01,$FD,$07,$FC,$FC,$FC
+	db $01,$FD,$FA,$08,$FA,$0A
+	db $FE,$FE,$FA,$0A,$FA,$0C
+	db $FF,$FF,$FA,$FB,$0F,$0F
+	db $00,$00,$00,$00,$00,$00
+
 ISCCDT:
-		db $24,$08,$08,$08,$08,$08
-		db $26,$84,$2F,$2F,$2F,$2F
-		db $24,$82,$82,$82,$82,$82
-		db $26,$84,$2F,$2F,$2F,$2F
-;
-		db $24,$08,$08,$08,$08,$08
-		db $24,$00,$98,$88,$88,$88
-		db $24,$00,$88,$89,$89,$98
-		db $00,$00,$89,$99,$99,$89
-		db $00,$00,$99,$3F,$99,$99
-		db $00,$00,$00,$00,$00,$00
+	db $24,$08,$08,$08,$08,$08
+	db $26,$84,$2F,$2F,$2F,$2F
+	db $24,$82,$82,$82,$82,$82
+	db $26,$84,$2F,$2F,$2F,$2F
+
+	;
+	db $24,$08,$08,$08,$08,$08
+	db $24,$00,$98,$88,$88,$88
+	db $24,$00,$88,$89,$89,$98
+	db $00,$00,$89,$99,$99,$89
+	db $00,$00,$99,$3F,$99,$99
+	db $00,$00,$00,$00,$00,$00
+
 ISCADT:
-		db $00,$00,$00,$00,$00,$00
-		db $00,$00,$00,$00,$00,$00
-		db $00,$00,$00,$00,$00,$00
-		db $04,$04,$04,$04,$04,$04
-;
-		db $00,$00,$00,$00,$00,$00
-		db $00,$00,$00,$00,$00,$00
-		db $00,$00,$00,$00,$04,$00
-		db $00,$00,$04,$00,$04,$04
-		db $00,$00,$00,$00,$04,$04
-		db $00,$00,$00,$00,$00,$00
+	db $00,$00,$00,$00,$00,$00
+	db $00,$00,$00,$00,$00,$00
+	db $00,$00,$00,$00,$00,$00
+	db $04,$04,$04,$04,$04,$04
+
+	;
+	db $00,$00,$00,$00,$00,$00
+	db $00,$00,$00,$00,$00,$00
+	db $00,$00,$00,$00,$04,$00
+	db $00,$00,$04,$00,$04,$04
+	db $00,$00,$00,$00,$04,$04
+	db $00,$00,$00,$00,$00,$00
+
 ISCSBD:
-		db 2,2,2,2,2,2
-		db 2,2,0,0,0,0
-		db 2,2,2,2,2,2
-		db 2,2,0,0,0,0
-;
-		db 2,2,0,0,0,0
-		db 2,2,0,0,0,0
-		db 2,2,0,0,0,0
-		db 2,2,0,0,0,0
-		db 2,2,0,0,0,0
-		db 2,2,2,2,2,2
+	db 2,2,2,2,2,2
+	db 2,2,0,0,0,0
+	db 2,2,2,2,2,2
+	db 2,2,0,0,0,0
+
+	;
+	db 2,2,0,0,0,0
+	db 2,2,0,0,0,0
+	db 2,2,0,0,0,0
+	db 2,2,0,0,0,0
+	db 2,2,0,0,0,0
+	db 2,2,2,2,2,2
+
 ;
 ISUUCS:
 {
-		JSR OAMCHK
+	JSR OAMCHK
+
     ;
-		LDA $7FF9FE, X : STA	$00
-		ASL A
-		ASL A
-		ADC $00 : ADC	$00 : STA	$02
+	LDA $7FF9FE, X : STA	$00
+	ASL A
+	ASL A
+	ADC $00 : ADC	$00 : STA	$02
+
     ;
-		LDA $7FF83C, X : SEC : SBC	$E2 : STA $00
-		LDA $7FF81E, X : SEC : SBC	$E8 : STA $01
+	LDA $7FF83C, X : SEC : SBC	$E2 : STA $00
+	LDA $7FF81E, X : SEC : SBC	$E8 : STA $01
+
     ;
-		PHX
-		LDX #$05
-.loop
+	PHX
+	LDX #$05
+
+	.loop
+
 		TXA
 
 		PHA
@@ -407,15 +427,17 @@ ISUUCS:
 		TAY : LDA	ISCSBD,X : STA ($92),Y
 		PLY : INY 
     PLX : DEX : BPL	.loop
+
     ;
-		PLX
-		LDY #$FF : LDA	#$05
-		JSR E2ALCK
-		RTS
+	PLX
+	LDY #$FF : LDA	#$05
+	JSR E2ALCK
+	RTS
 }
 
 ;====================================
 
+; TODO: Format this, I have no idea what's going on here so I'm just going to leave it. -Jared
 NATAMV:
 ;;    LDA	KEYA2 : AND	#00001100B : BEQ	WEWE2
 ;		LDA	$1A : AND	#$03 : BNE	WEWE2
@@ -440,58 +462,74 @@ SARAMV:
 WEWE:
 ;		STA	$7FF9FE,X
 WQWQ:
+
 ;----------------------------------
+
 SARACS:
-		LDA $7FF9FE, X : BEQ	SRC0F0
-;
-		JSR SARAC0
-		RTS
+	LDA $7FF9FE, X : BEQ SRC0F0
+	;
+	JSR SARAC0
+	RTS
+
 SRC0F0:
-		JSR E21CST
-;;;		JSR	E2SWST
-		RTS
+	JSR E21CST
+
+	; JSR E2SWST
+
+	RTS
+
 ;- - - - - - - - - - - - - - -
+
 SRCXAD:
-		db $00,$FE,$FC,$08,$07,$05
-		db $FE,$FF,$FA,$0A,$08,$03
-		db $FD,$FA,$F8,$0D,$09,$07
-		db $FD,$FB,$F6,$0F,$08,$08
-		db $F6,$F6,$F6,$0F,$0F,$0F
+	db $00,$FE,$FC,$08,$07,$05
+	db $FE,$FF,$FA,$0A,$08,$03
+	db $FD,$FA,$F8,$0D,$09,$07
+	db $FD,$FB,$F6,$0F,$08,$08
+	db $F6,$F6,$F6,$0F,$0F,$0F
+
 SRCYAD:
-		db $00,$FB,$06,$FC,$06,$09
-		db $FF,$F8,$06,$FD,$08,$0C
-		db $FC,$FB,$03,$FA,$06,$0D
-		db $00,$F9,$08,$FB,$0A,$0A
-		db $0C,$0C,$0C,$FC,$FC,$FC
+	db $00,$FB,$06,$FC,$06,$09
+	db $FF,$F8,$06,$FD,$08,$0C
+	db $FC,$FB,$03,$FA,$06,$0D
+	db $00,$F9,$08,$FB,$0A,$0A
+	db $0C,$0C,$0C,$FC,$FC,$FC
+
 SRCCDT:
-		db $D5,$C2,$D2,$C3,$D3,$D5
-		db $D5,$D4,$D2,$C3,$D4,$D5
-		db $3F,$D5,$D4,$D4,$D5,$3F
-		db $3F,$3F,$D5,$D5,$3F,$3F
-		db $3F,$3F,$3F,$3F,$3F,$3F
+	db $D5,$C2,$D2,$C3,$D3,$D5
+	db $D5,$D4,$D2,$C3,$D4,$D5
+	db $3F,$D5,$D4,$D4,$D5,$3F
+	db $3F,$3F,$D5,$D5,$3F,$3F
+	db $3F,$3F,$3F,$3F,$3F,$3F
+
 SRCADT:
-		db $00,$00,$00,$00,$00,$00
-		db $00,$00,$00,$00,$0C,$00
-		db $00,$00,$00,$04,$0C,$00
-		db $08,$00,$08,$04,$00,$00
-		db $00,$00,$00,$04,$04,$04
+	db $00,$00,$00,$00,$00,$00
+	db $00,$00,$00,$00,$0C,$00
+	db $00,$00,$00,$04,$0C,$00
+	db $08,$00,$08,$04,$00,$00
+	db $00,$00,$00,$04,$04,$04
+
 SARAC0:
 {
-		JSR OAMCHK
-;
-		LDA $7FF9FE, X
-		DEC A
-		STA $00
-		ASL A
-		ASL A
-		ADC $00 : ADC	$00 : STA	$02
-;
-		LDA $7FF83C, X : SEC : SBC	$E2 : STA $00
-		LDA $7FF81E, X : SEC : SBC	$E8 : STA	$01
-;
-		PHX
-		LDX #$05
-.loop
+	JSR OAMCHK
+
+	;
+	LDA $7FF9FE, X
+	DEC A
+	STA $00
+	ASL A
+	ASL A
+	ADC $00 : ADC	$00 : STA	$02
+
+	;
+	LDA $7FF83C, X : SEC : SBC	$E2 : STA $00
+	LDA $7FF81E, X : SEC : SBC	$E8 : STA	$01
+
+	;
+	PHX
+	LDX #$05
+
+	.loop
+
 		TXA
 		PHA : CLC : ADC	$02
 		TAX
@@ -501,293 +539,323 @@ SARAC0:
 		LDA	SRCADT, X : ORA	#$33 : INY : STA	($90),Y
 		INY
 		PLX
-		DEX : BPL	.loop
-		PLX
-		LDY #$00 : LDA #$05
-		JSR E2ALCK
-		RTS
+	DEX : BPL	.loop
+	PLX
+	LDY #$00 : LDA #$05
+	JSR E2ALCK
+	RTS
 }
 ;===================================
 
 FOOKMV:
 KNIFMV:
 {
-;		LDA	>E2CONT,X
-;		INC	A
-;		STA	>E2CONT,X
-;;;;		LSR	A
-;		LSR	A
-;		LSR	A
-;		AND	#$07
-;		STA	$7FF9FE,X
-;		AND	#$01
-		LDA $7FF9FE, X : AND.b	#$01 : BNE	KF0090
-		JSR KNIFCS
-		RTS
+	; LDA	>E2CONT,X
+	; INC	A
+	; STA	>E2CONT,X
+	;;;; LSR	A
+	; LSR	A
+	; LSR	A
+	; AND	#$07
+	; STA	$7FF9FE,X
+	; AND	#$01
+	LDA $7FF9FE, X : AND.b	#$01 : BNE	KF0090
+	JSR KNIFCS
+	RTS
 
-KF0090:
-		JSR E21CST
-		RTS
+	KF0090:
+	JSR E21CST
+
+	RTS
 }
+
 ;- - - - - - - - - - - -
+
 KFCXAD:
 {
-		db $04,$04
-		db $00,$08
-		db $04,$04
-		db $00,$08
+	db $04,$04
+	db $00,$08
+	db $04,$04
+	db $00,$08
 }
 
 KFCYAD:
 {
-		db $00,$08
-		db $04,$04
-		db $00,$08
-		db $04,$04
+	db $00,$08
+	db $04,$04
+	db $00,$08
+	db $04,$04
 }
 
 KFCCDT:
 {
-		db $C7,$D7
-		db $D8,$D9
-		db $D7,$C7
-		db $D9,$D8
-;
-		db $C6,$D6
-		db $C8,$C9
-		db $D6,$C6
-		db $C9,$C8
+	db $C7,$D7
+	db $D8,$D9
+	db $D7,$C7
+	db $D9,$D8
+
+	;
+	db $C6,$D6
+	db $C8,$C9
+	db $D6,$C6
+	db $C9,$C8
 }
 KFCADT:
 {
-		db %00110001,%00110001
-		db %00110001,%00110001
-		db %10110001,%10110001
-		db %01110001,%01110001
+	db %00110001,%00110001
+	db %00110001,%00110001
+	db %10110001,%10110001
+	db %01110001,%01110001
 }
+
 ;
 KNIFCS:
 {
-		JSR OAMCHK
-;
-		LDA $7FF800, X : STA	$03
-;
-		LDA $7FF9FE, X : AND	#$FE : STA $02
-		LDA $7FF83C, X : SEC : SBC	$E2 : STA $00
-		LDA $7FF81E, X : SEC : SBC	$E8 : STA	$01
-;		
-		PHX
-		LDX #$01
-;;;		LDY	#$00
-KFC010:
-		PHX
-		TXA
-		CLC : ADC	$02
-		TAX
-		LDA	$00 : CLC : ADC	KFCXAD,X :       STA	($90),Y
-		LDA	$01 : CLC : ADC	KFCYAD,X : INY : STA	($90),Y
-		PHX
+	JSR OAMCHK
 
-		LDA $03 : CMP	#FOOK : BEQ	KFC008
+	;
+	LDA $7FF800, X : STA	$03
+
+	;
+	LDA $7FF9FE, X : AND	#$FE : STA $02
+	LDA $7FF83C, X : SEC : SBC	$E2 : STA $00
+	LDA $7FF81E, X : SEC : SBC	$E8 : STA	$01
+	;		
+	PHX
+	LDX #$01
+
+	;;;	LDY	#$00
+	KFC010:
+	PHX
+	TXA
+	CLC : ADC	$02
+	TAX
+	LDA	$00 : CLC : ADC	KFCXAD,X :       STA	($90),Y
+	LDA	$01 : CLC : ADC	KFCYAD,X : INY : STA	($90),Y
+	PHX
+
+	LDA $03 : CMP	#FOOK : BEQ	KFC008
 		TXA : CLC : ADC	#$08 : TAX
-KFC008:
-		LDA	KFCCDT,X : INY : STA	($90),Y
+	KFC008:
+
+	LDA	KFCCDT,X : INY : STA	($90),Y
+	PLX
+	LDA	KFCADT,X : INY : STA	($90),Y
+	INY
+	PLX
+	DEX : BPL	KFC010
 		PLX
-		LDA	KFCADT,X : INY : STA	($90),Y
-		INY
-		PLX
-		DEX : BPL	KFC010
-		PLX
-;
+		;
 		LDY #$00 : LDA #$01
 		JSR E2ALCK
+
 		RTS
 }
 ;====================================
 
 MADOMV:
 {
-;;LDA	KEYA2
-;;AND	#00001100B
-;;BEQ	WQWQA1
-		LDA $1A : AND	#$07 : BNE	WQWQA1
-;
+	;;LDA	KEYA2
+	;;AND	#00001100B
+	;;BEQ	WQWQA1
+
+	LDA $1A : AND #$07 : BNE WQWQA1
+		;
 		LDA $7FF9FE, X : INC	A : CMP	#$06 : BNE	WEWEA1
-		LDA #$00
-WEWEA1:
+			LDA #$00
+
+		WEWEA1:
+
 		STA $7FF9FE, X
-WQWQA1:
-		JSR MADOCS
-		RTS
+
+	WQWQA1:
+
+	JSR MADOCS
+	RTS
 }
 
 ;------------------------------------------
 MDCCD0:
 MDCCD1:
 {
-		db $8A,$8C,$8E,$8A,$8C,$8E
+	db $8A,$8C,$8E,$8A,$8C,$8E
 }
 
 MDCAD0:
 {
-		db $B5,$B5,$B5,$F5,$F5,$F5
+	db $B5,$B5,$B5,$F5,$F5,$F5
 }
 
 MDCAD1:
 {
-		db $35,$35,$35,$75,$75,$75
+	db $35,$35,$35,$75,$75,$75
 }
 
 ;- - - - - - - - - - - - - - -
 
 MADOCS:
 {
-		JSR OAMCHK
+	JSR OAMCHK
 
-		LDA	$7FF83C,X : SEC : SBC	$E2 : STA	($90),Y
-		LDY #$04 : STA ($90), Y
+	LDA	$7FF83C,X : SEC : SBC	$E2 : STA	($90),Y
+	LDY #$04 : STA ($90), Y
 
-		LDA $7FF81E,          X : SEC : SBC	$E8
-		LDY #$01 : STA ($90), Y : CLC : ADC #$10
-		LDY #$05 : STA ($90), Y
-		LDA $7FF9FE,          X
-		PHX
-		TAX
-		LDA	MDCCD0, X : LDY	#$02 : STA	($90),Y
-;;;;;;		LDA	MDCCD1,X
-		LDY #$06 : STA	($90), Y
-		LDA	MDCAD0, X : LDY	#$03 : STA	($90), Y
-		LDA	MDCAD1, X : LDY	#$07 : STA	($90), Y
-		PLX
+	LDA $7FF81E,          X : SEC : SBC	$E8
+	LDY #$01 : STA ($90), Y : CLC : ADC #$10
+	LDY #$05 : STA ($90), Y
+	LDA $7FF9FE,          X
+	PHX
+	TAX
+	LDA	MDCCD0, X : LDY	#$02 : STA	($90),Y
+	;;;;;; LDA MDCCD1,X
+	LDY #$06 : STA	($90), Y
+	LDA	MDCAD0, X : LDY	#$03 : STA	($90), Y
+	LDA	MDCAD1, X : LDY	#$07 : STA	($90), Y
+	PLX
 
-		LDY #$02
-		LDA #$01
-		JSR E2ALCK
-		RTS
+	LDY #$02
+	LDA #$01
+	JSR E2ALCK
+
+	RTS
 }
 
 ;====================================
 
 GAKUMV:
 {
-;;              LDA	KEYA2
-;;             AND	#00001100B
-;;              BEQ	WQWQAA
-;		LDA	$1A
-;		AND	#$03
-;		BNE	WQWQAA
-;
-;		LDA	$7FF9FE,X
-;		INC	A
-;		CMP	#0EH
-;		BNE	WEWEAA
-;		LDA	#$00
-;WEWEAA:
-;		STA	$7FF9FE,X
-WQWQAA:
-		JSR GAKUCS
-		RTS
+	;; LDA KEYA2
+	;;  AND #00001100B
+	;; BEQ WQWQAA
+	; LDA $1A
+	; AND #$03
+	; BNE WQWQAA
+	;
+	; LDA $7FF9FE,X
+	; INC A
+	; CMP #0EH
+	; BNE WEWEAA
+	; LDA #$00
+	;WEWEAA:
+	; STA $7FF9FE,X
+
+	WQWQAA:
+	JSR GAKUCS
+
+	RTS
 }
 
 ;-------- ----------- ------------- ------------- 
 GAKXAD:
-		db $00,$10,$10,$10,$10,$10
-		db $04,$0C,$00,$10,$10,$10
-		db $05,$0C,$14,$00,$10,$10
-		db $05,$0C,$14,$00,$10,$10
-		db $04,$0C,$00,$10,$10,$10
-		db $04,$0C,$00,$10,$10,$10
-;
-		db $04,$0C,$00,$10,$10,$10
-		db $04,$0C,$00,$10,$10,$10
-		db $04,$0C,$00,$10,$10,$10
-		db $04,$0C,$04,$14,$07,$0F
-		db $04,$0C,$FC,$0C,$04,$12
-		db $04,$0C,$04,$14,$02,$16
-		db $04,$0C,$04,$14,$00,$00
-		db $04,$0C,$04,$0C,$0C,$0C
+	db $00,$10,$10,$10,$10,$10
+	db $04,$0C,$00,$10,$10,$10
+	db $05,$0C,$14,$00,$10,$10
+	db $05,$0C,$14,$00,$10,$10
+	db $04,$0C,$00,$10,$10,$10
+	db $04,$0C,$00,$10,$10,$10
+
+	;
+	db $04,$0C,$00,$10,$10,$10
+	db $04,$0C,$00,$10,$10,$10
+	db $04,$0C,$00,$10,$10,$10
+	db $04,$0C,$04,$14,$07,$0F
+	db $04,$0C,$FC,$0C,$04,$12
+	db $04,$0C,$04,$14,$02,$16
+	db $04,$0C,$04,$14,$00,$00
+	db $04,$0C,$04,$0C,$0C,$0C
+
 GAKYAD:
-		db $00,$00,$00,$00,$00,0
-		db $0C,$0C,$00,$00,$00,0
-		db $0E,$0E,$0E,$00,$00,0
-		db $0E,$0E,$0E,$00,$00,0
-		db $0C,$0C,$00,$00,$00,0
-		db $08,$08,$00,$00,$00,0
-;
-		db $08,$08,$02,$02,$02,2
-		db $08,$08,$05,$05,$05,5
-		db $08,$08,$07,$07,$07,7
-		db $08,$08,$04,$04,$FE,$10
-		db $08,$08,$03,$03,$FC,$14
-		db $08,$08,$05,$05,$FA,$14
-		db $08,$08,$06,$06,$F7,$F7
-		db $08,$08,$07,$07,$07,$07
+	db $00,$00,$00,$00,$00,0
+	db $0C,$0C,$00,$00,$00,0
+	db $0E,$0E,$0E,$00,$00,0
+	db $0E,$0E,$0E,$00,$00,0
+	db $0C,$0C,$00,$00,$00,0
+	db $08,$08,$00,$00,$00,0
+
+	;
+	db $08,$08,$02,$02,$02,2
+	db $08,$08,$05,$05,$05,5
+	db $08,$08,$07,$07,$07,7
+	db $08,$08,$04,$04,$FE,$10
+	db $08,$08,$03,$03,$FC,$14
+	db $08,$08,$05,$05,$FA,$14
+	db $08,$08,$06,$06,$F7,$F7
+	db $08,$08,$07,$07,$07,$07
+
 GAKCDT:
-		db $AC,$AC,$AC,$AC,$AC,$AC
-		db $24,$24,$AC,$AC,$AC,$AC
-		db $34,$34,$35,$AE,$AE,$AE
-		db $34,$34,$35,$AE,$AE,$AE
-		db $24,$24,$0C,$0C,$0C,$0C
-		db $24,$24,$AA,$AA,$AA,$AA
-;
-		db $24,$24,$AA,$AA,$AA,$AA
-		db $24,$24,$AA,$AA,$AA,$AA
-		db $24,$24,$AA,$AA,$AA,$AA
-		db $24,$24,$28,$2A,$89,$99
-		db $24,$24,$2A,$28,$89,$99
-		db $24,$24,$28,$2A,$99,$3F
-		db $24,$24,$28,$2A,$3F,$3F
-		db $24,$24,$28,$28,$28,$28
+	db $AC,$AC,$AC,$AC,$AC,$AC
+	db $24,$24,$AC,$AC,$AC,$AC
+	db $34,$34,$35,$AE,$AE,$AE
+	db $34,$34,$35,$AE,$AE,$AE
+	db $24,$24,$0C,$0C,$0C,$0C
+	db $24,$24,$AA,$AA,$AA,$AA
+
+	;
+	db $24,$24,$AA,$AA,$AA,$AA
+	db $24,$24,$AA,$AA,$AA,$AA
+	db $24,$24,$AA,$AA,$AA,$AA
+	db $24,$24,$28,$2A,$89,$99
+	db $24,$24,$2A,$28,$89,$99
+	db $24,$24,$28,$2A,$99,$3F
+	db $24,$24,$28,$2A,$3F,$3F
+	db $24,$24,$28,$28,$28,$28
+
 GAKADT:
-		db $00,$04,$04,$04,$04,$04
-		db $00,$04,$00,$04,$04,$04
-		db $00,$00,$00,$00,$04,$04
-		db $00,$00,$00,$08,$0C,$0C
-		db $00,$04,$00,$04,$04,$04
-		db $00,$04,$00,$04,$04,$04
-;
-		db $00,$04,$00,$04,$04,$04
-		db $00,$04,$00,$04,$04,$04
-		db $00,$04,$00,$04,$04,$04
-		db $00,$04,$00,$00,$00,$00
-		db $00,$04,$04,$04,$04,$00
-		db $00,$04,$00,$00,$00,$00
-		db $00,$04,$00,$00,$00,$00
-		db $00,$04,$04,$04,$04,$04
+	db $00,$04,$04,$04,$04,$04
+	db $00,$04,$00,$04,$04,$04
+	db $00,$00,$00,$00,$04,$04
+	db $00,$00,$00,$08,$0C,$0C
+	db $00,$04,$00,$04,$04,$04
+	db $00,$04,$00,$04,$04,$04
+
+	;
+	db $00,$04,$00,$04,$04,$04
+	db $00,$04,$00,$04,$04,$04
+	db $00,$04,$00,$04,$04,$04
+	db $00,$04,$00,$00,$00,$00
+	db $00,$04,$04,$04,$04,$00
+	db $00,$04,$00,$00,$00,$00
+	db $00,$04,$00,$00,$00,$00
+	db $00,$04,$04,$04,$04,$04
+
 GAKSBD:
-		db 2,2,2,2,2,2
-		db 2,2,2,2,2,2
-		db 0,0,0,2,2,2
-		db 0,0,0,2,2,2
-		db 2,2,2,2,2,2
-		db 2,2,2,2,2,2
-;
-		db 2,2,2,2,2,2
-		db 2,2,2,2,2,2
-		db 2,2,2,2,2,2
-		db 2,2,2,2,0,0
-		db 2,2,2,2,0,0
-		db 2,2,2,2,0,0
-		db 2,2,2,2,0,0
-		db 2,2,2,2,2,2
+	db 2,2,2,2,2,2
+	db 2,2,2,2,2,2
+	db 0,0,0,2,2,2
+	db 0,0,0,2,2,2
+	db 2,2,2,2,2,2
+	db 2,2,2,2,2,2
+
+	;
+	db 2,2,2,2,2,2
+	db 2,2,2,2,2,2
+	db 2,2,2,2,2,2
+	db 2,2,2,2,0,0
+	db 2,2,2,2,0,0
+	db 2,2,2,2,0,0
+	db 2,2,2,2,0,0
+	db 2,2,2,2,2,2
 
 GAKUCS:
 {
-		JSR OAMCHK
-;
-		LDA $7FF9FE, X
-		ASL A
-		ASL A
-		ADC	$7FF9FE,X : ADC	$7FF9FE,X : STA	$02
-;
-		LDA $7FF83C, X : SEC : SBC	$E2 : STA	$00
-		LDA $7FF81E, X : SEC	: SBC	$E8	: STA	$01
-		PHX
-		LDX #$06-1
-GKC010:
+	JSR OAMCHK
+
+	;
+	LDA $7FF9FE, X
+	ASL A
+	ASL A
+	ADC	$7FF9FE,X : ADC	$7FF9FE,X : STA	$02
+
+	;
+	LDA $7FF83C, X : SEC : SBC	$E2 : STA	$00
+	LDA $7FF81E, X : SEC	: SBC	$E8	: STA	$01
+	PHX
+	LDX #$06-1
+
+	GKC010:
 		PHX
 		TXA
-    CLC : ADC	$02
+    	CLC : ADC	$02
 		TAX
 		LDA	$00 : CLC : ADC	GAKXAD,X :       STA	($90), Y
 		LDA	$01 : CLC : ADC	GAKYAD,X : INY : STA	($90), Y
@@ -804,37 +872,44 @@ GKC010:
 		PLY
 		INY
 		PLX
-		DEX : BPL	GKC010
-;
-		PLX
-		LDY #$FF
-		LDA #06-1
-		JSR E2ALCK
-		RTS
+	DEX : BPL	GKC010
+
+	;
+	PLX
+	LDY #$FF
+	LDA #06-1
+	JSR E2ALCK
+
+	RTS
 }
+
 ;====================================
+
+; TODO: Alright I got bored and stopped formatting this here sorry lol. -Jared
+
 BEDDMV:
-;		LDA	$1A
-;		AND	#$03
-;		BNE	BDM010
+;	LDA	$1A
+;	AND	#$03
+;	BNE	BDM010
 ;
-;		LDA	<KEYA2
-;		AND	#00001000B
-;		BEQ	BDM010
+;	LDA	<KEYA2
+;	AND	#00001000B
+;	BEQ	BDM010
 ;
-;		LDA	$7FF9FE,X
-;		INC	A
-;		STA	$7FF9FE,X
+;	LDA	$7FF9FE,X
+;	INC	A
+;	STA	$7FF9FE,X
 ;
-;		LDA	$7FF9FE,X
-;		CMP	#$07
-;		BNE	BDM010
+;	LDA	$7FF9FE,X
+;	CMP	#$07
+;	BNE	BDM010
 ;
-;		LDA	#$00
-;		STA	$7FF9FE,X
+;	LDA	#$00
+;	STA	$7FF9FE,X
 BDM010:
-		JSR BEDDCS
-		RTS
+	JSR BEDDCS
+	RTS
+
 ;---------------------------------
 BDCXAD:
 		db $00,$10,$00,$10,$00,$10

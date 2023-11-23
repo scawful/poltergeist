@@ -41,7 +41,6 @@ NewObjectsCode31:
 
                 LDA .objData, X : BEQ +
                     STA [$BF], Y
-
                 +
 
                 ; If it is one of the slime objects, set the collision to 0x00.
@@ -70,7 +69,6 @@ NewObjectsCode31:
 
                     INX : INX
                     BRA .lineLoop
-
                 +
 
             BRA .tileLoop

@@ -24,6 +24,7 @@ RoomGfxLoad:
 ;==============================================================================
 ; Sprite Properties
 ;==============================================================================
+
 !SPRID              = $CC ; The sprite ID you are overwriting (HEX)
 !NbrTiles           = 16  ; Number of tiles used in a frame
 !Harmless           = 00  ; 00 = Sprite is Harmful,  01 = Sprite is Harmless
@@ -51,13 +52,15 @@ RoomGfxLoad:
 !ImperviousArrow    = 00  ; 01 = Impervious to arrows
 !ImpervSwordHammer  = 00  ; 01 = Impervious to sword and hammer attacks
 !Boss               = 01  ; 00 = normal sprite, 01 = sprite is a boss
-%Set_Sprite_Properties(Sprite_Metroid_Prep, Sprite_Metroid_Long);
+%Set_Sprite_Properties(Sprite_Metroid_Prep, Sprite_Metroid_Long)
+
 ;==================================================================================================
 ; Sprite Long Hook for that sprite
 ; --------------------------------------------------------------------------------------------------
 ; This code can be left unchanged
 ; handle the draw code and if the sprite is active and should move or not
 ;==================================================================================================
+
 Sprite_Metroid_Long:
 {
     PHB : PHK : PLB
@@ -79,6 +82,7 @@ Sprite_Metroid_Long:
 ; this code only get called once perfect to initialize sprites substate or timers
 ; this code as soon as the room transitions/ overworld transition occurs
 ;==================================================================================================
+
 Sprite_Metroid_Prep:
 {
     PHB : PHK : PLB
@@ -148,6 +152,7 @@ MetroidBitmap:
 ; This is the main local code of your sprite
 ; This contains all the Subroutines of your sprites you can add more below
 ;==================================================================================================
+
 Sprite_Metroid_Main:
 {
     LDA.w SprAction, X; Load the SprAction

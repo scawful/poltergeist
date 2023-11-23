@@ -3,38 +3,39 @@
 pushpc
 
 org $07A91A
-NOP #04 ; remove the extra Y button check
+    NOP #04 ; remove the extra Y button check
 
-org $07A923 ; LDA $7EF3CC : CMP.b #$0A : BNE BRANCH_ALPHA
-JSL NewMirrorCode
-BCS warp ; if carry was set warp
-
-RTS ; otherwise end the mirror code !
+    org $07A923 ; LDA $7EF3CC : CMP.b #$0A : BNE BRANCH_ALPHA
+    JSL NewMirrorCode
+    BCS warp ; if carry was set warp
+        RTS ; otherwise end the mirror code !
 
 org $07A93C
-warp:
+    warp:
 
 pullpc
 
 ; ==============================================================================
 
 NewMirrorCode:
-STZ.b $3A
-REP #$20
-LDA.b $20 : CMP.w #$0910 : BCC .toohigh
-CMP.w #$0976 : BCS .toolow
-LDA.b $22 : CMP.w #$00A0 : BCC .tooleft
-CMP.w #$00FE : BCS .tooright
+{
+    STZ.b $3A
+    REP #$20
+    LDA.b $20 : CMP.w #$0910 : BCC .toohigh
+        CMP.w #$0976 : BCS .toolow
+            LDA.b $22 : CMP.w #$00A0 : BCC .tooleft
+                CMP.w #$00FE : BCS .tooright
+                    SEP #$21 ; use that to set carry at same time
+                    RTL
+                
+                .tooright
+            .tooleft
+        .toolow
+    .toohigh
 
-SEP #$21 ; use that to set carry at same time
-RTL
-.tooleft
-.tooright
-.toohigh
-.toolow
-
-SEP #$20 ; use that to clear carry at same time
-CLC
-RTL
+    SEP #$20 ; use that to clear carry at same time
+    CLC
+    RTL
+}
 
 ; ==============================================================================

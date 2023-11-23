@@ -53,7 +53,6 @@ EntranceOpening2:
 
         LDA #$40 : STA $C8 ; Timer wait 40 frames before playing jingle and end the animation
         INC $B0 ; State of bombosentrance animation
-
     +
 
     RTS
@@ -86,7 +85,6 @@ EntranceOpening3:
 
         JSL PlayThudSound
         LDA #$40 : STA $C8 ; Timer wait 40 frames before playing jingle and end the animation
-
     +
 
     RTS
@@ -119,7 +117,6 @@ EntranceOpening4:
         INC $B0
         JSL PlayThudSound
         LDA #$40 : STA $C8 ; Timer wait 40 frames before playing jingle and end the animation
-
     +
 
     RTS
@@ -165,7 +162,6 @@ EntranceOpening5:
         STZ $011B
         STZ $011C
         STZ $011D
-
     +
 
     RTS

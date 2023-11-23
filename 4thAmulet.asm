@@ -133,7 +133,8 @@ org $01C709
 {
     ; name: Kill enemy to clear level in hyrule magic
         
-    ; Has this boss room already been done with? (i.e. has a heart piece been picked up in this room?)
+    ; Has this boss room already been done with? (i.e. has a heart piece been picked
+    ; up in this room?)
     LDA $0403 : AND.b #$80 : BEQ .heartPieceStillExists
         ; Load the dungeon index, divide by 2.
         LDA $040C : LSR A : TAX
@@ -181,8 +182,7 @@ CheckForSparkles:
                    CMP.b #$37 : BEQ .sparkle
                    CMP.b #$38 : BEQ .sparkle
                    CMP.b #$39 : BEQ .sparkle
-
-    JML NoSparkle
+        JML NoSparkle
 
     .sparkle
 
@@ -202,8 +202,7 @@ CheckForSparkles2:
                    CMP.b #$37 : BEQ .sparkle
                    CMP.b #$38 : BEQ .sparkle
                    CMP.b #$39 : BEQ .sparkle
-
-    RTL
+        RTL
 
     .sparkle
         
@@ -220,7 +219,6 @@ PendantTimer:
                    CMP.b #$37 : BEQ .isPendant
                    CMP.b #$38 : BEQ .isPendant
                    CMP.b #$39 : BEQ .isPendant
-
         JML NotPendant
 
     .isPendant
