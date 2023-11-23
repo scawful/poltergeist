@@ -306,6 +306,10 @@ mainblinking:
 		; dead
 		LDA.b #$04 : STA.w $0DD0, X
 		STZ.w $0D90, X
+
+		; Play dying sound
+		LDA.b #$22 : STA $012F
+
 		;LDA #$02 : STA.w SprFrame, X
 		LDA.b #$E0 : STA.w SprTimerA, X
 		LDA.b #$9F : STA.w SprDeath, X
@@ -515,20 +519,20 @@ Sprite_Facade_Draw:
 		CMP #$02 : BEQ .hole
 			LDA #10
 			JSL OAM_AllocateFromRegionB
-			BRA .nodefer
+			BRA .noDefer
 
 		.hole
 
 		LDA #04
 		JSL OAM_AllocateFromRegionB
-		BRA .nodefer
+		BRA .noDefer
 
 	.defer
 
 	LDA #08
 	JSL Sprite_OAM_AllocateDeferToPlayer
 
-	.nodefer
+	.noDefer
 
 	STX $09
 	LDA $0DC0, X : CLC : ADC $0D90, X : TAY;Animation Frame
@@ -536,7 +540,7 @@ Sprite_Facade_Draw:
 
 	PHX
 	LDX .nbr_of_tiles, Y ;amount of tiles -1
-		LDY.b #$00
+	LDY.b #$00
 
 	.nextTile
 

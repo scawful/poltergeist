@@ -185,6 +185,9 @@ JSL Sprite_CheckDamageFromPlayer : BCC .nodamage
 		; dead
 		LDA.b #$04 : STA.w $0DD0, X
 		STZ.w $0D90, X
+
+		; Play dying sound
+		LDA.b #$22 : STA $012F
 		
 	    ;LDA #$02 : STA.w SprFrame, X
 	    LDA.b #$E0 : STA.w SprTimerA, X

@@ -313,10 +313,6 @@ CheckDamage:
     STZ.w $0CE2, X ; kill the damage of the icerod
     ; freeze it !
 
-    ; spawn a small magic
-
-    .nodamage
-
     RTS
 }
 
@@ -597,6 +593,7 @@ Frozen: ; 0x05
         ; the fighter sword doesn't do any damage so reduce manually i guess...
         LDA.w SprTimerB, X : BNE .nodamage
             DEC.w SprHealth, X
+
             LDA #$10 : STA.w SprTimerB, X
 
     .nodamage
@@ -641,6 +638,9 @@ Frozen: ; 0x05
         
         LDA.b #$E0 : STA.w SprTimerA, X
         LDA.b #$9F : STA.w SprDeath, X
+
+        ; Play dying sound
+		LDA.b #$22 : STA $012F
         
     .alive
         

@@ -81,17 +81,20 @@ Sprite_DarkLink_Long:
                     %GotoAction(15)
                     BRA .SpriteIsNotActive
 
-                    +
+            +
 
-                    LDA #$30 : STA.w SprTimerA, X
-                    LDA #$08 : STA.w SprTimerB, X
-                    STZ.w SprFrame, X
-                    STZ.w SprMiscF, X
-                    STZ.w SprMiscD, X
-                    %GotoAction(11)
-                    BRA .SpriteIsNotActive
+            ; Play dying sound
+		    LDA.b #$22 : STA $012F
+
+            LDA #$30 : STA.w SprTimerA, X
+            LDA #$08 : STA.w SprTimerB, X
+            STZ.w SprFrame, X
+            STZ.w SprMiscF, X
+            STZ.w SprMiscD, X
+            %GotoAction(11)
+            BRA .SpriteIsNotActive
+
     .notdying
-
 
     JSL Sprite_CheckActive   ; Check if game is not paused
     BCC .SpriteIsNotActive   ; Skip Main code is sprite is innactive
@@ -154,25 +157,26 @@ Sprite_DarkLink_Main:
 {
     LDA.w SprAction, X; Load the SprAction
     JSL UseImplicitRegIndexedLocalJumpTable; Goto the SprAction we are currently in
-    dw Handler
-    dw SwordSlash
-    dw JumpBack
-    dw JumpAttackUp
-    dw JumpAttackDown
-    dw JumpAttackPrep
-    dw JumpAttackShake
-    dw WalkAction
-    dw Damaged
-    dw RecoilSword
-    dw SwordSubtype
-    dw DyingSpin
-    dw DeadDespawn
-    dw OpenDoor
-    dw Dead
-    dw Enraging
+
+    dw Handler         ; 0x00
+    dw SwordSlash      ; 0x01
+    dw JumpBack        ; 0x02
+    dw JumpAttackUp    ; 0x03
+    dw JumpAttackDown  ; 0x04
+    dw JumpAttackPrep  ; 0x05
+    dw JumpAttackShake ; 0x06
+    dw WalkAction      ; 0x07
+    dw Damaged         ; 0x08
+    dw RecoilSword     ; 0x09
+    dw SwordSubtype    ; 0x0A
+    dw DyingSpin       ; 0x0B
+    dw DeadDespawn     ; 0x0C
+    dw OpenDoor        ; 0x0D
+    dw Dead            ; 0x0E
+    dw Enraging        ; 0x0F
 }
 
-Handler:
+Handler: ; 0x00
 {  
     LDA.w SprSubtype, X : CMP #$01 : BNE +
         %SetTimerA(16)
@@ -617,7 +621,7 @@ SpawnSwordDamage:
     db $0E, $F2, $00, $00
 }
 
-SwordSlash:
+SwordSlash: ; 0x01
 {
     JSL Sprite_CheckTileCollision
 
@@ -724,7 +728,7 @@ SwordSlash:
     RTS
 }
 
-JumpBack:
+JumpBack: ; 0x02
 {
     JSL Sprite_MoveXyz
 
@@ -741,7 +745,7 @@ JumpBack:
     RTS
 }
 
-JumpAttackUp:
+JumpAttackUp: ; 0x03
 {
     JSL Sprite_MoveXyz
 
@@ -804,7 +808,7 @@ JumpAttackUp:
     RTS
 }
 
-JumpAttackDown:
+JumpAttackDown: ; 0x04
 {
     LDA.w SprTimerA, X : BNE .wait
         JSL Sprite_MoveXyz
@@ -830,7 +834,7 @@ JumpAttackDown:
     RTS
 }
 
-JumpAttackPrep:
+JumpAttackPrep: ; 0x05
 {
     LDA #35 : STA.w SprFrame, X
 
@@ -841,7 +845,7 @@ JumpAttackPrep:
     RTS
 }
 
-JumpAttackShake:
+JumpAttackShake: ; 0x06
 {
     PHX
     JSL Sprite_CheckDamageToPlayer
@@ -905,7 +909,7 @@ CrumbleSprX:
 CrumbleSprY:
     db $28, $28, $D8, $D8
 
-WalkAction:
+WalkAction: ; 0x07
 {
     JSL Sprite_CheckDamageFromPlayer : BCC .nodamage
         LDA.w SprTimerA, X : BNE .alreadytakingdamage
@@ -966,7 +970,7 @@ speedTableX:
 speedTableY:
     db 00, 00, 16, -16
 
-Damaged:
+Damaged: ; 0x08
 {
     JSL Sprite_CheckTileCollision
 
@@ -1012,7 +1016,7 @@ Damaged:
     RTS
 }
 
-RecoilSword:
+RecoilSword: ; 0x09
 {
     JSL Sprite_MoveLong
     LDA.w SprTimerC, X : BNE +
@@ -1025,7 +1029,7 @@ RecoilSword:
     RTS
 }
 
-SwordSubtype:
+SwordSubtype: ; 0x0A
 {
     LDA.w SprTimerA, X : BNE +
         STZ.w SprState, X ; kill the sprite
@@ -1038,7 +1042,7 @@ SwordSubtype:
     RTS
 }
 
-DyingSpin:
+DyingSpin: ; 0x0B
 {
     STZ.w SprHeight, X
     LDA.w SprTimerB, X : BNE ++
@@ -1065,7 +1069,7 @@ DyingSpin:
 dyingframes:
     db $00, $02, $01, $03
 
-DeadDespawn:
+DeadDespawn: ; 0x0C
 {
     LDA.w SprTimerB, X : BNE +
         LDA.b #45 : STA.w SprFrame, X
@@ -1083,7 +1087,7 @@ DeadDespawn:
     RTS
 }
 
-OpenDoor:
+OpenDoor: ; 0x0D
 {
     INC.w SprMiscF, X
     ;LDA #$1A : STA.b $11 ; ganon open door routine
@@ -1095,12 +1099,12 @@ OpenDoor:
     RTS
 }
 
-Dead:
+Dead: ; 0x0E
 {
     RTS
 }
 
-Enraging:
+Enraging: ; 0x0F
 {
     PHX
     REP #$20 ; P is still on stack, so we don't even need to fix this
