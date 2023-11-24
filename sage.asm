@@ -1,6 +1,7 @@
 ;==============================================================================
 ; Sprite Properties
 ;==============================================================================
+
 !SPRID              = $1A; The sprite ID you are overwriting (HEX)
 !NbrTiles           = 04 ; Number of tiles used in a frame
 !Harmless           = 01  ; 00 = Sprite is Harmful,  01 = Sprite is Harmless
@@ -28,25 +29,30 @@
 !ImperviousArrow    = 00  ; 01 = Impervious to arrows
 !ImpervSwordHammer  = 00  ; 01 = Impervious to sword and hammer attacks
 !Boss               = 00  ; 00 = normal sprite, 01 = sprite is a boss
-%Set_Sprite_Properties(Sprite_Sage_Prep, Sprite_Sage_Long);
+%Set_Sprite_Properties(Sprite_Sage_Prep, Sprite_Sage_Long)
+
 ;==================================================================================================
 ; Sprite Long Hook for that sprite
 ; --------------------------------------------------------------------------------------------------
 ; This code can be left unchanged
 ; handle the draw code and if the sprite is active and should move or not
 ;==================================================================================================
+
 Sprite_Sage_Long:
-PHB : PHK : PLB
+{
+    PHB : PHK : PLB
 
-JSR Sprite_Sage_Draw ; Call the draw code
-JSL Sprite_CheckActive   ; Check if game is not paused
-BCC .SpriteIsNotActive   ; Skip Main code is sprite is innactive
+    JSR Sprite_Sage_Draw ; Call the draw code
+    JSL Sprite_CheckActive   ; Check if game is not paused
 
-JSR Sprite_Sage_Main ; Call the main sprite code
+    BCC .SpriteIsNotActive   ; Skip Main code is sprite is innactive
+        JSR Sprite_Sage_Main ; Call the main sprite code
 
-.SpriteIsNotActive
-PLB ; Get back the databank we stored previously
-RTL ; Go back to original code
+    .SpriteIsNotActive
+
+    PLB ; Get back the databank we stored previously
+    RTL ; Go back to original code
+}
 
 ;==================================================================================================
 ; Sprite initialization
@@ -54,13 +60,16 @@ RTL ; Go back to original code
 ; this code only get called once perfect to initialize sprites substate or timers
 ; this code as soon as the room transitions/ overworld transition occurs
 ;==================================================================================================
+
 Sprite_Sage_Prep:
-PHB : PHK : PLB
+{
+    PHB : PHK : PLB
    
     ; Add more code here to initialize data
 
-PLB
-RTL
+    PLB
+    RTL
+}
 
 ;==================================================================================================
 ; Sprite Main routines code
@@ -68,16 +77,20 @@ RTL
 ; This is the main local code of your sprite
 ; This contains all the Subroutines of your sprites you can add more below
 ;==================================================================================================
+
 Sprite_Sage_Main:
-LDA.w SprAction, X; Load the SprAction
-JSL UseImplicitRegIndexedLocalJumpTable; Goto the SprAction we are currently in
-dw SageAction00
-dw SageAction01
-dw SageAction02
-dw Sword
-dw SageAction04
-dw SageAction05
-dw SageAction06
+{
+    LDA.w SprAction, X; Load the SprAction
+    JSL UseImplicitRegIndexedLocalJumpTable; Goto the SprAction we are currently in
+
+    dw SageAction00
+    dw SageAction01
+    dw SageAction02
+    dw Sword
+    dw SageAction04
+    dw SageAction05
+    dw SageAction06
+}
 
 SageAction00:
 {
@@ -145,12 +158,12 @@ SageAction02:
 {
     %PreventPlayerMovement()
     LDA.b #$01 : STA.w SprFrame, X
+
     LDA.w SprTimerA, X : BNE +
         LDA.l $7EF281 : ORA #$40 : STA.l $7EF281
         LDA.b #$00 : STA.w SprFrame, X
         %GotoAction(0)
         %AllowPlayerMovement()
-
     +
 
     RTS
@@ -186,8 +199,7 @@ SageAction04:
         LDA.w $1CE8 : BNE .No
             %GotoAction(5)
                         
-        .No
-                
+        .No    
     .no_message
 
     RTS
@@ -232,87 +244,94 @@ SageAction06:
 ; Draw the tiles on screen with the data provided by the sprite maker editor
 ;==================================================================================================
 Sprite_Sage_Draw:
-JSL Sprite_PrepOamCoord
-JSL Sprite_OAM_AllocateDeferToPlayer
+{
+    JSL Sprite_PrepOamCoord
+    JSL Sprite_OAM_AllocateDeferToPlayer
 
-LDA $0DC0, X : CLC : ADC $0D90, X : TAY;Animation Frame
-LDA .start_index, Y : STA $06
+    LDA $0DC0, X : CLC : ADC $0D90, X : TAY;Animation Frame
+    LDA .start_index, Y : STA $06
 
+    PHX
+    LDX .nbr_of_tiles, Y ;amount of tiles -1
+    LDY.b #$00
 
-PHX
-LDX .nbr_of_tiles, Y ;amount of tiles -1
-LDY.b #$00
-.nextTile
+    .nextTile
 
-PHX ; Save current Tile Index?
-    
-TXA : CLC : ADC $06 ; Add Animation Index Offset
+        PHX ; Save current Tile Index?
+            
+        TXA : CLC : ADC $06 ; Add Animation Index Offset
 
-PHA ; Keep the value with animation index offset?
+        PHA ; Keep the value with animation index offset?
 
-ASL A : TAX 
+        ASL A : TAX 
 
-REP #$20
+        REP #$20
 
-LDA $00 : CLC : ADC .x_offsets, X : STA ($90), Y
-AND.w #$0100 : STA $0E 
-INY
-LDA $02 : CLC : ADC .y_offsets, X : STA ($90), Y
-CLC : ADC #$0010 : CMP.w #$0100
-SEP #$20
-BCC .on_screen_y
+        LDA $00 : CLC : ADC .x_offsets, X : STA ($90), Y
+        AND.w #$0100 : STA $0E 
+        INY
+        LDA $02 : CLC : ADC .y_offsets, X : STA ($90), Y
+        CLC : ADC #$0010 : CMP.w #$0100
+        SEP #$20
+        BCC .on_screen_y
 
-LDA.b #$F0 : STA ($90), Y ;Put the sprite out of the way
-STA $0E
-.on_screen_y
+        LDA.b #$F0 : STA ($90), Y ;Put the sprite out of the way
+        STA $0E
+        .on_screen_y
 
-PLX ; Pullback Animation Index Offset (without the *2 not 16bit anymore)
-INY
-LDA .chr, X : STA ($90), Y
-INY
-LDA .properties, X : STA ($90), Y
+        PLX ; Pullback Animation Index Offset (without the *2 not 16bit anymore)
+        INY
+        LDA .chr, X : STA ($90), Y
+        INY
+        LDA .properties, X : STA ($90), Y
 
-PHY 
-    
-TYA : LSR #2 : TAY
-    
-LDA .sizes, X : ORA $0F : STA ($92), Y ; store size in oam buffer
-    
-PLY : INY
-    
-PLX : DEX : BPL .nextTile
+        PHY 
+            
+        TYA : LSR #2 : TAY
+            
+        LDA .sizes, X : ORA $0F : STA ($92), Y ; store size in oam buffer
+            
+        PLY : INY 
+    PLX : DEX : BPL .nextTile
 
-PLX
+    PLX
 
-RTS
-
+    RTS
+}
 
 ;==================================================================================================
 ; Sprite Draw Generated Data
 ; --------------------------------------------------------------------------------------------------
 ; This is where the generated Data for the sprite go
 ;==================================================================================================
-.start_index
-db $00, $04, $08
-.nbr_of_tiles
-db 3, 3, 0
-.x_offsets
-dw -8, -8, 8, 8
-dw -8, 8, -8, 8
-dw 0
-.y_offsets
-dw 0, -16, 0, -16
-dw 0, 0, -16, -16
-dw 0
-.chr
-db $62, $60, $62, $60
-db $64, $64, $44, $44
-db $6A
-.properties
-db $37, $37, $77, $77
-db $37, $77, $37, $77
-db $39
-.sizes
-db $02, $02, $02, $02
-db $02, $02, $02, $02
-db $02
+    
+    .start_index
+    db $00, $04, $08
+
+    .nbr_of_tiles
+    db 3, 3, 0
+
+    .x_offsets
+    dw -8, -8, 8, 8
+    dw -8, 8, -8, 8
+    dw 0
+
+    .y_offsets
+    dw 0, -16, 0, -16
+    dw 0, 0, -16, -16
+    dw 0
+
+    .chr
+    db $62, $60, $62, $60
+    db $64, $64, $44, $44
+    db $6A
+
+    .properties
+    db $37, $37, $77, $77
+    db $37, $77, $37, $77
+    db $39
+
+    .sizes
+    db $02, $02, $02, $02
+    db $02, $02, $02, $02
+    db $02

@@ -53,16 +53,16 @@ pullpc
 pushpc
 
 org $0DF882
-db $30
+    db $30
 
 org $0DF884
-db $70
+    db $70
 
 org $0DF886
-db $30
+    db $30
 
 org $0DF888
-db $70
+    db $70
 
 pullpc
 
@@ -73,10 +73,10 @@ pullpc
 pushpc
 
 org $0288FD ; Replace a BEQ by a BRA (dungeon map removed)
-db $80
+    db $80
 
 ;org $02A55E ; Replace a BEQ by a BRA (overworld map removed)
-;db $80
+    ;db $80
 
 pullpc
 
@@ -87,7 +87,7 @@ pullpc
 pushpc
 
 org $08C2DD
-;dw $FFFF
+    ;dw $FFFF
 
 pullpc
 
@@ -98,7 +98,7 @@ pullpc
 pushpc
 
 org $0CF002
-;db $12
+    ;db $12
 
 pullpc
 
@@ -109,7 +109,7 @@ pullpc
 pushpc
 
 org $0CEF91 ; The Blockset for the Throne Room in the Intro.
-;db $0C ; Change to whatever Blockset you want.
+    ;db $0C ; Change to whatever Blockset you want.
 
 pullpc
 
@@ -120,7 +120,7 @@ pullpc
 pushpc
 
 org $0CF08C ; The Blockset for Agahnim's room in the Intro.
-;db $09 ; Change to whatever Blockset you want.
+    ;db $09 ; Change to whatever Blockset you want.
 
 pullpc
 
@@ -131,7 +131,7 @@ pullpc
 pushpc
 
 org $02D7AA
-;db $FF
+    ;db $FF
 
 pullpc
 
@@ -218,7 +218,6 @@ DrawProgressIcons:
         LDA $E9B4, X : STA $14EA, X
         
         INX #2 : CPX.w #$0014
-        
     BCC .initCrystalDiagram
 
     ; 1st pendant
@@ -266,7 +265,6 @@ DrawProgressIcons:
     
     .pendant4
 
-    
     SEP #$30
         
     RTS
@@ -282,16 +280,16 @@ pushpc
 
 ;Equipment Menu Color Change
 org $0DED2C
-db $FB
-db $3C ; Corners
+    db $FB
+    db $3C ; Corners
 
 org $0DED4C
-db $FC
-db $3C ; Vertical Edge
+    db $FC
+    db $3C ; Vertical Edge
 
 org $0DED69
-db $F9
-db $3C ; Horizontal Edge
+    db $F9
+    db $3C ; Horizontal Edge
 
 pullpc
 
@@ -301,16 +299,16 @@ pushpc
 
 ;Item Display Menu Color Change
 org $0DE64A
-db $FB 
-db $20 ; Corners
+    db $FB 
+    db $20 ; Corners
 
 org $0DE66A
-db $FC
-db $20 ; Vertical Edge
+    db $FC
+    db $20 ; Vertical Edge
 
 org $0DE687
-db $F9
-db $20 ; Horizontal Edge
+    db $F9
+    db $20 ; Horizontal Edge
 
 pullpc
 
@@ -321,33 +319,33 @@ pushpc
 ; Item select box:
 ; Corners
 org $0DE3DC
-db $FB
-db $2C
+    db $FB
+    db $2C
 
 ; Vertical Edge
 org $0DE3FC
-db $FC
-db $2C
+    db $FC
+    db $2C
 
 ; Vertical Edge
 org $0DE419
-db $F9
-db $2C
+    db $F9
+    db $2C
 
 ; Top of the Y
 org $0DE461
-db $F0
-db $2C
+    db $F0
+    db $2C
 
 ; Top of the Y
 org $0DE461
-db $F0
-db $2C
+    db $F0
+    db $2C
 
 ; Bottom of the Y
 org $0DE467
-db $F1
-db $2C
+    db $F1
+    db $2C
 
 pullpc
 
@@ -358,88 +356,88 @@ pushpc
 ; Bottle box:
 ; Corners
 org $0DEF6A
-db $FB
-db $3C
+    db $FB
+    db $3C
 
 ; Vertical Edge
 org $0DEF8A
-db $FC
-db $3C
+    db $FC
+    db $3C
 
 ; Horizontal Edge
 org $0DEFA7
-db $F9
-db $3C
+    db $F9
+    db $3C
 
 
 ; Bottle menu:
 ; Left border when switching
 org $0DE064
-db $FC
-db $3C
+    db $FC
+    db $3C
 
 ; Right border when switching
 org $0DE076
-db $FC
-db $7C
+    db $FC
+    db $7C
 
 ; Bottom left corner when switching
 org $0DE078
-db $FB
-db $BC
+    db $FB
+    db $BC
 
 ; Bottom right corner when switching
 org $0DE08A
-db $FB
-db $FC
+    db $FB
+    db $FC
 
 ; Top left corner when switching
 org $0DE050
-db $FB
-db $3C
+    db $FB
+    db $3C
 
 ; Top right corner when switching
 org $0DE062
-db $FB
-db $7C
+    db $FB
+    db $7C
 
 ; Top border when switching
 org $0DE052
-db $F9
-db $3C
-db $F9
-db $3C
-db $F9
-db $3C
-db $F9
-db $3C
-db $F9
-db $3C
-db $F9
-db $3C
-db $F9
-db $3C
-db $F9
-db $3C
+    db $F9
+    db $3C
+    db $F9
+    db $3C
+    db $F9
+    db $3C
+    db $F9
+    db $3C
+    db $F9
+    db $3C
+    db $F9
+    db $3C
+    db $F9
+    db $3C
+    db $F9
+    db $3C
 
 ; Bottom border when switching
 org $0DE07A
-db $F9
-db $BC
-db $F9
-db $BC
-db $F9
-db $BC
-db $F9
-db $BC
-db $F9
-db $BC
-db $F9
-db $BC
-db $F9
-db $BC
-db $F9
-db $BC
+    db $F9
+    db $BC
+    db $F9
+    db $BC
+    db $F9
+    db $BC
+    db $F9
+    db $BC
+    db $F9
+    db $BC
+    db $F9
+    db $BC
+    db $F9
+    db $BC
+    db $F9
+    db $BC
 
 pullpc
 
@@ -450,13 +448,13 @@ pullpc
 pushpc
 
 org $0DE6B6
-    DrawAbilityText:
-    {
-        REP #$30
+DrawAbilityText:
+{
+    REP #$30
         
-        LDX.w #$0000
-        LDY.w #$0010
-        LDA.w #$3CF5
+    LDX.w #$0000
+    LDY.w #$0010
+    LDA.w #$3CF5
     
     .drawBoxInterior
     
@@ -465,15 +463,14 @@ org $0DE6B6
         STA $1684, X : STA $16C4, X
         
         STA $1704, X : INX #2
+    DEY : BPL .drawBoxInterior
         
-        DEY : BPL .drawBoxInterior
+    ; get data from ability variable (set of flags for each ability)
+    LDA $7EF378 : AND.w #$FF00 : STA $02
         
-        ; get data from ability variable (set of flags for each ability)
-        LDA $7EF378 : AND.w #$FF00 : STA $02
+    LDA.w #$0003 : STA $04
         
-        LDA.w #$0003 : STA $04
-        
-        LDY.w #$0000 : TYX
+    LDY.w #$0000 : TYX
     
     .nextLine
     
@@ -482,39 +479,37 @@ org $0DE6B6
     .nextAbility
     
         ASL $02 : BCC .lacksAbility
-        
-        ; Draws the ability strings if Link has the ability
-        ; (2 x 5 tile rectangle for each ability)
-        LDA $F959, X : STA $1588, Y
-        LDA $F95B, X : STA $158A, Y
-        LDA $F95D, X : STA $158C, Y
-        LDA $F95F, X : STA $158E, Y
-        LDA $F961, X : STA $1590, Y
-        LDA $F963, X : STA $15C8, Y
-        LDA $F965, X : STA $15CA, Y
-        LDA $F967, X : STA $15CC, Y
-        LDA $F969, X : STA $15CE, Y
-        LDA $F96B, X : STA $15D0, Y
+            ; Draws the ability strings if Link has the ability
+            ; (2 x 5 tile rectangle for each ability)
+            LDA $F959, X : STA $1588, Y
+            LDA $F95B, X : STA $158A, Y
+            LDA $F95D, X : STA $158C, Y
+            LDA $F95F, X : STA $158E, Y
+            LDA $F961, X : STA $1590, Y
+            LDA $F963, X : STA $15C8, Y
+            LDA $F965, X : STA $15CA, Y
+            LDA $F967, X : STA $15CC, Y
+            LDA $F969, X : STA $15CE, Y
+            LDA $F96B, X : STA $15D0, Y
     
-    .lacksAbility
+        .lacksAbility
     
-        TXA : CLC : ADC.w #$0014 : TAX
-        TYA : CLC : ADC.w #$000A : TAY
-        
+            TXA : CLC : ADC.w #$0014 : TAX
+            TYA : CLC : ADC.w #$000A : TAY
         DEC $06 : BNE .nextAbility
         
         TYA : CLC : ADC.w #$0058 : TAY
         
-        DEC $04 : BNE .nextLine
+    DEC $04 : BNE .nextLine
         
-        ; draw the 4 corners of the box containing the ability tiles
-        LDA.w #$3CFB : AND $00 : STA $1542
-        ORA.w #$8000 : STA $1742
-        ORA.w #$4000 : STA $1766
-        EOR.w #$8000 : STA $1566
+    ; draw the 4 corners of the box containing the ability tiles
+    LDA.w #$3CFB : AND $00 : STA $1542
+    ORA.w #$8000 : STA $1742
+    ORA.w #$4000 : STA $1766
+    EOR.w #$8000 : STA $1566
         
-        LDX.w #$0000
-        LDY.w #$0006
+    LDX.w #$0000
+    LDY.w #$0006
     
     .drawVerticalEdges
     
@@ -522,8 +517,7 @@ org $0DE6B6
         ORA.w #$4000 : STA $15A6, X
         
         TXA : CLC : ADC.w #$0040 : TAX
-        
-        DEY : BPL .drawVerticalEdges
+    DEY : BPL .drawVerticalEdges
         
         LDX.w #$0000
         LDY.w #$0010
@@ -534,20 +528,18 @@ org $0DE6B6
         ORA.w #$8000 : STA $1744, X
         
         INX #2
+    DEY : BPL .drawHorizontalEdges
         
-        DEY : BPL .drawHorizontalEdges
+    ; Draw 'A' button icon
+    LDA.w #$BCF0 : STA $1584
+    LDA.w #$3CF2 : STA $15C4
+    LDA.w #$3C82 : STA $1546
+    LDA.w #$3C83 : STA $1548
         
-        ; Draw 'A' button icon
-        LDA.w #$BCF0 : STA $1584
-        LDA.w #$3CF2 : STA $15C4
-        LDA.w #$3C82 : STA $1546
-        LDA.w #$3C83 : STA $1548
+    SEP #$30
         
-        SEP #$30
-        
-        RTS
-    }
-
+    RTS
+}
 warnpc $0DE7B7
 
 pullpc

@@ -50,10 +50,9 @@ Main2:
     JSL $0CC404 ; $64404* that was replaced 
 
     LDA $35 : CMP.b #$01 : BEQ .notfirst ;$35 is free ram that i am using to see whether this is the first time this is being run or not
+        LDA.b #$01 : STA $35 ;if it is set $35 to 1 so we don't apply the tile map again. otherwise this causes part of the triforce to flicker
 
-    LDA.b #$01 : STA $35 ;if it is set $35 to 1 so we don't apply the tile map again. otherwise this causes part of the triforce to flicker
-
-    JSR ApplyTileMap ;inserts the new tilemap into the vram
+        JSR ApplyTileMap ;inserts the new tilemap into the vram
 
     .notfirst
 
@@ -106,21 +105,22 @@ ApplyNewColors:
     REP #$20 ;Set A in 16bit mode
 
     LDX #$24
+
     --
-    ;LDA.l TitlePalette, X : STA.l $7EC540, X
-    LDA.l TitlePalette, X : STA.l $7EC340, X
+        ;LDA.l TitlePalette, X : STA.l $7EC540, X
+        LDA.l TitlePalette, X : STA.l $7EC340, X
     DEX : DEX : BNE --
+
     INC $15 ;Refresh Palettes
     SEP #$20 ;Set A in 8bit mode
 
     PLX
     RTS
-
 }
 
 TitlePalette:
-dw $0000,$0421,$1CE7,$294A,$318C,$14E9,$21B1,$110B,$196E,$10C7,$14A4,$1CA6,$0C43,$1064,$0000,$0000
-dw #$0000, #$0C77, #$000A
+    dw $0000,$0421,$1CE7,$294A,$318C,$14E9,$21B1,$110B,$196E,$10C7,$14A4,$1CA6,$0C43,$1064,$0000,$0000
+    dw #$0000, #$0C77, #$000A
 
 
 

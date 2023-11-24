@@ -8,19 +8,18 @@
 ; Load Sanctuary music during Room 02 to 12 transition
 ; ----------------------------------------------------
 org $028BDA
-db $12
+    db $12
 
 ; Room Number (Sanctuary)
 org $028BDE
-db $12
-
+    b $12
 
 ; --------------------------------------------------------
 ; Load Hyrule Castle music during Room 12 to 02 transition
 ; --------------------------------------------------------
 org $028BE3
-db $12
+    db $12
 
 ; Room Number (Sewers)
 org $028BE5
-db $02
+    db $02

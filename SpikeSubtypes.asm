@@ -15,12 +15,12 @@
 pushpc
 
 org $0691D7 ; SpritePrep_SpikeBlock:
-JSL NewSpikePrep
-RTS
+    JSL NewSpikePrep
+    RTS
 
 org $1EBD0E
-JSL NewSpikeCollision
-RTS
+    JSL NewSpikeCollision
+    RTS
 
 ; ==============================================================================
 
@@ -40,6 +40,7 @@ NewSpikePrep:
     LDA $0E30, X : TAY
     LDA.w speedValuesH, Y : STA $0D50, X
     LDA.w speedValuesV, Y : STA $0D40, X
+    
     PLB
     RTL
 }
