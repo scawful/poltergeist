@@ -12,7 +12,7 @@ org $028BDA
 
 ; Room Number (Sanctuary)
 org $028BDE
-    b $12
+    db $12
 
 ; --------------------------------------------------------
 ; Load Hyrule Castle music during Room 12 to 02 transition
