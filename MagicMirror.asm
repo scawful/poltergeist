@@ -5,7 +5,7 @@ pushpc
 org $07A91A
     NOP #04 ; remove the extra Y button check
 
-    org $07A923 ; LDA $7EF3CC : CMP.b #$0A : BNE BRANCH_ALPHA
+org $07A923 ; LDA $7EF3CC : CMP.b #$0A : BNE BRANCH_ALPHA
     JSL NewMirrorCode
     BCS warp ; if carry was set warp
         RTS ; otherwise end the mirror code !
@@ -19,6 +19,13 @@ pullpc
 
 NewMirrorCode:
 {
+    LDA $1B : BEQ .outside
+        SEC
+
+        RTL
+
+    .outside
+
     STZ.b $3A
     REP #$20
     LDA.b $20 : CMP.w #$0910 : BCC .toohigh
@@ -35,6 +42,7 @@ NewMirrorCode:
 
     SEP #$20 ; use that to clear carry at same time
     CLC
+    
     RTL
 }
 

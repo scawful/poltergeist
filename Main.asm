@@ -14,6 +14,7 @@ incsrc OverworldMap.asm
 incsrc SanctuaryMusicTransitionNOP.asm
 incsrc DoorOverlay.asm
 incsrc DungeonMaps.asm
+
 ; ==============================================================================
 
 ; Music:
@@ -30,6 +31,7 @@ incsrc Music/SkullDungeonThemeV1-00.asm ; fugitive song 0x0C
 incsrc Music/SadThemeV1-00.asm  ; village song 0x07
 incsrc Music/ThickFogV1-00.asm ; bunny theme song 0x04
 incsrc Music/SubrosiaThemeV1-00.asm 
+
 ; ==============================================================================
 
 ; Sprite engine stuff:
@@ -71,7 +73,7 @@ incsrc GoriyaSubtype.asm
 incsrc IntroZelda.asm
 incsrc LockedDoorsRainstate.asm
 incsrc LongSwitch.asm
-;incsrc MagicMirror.asm
+incsrc MagicMirror.asm
 incsrc Mantle.asm
 incsrc ManorMaiden.asm
 incsrc MapShop.asm
@@ -95,7 +97,6 @@ incsrc AllhallowMusic.asm
 warnpc $39FFFF ; If it reaches the warning move some code in next bank.
 
 org $3A8000
-
 
 warnpc $3AFFFF ; If it reaches the warning move some code in next bank.
 
