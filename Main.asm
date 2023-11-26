@@ -94,6 +94,7 @@ incsrc Swordbeam.asm
 incsrc sage.asm
 incsrc FluteMap.asm
 incsrc AllhallowMusic.asm
+incsrc WarpBetweenFloors.asm
 warnpc $39FFFF ; If it reaches the warning move some code in next bank.
 
 org $3A8000
