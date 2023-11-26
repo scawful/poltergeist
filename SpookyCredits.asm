@@ -13,6 +13,13 @@ org $0E9889
     LDA #$20 : STA $11
     RTS
 
+; Change the final death count to save under Hyrule Castle 2 instead so that 
+; it show the count correctly at the end of the credits and start the count
+; at 0 instead of what was in ganon's tower.
+org $0EBC9E
+    LDA $7EF403 : STA $7EF3EF : LDA.w #$0000
+    NOP : NOP
+
 ; ==============================================================================
 
 org $0EB038 ; $073038 - 073C51
