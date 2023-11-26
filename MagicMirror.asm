@@ -20,9 +20,12 @@ pullpc
 NewMirrorCode:
 {
     LDA $1B : BEQ .outside
-        SEC
+        ; If we arn't in a dungeon, don't warp.
+        LDA $040C : CMP.b #$FF : BEQ .dontWarp
+            ; warp
+            SEC
 
-        RTL
+            RTL
 
     .outside
 
@@ -41,6 +44,8 @@ NewMirrorCode:
     .toohigh
 
     SEP #$20 ; use that to clear carry at same time
+
+    .dontWarp
     CLC
     
     RTL
