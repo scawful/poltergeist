@@ -99,6 +99,8 @@ warnpc $39FFFF ; If it reaches the warning move some code in next bank.
 
 org $3A8000
 
+incsrc CastleBGGFX.asm
+
 warnpc $3AFFFF ; If it reaches the warning move some code in next bank.
 
 pushpc
@@ -108,7 +110,7 @@ pullpc
 ; ==============================================================================
 
 ; Currently unused:
-; incsrc CastleBGGFX.asm ; Was going to be used with the pyramid BG but that's currently broken.
+
 ; incsrc PortMain.asm ; This will need to be fixed before it can be put in.
 
 ; ==============================================================================
