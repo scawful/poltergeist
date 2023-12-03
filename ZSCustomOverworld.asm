@@ -1146,14 +1146,26 @@ if !Func02BC44 = 1
 org $02BC44 ; $013C44
 {
     NOP : JSL ReadOverlayArray : CMP.w #$0096 : BNE .BRANCH_IOTA
-        LDA.w #$0600 : CMP.b $E6 : BCC .BRANCH_NU
-            STA.b $E6
+        ; TODO: I think these comparison values will need to be calulated somehow
+        ; depending on the area. Right now they are hardcoded to work with the
+        ; castle of shadows area.
+
+        JSL BGControl
+        BRA .BRANCH_IOTA
+
+        ; Don't let the BG scroll down further than the "top" of the bg when walking up.
+        ;LDA.w #$0208 : CMP.b $E6 : BCC .BRANCH_NU ; #$0600 
+            ;STA.b $E6
     
-        .BRANCH_NU
+        ;.BRANCH_NU
     
-        LDA.w #$06C0 : CMP.b $E6 : BCS .BRANCH_IOTA
-            STA.b $E6
+        ; Don't let the BG scroll up further than the "bottom" of the bg when walking down.
+        ;LDA.w #$02C0 : CMP.b $E6 : BCS .BRANCH_IOTA ;#$06C0 
+           ; STA.b $E6
     
+    warnpc $02BC60
+
+    org $02BC60
     .BRANCH_IOTA
 }
 warnpc $02BC60
@@ -1165,6 +1177,35 @@ ReadOverlayArray:
 {
     LDA.b $8A : ASL : TAX
     LDA.l Pool_OverlayTable, X
+
+    RTL
+}
+
+BGControl:
+{
+    LDA.b $20 : CMP.w #$0180 : BCC .startShowingMountains
+        ; Lock the position so that nothing shows through the trees
+        LDA.w #$02C0 : STA.b $E6
+
+        RTL
+
+    .startShowingMountains
+
+    ; Lock the position to just above right where the last tree block is based on
+    ; the actual tile BG.
+    LDA.b $E8 : CLC : ADC.w #$01A0 : STA.b $E6
+
+    ; Don't let the BG scroll down further than the "top" of the bg when walking up.
+    LDA.w #$0208 : CMP.b $E6 : BCC .dontLock ; #$0600 
+        STA.b $E6
+    
+    .dontLock
+    
+    ; Don't let the BG scroll up further than the "bottom" of the bg when walking down.
+    LDA.w #$02C0 : CMP.b $E6 : BCS .dontLock2 ;#$06C0 
+        STA.b $E2
+
+    .dontLock2
 
     RTL
 }
@@ -1182,7 +1223,11 @@ org $02C02D ; $01402D
     PLA
     
     CPY.b #$96 : BEQ .dontMoveBg1  
-        STA.b $E0, X
+        ; TODO: This may or not be needed.
+        ; It shifts the BG over by a half small area's width. I think this is to line up the
+        ; mountain with the tower in the distance at the appropriate location when coming into
+        ; the pyramid area from the right.
+        STA.b $E0, X 
     
     .dontMoveBg1
 }
