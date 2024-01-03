@@ -68,7 +68,7 @@ EtherTabletDuringCrumblingHook:
         ;LDA #$04 : STA $7EF359
         PHX
         ;JSL $00D2C8 ; DecompSwordGfx              ; $52C8 IN ROM
-        ;JSL $1BED03 ; Palette_Sword               ; $DED03 IN ROM
+        ;JSL $1BED03 ; Palette_Sword               ; $0DED03 IN ROM
 
         ;LDA #$03 : STA $7EF359
 

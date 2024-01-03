@@ -547,7 +547,7 @@ org $00FF7C ; $007F7C
         
         INC $B0
         
-        JSL $0BFE70 ; $5FE70 IN ROM
+        JSL $0BFE70 ; $05FE70 IN ROM
 
         REP #$30 ; Set A, X, and Y in 16bit mode.
 
@@ -638,7 +638,7 @@ PreOverworld_LoadProperties_LoadMain:
 
     JSL DecompOwAnimatedTiles       ; $5394 IN ROM
     JSL InitTilesets                ; $619B IN ROM; Decompress all other graphics
-    JSR Overworld_LoadAreaPalettes  ; $14692 IN ROM; Load palettes for overworld
+    JSR Overworld_LoadAreaPalettes  ; $014692 IN ROM; Load palettes for overworld
         
     LDX.b $8A
         
@@ -646,11 +646,11 @@ PreOverworld_LoadProperties_LoadMain:
         
     LDA.l $00FD1C, X
         
-    JSL Overworld_LoadPalettes      ; $755A8 IN ROM; Load some other palettes
-    JSL Palette_SetOwBgColor_Long   ; $75618 IN ROM; Sets the background color (changes depending on area)
+    JSL Overworld_LoadPalettes      ; $0755A8 IN ROM; Load some other palettes
+    JSL Palette_SetOwBgColor_Long   ; $075618 IN ROM; Sets the background color (changes depending on area)
         
     LDA.b $10 : CMP.b #$08 : BNE .specialArea2
-        ; $1465F IN ROM; Copies $7EC300[0x200] to $7EC500[0x200]
+        ; $01465F IN ROM; Copies $7EC300[0x200] to $7EC500[0x200]
         JSR $C65F
         
         BRA .normalArea2
@@ -658,11 +658,11 @@ PreOverworld_LoadProperties_LoadMain:
     .specialArea2
     
     ; apparently special overworld handles palettes a bit differently?
-    JSR $C6EB ; $146EB IN ROM
+    JSR $C6EB ; $0146EB IN ROM
     
     .normalArea2
     
-    JSL $0BFE70 ; $5FE70 IN ROM; Sets fixed colors and scroll values
+    JSL $0BFE70 ; $05FE70 IN ROM; Sets fixed colors and scroll values
         
     ; Something fixed color related
     LDA.b #$00 : STA.l $7EC017
@@ -684,7 +684,7 @@ PreOverworld_LoadProperties_LoadMain:
         
     ; Are we in the dark world? If so, there's no warp vortex there.
     LDA.b $8A : AND.b #$40 : BNE .noWarpVortex
-        JSL Sprite_ReinitWarpVortex ; $4AF89 IN ROM
+        JSL Sprite_ReinitWarpVortex ; $04AF89 IN ROM
     
     .noWarpVortex
         
@@ -704,7 +704,7 @@ PreOverworld_LoadProperties_LoadMain:
     STZ $0351
         
     ; Reinitialize many of Link's gameplay variables
-    JSR $8B0C ; $10B0C IN ROM
+    JSR $8B0C ; $010B0C IN ROM
         
     LDA.l $7EF357 : BNE .notBunny
     LDA.l $7EF3CA : BEQ .notBunny
@@ -782,7 +782,7 @@ org $028632 ; $010632
     LDA.l $0285F3, X : PHA
         
     JSL InitTilesets                ; $619B IN ROM
-    JSR Overworld_LoadAreaPalettes  ; $14692 IN ROM ; Load Palettes
+    JSR Overworld_LoadAreaPalettes  ; $014692 IN ROM ; Load Palettes
         
     PLA : STA.b $00
         
@@ -790,22 +790,22 @@ org $028632 ; $010632
         
     LDA.l $00FD1C, X
         
-    JSL Overworld_LoadPalettes ; $755A8 IN ROM
+    JSL Overworld_LoadPalettes ; $0755A8 IN ROM
         
     LDA.b #$01 : STA.w $0AB2
         
-    JSL Palette_Hud ; $DEE52 IN ROM
+    JSL Palette_Hud ; $0DEE52 IN ROM
         
     LDA.l $11 : BNE .BRANCH_4
         JSL CopyFontToVram  ; $6556 IN ROM
     
     .BRANCH_4
     
-    JSR $C65F   ; $1465F IN ROM
-    JSL $0BFE70 ; $5FE70 IN ROM
+    JSR $C65F   ; $01465F IN ROM
+    JSL $0BFE70 ; $05FE70 IN ROM
         
     LDA.l $8A : CMP.b #$80 : BCC .BRANCH_5
-        JSL Palette_SetOwBgColor_Long ; $75618 IN ROM
+        JSL Palette_SetOwBgColor_Long ; $075618 IN ROM
     
     .BRANCH_5
     
@@ -956,7 +956,7 @@ org $02AF58 ; $012F58
 
     .notFF
     
-    ; $1300B ALTERNATE ENTRY POINT ; TODO: Verify this. If it is an alternate entry I can't find where it is referenced anywhere.
+    ; $01300B ALTERNATE ENTRY POINT ; TODO: Verify this. If it is an alternate entry I can't find where it is referenced anywhere.
     .loadSubScreenOverlay
     STY.b $84
         
@@ -1122,8 +1122,8 @@ org $02B3A1 ; $0133A1
         
     JSL Sprite_ResetAll
     JSL Sprite_OverworldReloadAll
-    JSL $07B107 ; $3B107 IN ROM
-    JSR $8B0C   ; $10B0C IN ROM
+    JSL $07B107 ; $03B107 IN ROM
+    JSR $8B0C   ; $010B0C IN ROM
         
     LDA.b #$14 : STA.b $5D
         
@@ -1277,13 +1277,13 @@ Overworld_LoadAreaPalettes:
         
     STZ $0AA9
         
-    JSL Palette_MainSpr         ; $DEC9E IN ROM; load SP1 through SP4
-    JSL Palette_MiscSpr         ; $DED6E IN ROM; load SP0 (2nd half) and SP6 (2nd half)
-    JSL Palette_SpriteAux1      ; $DECC5 IN ROM; load SP5 (1st half)
-    JSL Palette_SpriteAux2      ; $DECE4 IN ROM; load SP6 (1st half)
-    JSL Palette_Sword           ; $DED03 IN ROM; load SP5 (2nd half, 1st 3 colors), which is the sword palette
-    JSL Palette_Shield          ; $DED29 IN ROM; load SP5 (2nd half, next 4 colors), which is the shield
-    JSL Palette_ArmorAndGloves  ; $DEDF9 IN ROM; load SP7 (full) Link's whole palette, including Armor
+    JSL Palette_MainSpr         ; $0DEC9E IN ROM; load SP1 through SP4
+    JSL Palette_MiscSpr         ; $0DED6E IN ROM; load SP0 (2nd half) and SP6 (2nd half)
+    JSL Palette_SpriteAux1      ; $0DECC5 IN ROM; load SP5 (1st half)
+    JSL Palette_SpriteAux2      ; $0DECE4 IN ROM; load SP6 (1st half)
+    JSL Palette_Sword           ; $0DED03 IN ROM; load SP5 (2nd half, 1st 3 colors), which is the sword palette
+    JSL Palette_Shield          ; $0DED29 IN ROM; load SP5 (2nd half, next 4 colors), which is the shield
+    JSL Palette_ArmorAndGloves  ; $0DEDF9 IN ROM; load SP7 (full) Link's whole palette, including Armor
         
     LDX.b #$01
         
@@ -1295,9 +1295,9 @@ Overworld_LoadAreaPalettes:
     
     STX.w $0AAC
         
-    JSL Palette_SpriteAux3      ; $DEC77 IN ROM; load SP0 (first half) (or SP7 (first half))
-    JSL Palette_Hud             ; $DEE52 IN ROM; load BP0 and BP1 (first halves)
-    JSL Palette_OverworldBgMain ; $DEEC7 IN ROM; load BP2 through BP5 (first halves)
+    JSL Palette_SpriteAux3      ; $0DEC77 IN ROM; load SP0 (first half) (or SP7 (first half))
+    JSL Palette_Hud             ; $0DEE52 IN ROM; load BP0 and BP1 (first halves)
+    JSL Palette_OverworldBgMain ; $0DEEC7 IN ROM; load BP2 through BP5 (first halves)
         
     RTS
 }
@@ -1659,7 +1659,7 @@ org $0AB8F5 ; $0538F5
     
     ; From this point on it is the vanilla function.
     JSL DecompOwAnimatedTiles ; $5394 IN ROM
-    JSL $0BFE70 ; $5FE70 IN ROM
+    JSL $0BFE70 ; $05FE70 IN ROM
         
     STZ $0AA9
     STZ $0AB2
@@ -1670,7 +1670,7 @@ org $0AB8F5 ; $0538F5
         
     STZ $B2
         
-    JSL $02B1F4 ; $131F4 IN ROM
+    JSL $02B1F4 ; $0131F4 IN ROM
         
     ; Play sound effect indicating we're coming out of map mode
     LDA.b #$10 : STA.w $012F

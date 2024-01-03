@@ -246,7 +246,7 @@ Zelda_ApproachingPlayer:
     RTS
 }
 
-; $2ED76-$2ED7D DATA
+; $02ED76-$02ED7D DATA
 org    $05ED76
 Zelda_WalkTowardsPriest:
 {
@@ -259,7 +259,7 @@ Zelda_WalkTowardsPriest:
     db $00, $00, $00, $00
 }
 
-; $2EDC4-$2EDEB JUMP LOCATION
+; $02EDC4-$02EDEB JUMP LOCATION
 org $05EDC4
 Zelda_RespondToPriest:
 {
@@ -500,7 +500,7 @@ AltarZelda_Main:
     RTS
 }
 
-; $ED661-$ED6B0 DATA
+; $0ED661-$0ED6B0 DATA
 org $1DD661
 AltarZelda_WarpEffectOam:
 {

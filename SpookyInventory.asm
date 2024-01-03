@@ -142,7 +142,7 @@ pullpc
 pushpc
 
 org $0DE860
-    ; $6E860-$6E9C7 DATA
+    ; $06E860-$06E9C7 DATA
     ; Progress box data
 
     ; Pendants
@@ -199,7 +199,7 @@ org $0DE372
     DrawItem:
 
 org $0DE9C8
-; *$6E9C8-$6EB39 LOCAL
+; $06E9C8-$06EB39 LOCAL
 DrawProgressIcons:
 {
     REP #$30

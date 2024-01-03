@@ -2,7 +2,7 @@
 
 pushpc
 
-; $4BA56-$4BAAB LOCAL
+; $04BA56-$04BAAB LOCAL
 org $09BA56
     JSL NewSpawnFlyingTile
 
