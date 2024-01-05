@@ -106,6 +106,9 @@ NewObjectsCode31:
     dw .slime7-.objData ; 0x0A
     dw .slime8-.objData ; 0x0B
 
+    .potStart
+    dw .pot1-.ObjData ; 0x0C
+
     .objData
         .north
         incbin objects/northPillar.bin
@@ -143,6 +146,10 @@ NewObjectsCode31:
 
         .slime8
         incbin objects/slime8.bin
+
+
+        .pot1
+        incbin objects/EmptyPot.bin
 }
 
 ; ==============================================================================
