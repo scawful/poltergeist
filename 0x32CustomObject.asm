@@ -88,7 +88,7 @@ NewObjectsCode:
     dw .SlimeWest-.ObjData			;0x0C
     dw .TableLarge-.ObjData			;0x0D
     dw .TableSmall-.ObjData			;0x0E
-    dw .EmptyPot-.ObjData			;0x0F
+    dw .StairMask-.ObjData			;0x0F
 
     .ObjData
         .bookshelf
@@ -121,8 +121,8 @@ NewObjectsCode:
         incbin objects/TableLarge.bin
         .TableSmall
         incbin objects/TableSmall.bin
-        .EmptyPot
-        incbin objects/EmptyPot.bin
+        .StairMask
+        incbin objects/StairMask.bin
 }
 
 ; ==============================================================================
