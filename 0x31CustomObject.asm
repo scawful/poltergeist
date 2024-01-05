@@ -107,7 +107,7 @@ NewObjectsCode31:
     dw .slime8-.objData ; 0x0B
 
     .potStart
-    dw .pot1-.ObjData ; 0x0C
+    dw .EmptyPot-.objData ; 0x0C
 
     .objData
         .north
@@ -148,7 +148,7 @@ NewObjectsCode31:
         incbin objects/slime8.bin
 
 
-        .pot1
+        .EmptyPot
         incbin objects/EmptyPot.bin
 }
 
