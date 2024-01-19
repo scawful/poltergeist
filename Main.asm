@@ -14,6 +14,7 @@ incsrc OverworldMap.asm
 incsrc SanctuaryMusicTransitionNOP.asm
 incsrc DoorOverlay.asm
 incsrc DungeonMaps.asm
+incsrc HitBoxProperties.asm
 
 ; ==============================================================================
 
