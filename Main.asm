@@ -14,6 +14,7 @@ incsrc OverworldMap.asm
 incsrc SanctuaryMusicTransitionNOP.asm
 incsrc DoorOverlay.asm
 incsrc DungeonMaps.asm
+incsrc HitBoxProperties.asm
 
 ; ==============================================================================
 
@@ -96,6 +97,7 @@ incsrc sage.asm
 incsrc FluteMap.asm
 incsrc AllhallowMusic.asm
 incsrc WarpBetweenFloors.asm
+incsrc CollectItemsWithSword.asm
 warnpc $39FFFF ; If it reaches the warning move some code in next bank.
 
 org $3A8000
