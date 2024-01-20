@@ -213,6 +213,7 @@ GiveMapAndX:
 {
    LDY #$33
    JSL Link_ReceiveItem
+   LDA #$01 : STA $7EF280 ; set area 00 to non-zero
    %GotoAction(0)
 
    RTS
