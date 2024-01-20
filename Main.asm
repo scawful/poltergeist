@@ -58,6 +58,7 @@ incsrc BigWhirlPool.asm
 incsrc BowTablet.asm
 incsrc BumperASM.asm
 incsrc Clown.asm
+incsrc CreditFixes.asm
 incsrc DamageHole.asm
 incsrc DarkLinkBoss.asm
 incsrc Doll.asm

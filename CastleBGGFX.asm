@@ -52,6 +52,15 @@ CheckForChangeGraphicsNormalLoadCastle:
 
 ; ==============================================================================
 
+ApplyCastleGFX_LONG:
+{
+    JSL $00E19B ;calls InitTilesets that was replaced
+
+    JSR ApplyCastleGFX
+    
+    RTL
+}
+
 ApplyCastleGFX:
 {
     REP #$20 ; A = 16, XY = 8
