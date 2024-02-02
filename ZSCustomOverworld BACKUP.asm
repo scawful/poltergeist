@@ -326,8 +326,8 @@ Pool:
 !Func00D8D5 = $00 ; Disable
 ; 00DA63 ; W8 Enable/Disable subscreen.
 !Func00DA63 = $00 ; Disable
-; 00EEBC ; Zeros out the BG color when mirror warping to the pyramid area.
-!Func00EEBC = $00 ; Disable
+; 00EEBB ; Zeros out the BG color when mirror warping to the pyramid area.
+!Func00EEBB = $00 ; Disable
 ; 00FF7C ; W9 BG scrolling for HC and the pyramid area.
 !Func00FF7C = $00 ; Disable
 
@@ -460,10 +460,10 @@ endif
 
 ; ==============================================================================
 
-if !Func00EEBC = 1
+if !Func00EEBB = 1
 
 ; Zeros out the BG color when mirror warping to the pyramid area.
-org $00EEBC ; $006EBC
+org $00EEBB ; $006EBB
 {
     ; Check if we are warping to an area with the pyramid BG.
     LDA.b $8A : ASL : TAX

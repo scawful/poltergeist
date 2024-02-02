@@ -9,7 +9,6 @@ incsrc Music/MusicEngine.asm
 incsrc BugNetKid.asm
 incsrc CollisionTables.asm
 incsrc CustomSprProperties.asm
-incsrc SpookyCredits.asm
 incsrc OverworldMap.asm
 incsrc SanctuaryMusicTransitionNOP.asm
 incsrc DoorOverlay.asm
@@ -59,7 +58,6 @@ incsrc BigWhirlPool.asm
 incsrc BowTablet.asm
 incsrc BumperASM.asm
 incsrc Clown.asm
-incsrc CreditFixes.asm
 incsrc DamageHole.asm
 incsrc DarkLinkBoss.asm
 incsrc Doll.asm
@@ -89,6 +87,7 @@ incsrc PumpkinHeadCD.asm
 incsrc Snorlax.asm
 incsrc SahasralalalalaFlippers.asm
 incsrc SpikeSubtypes.asm
+incsrc SpookyCredits.asm
 incsrc SpookyInventory.asm
 incsrc TitleScreen.asm
 incsrc Captain.asm
