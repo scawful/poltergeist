@@ -9,18 +9,16 @@ InCutScene = $7EF303
 
 pushpc
 
-; Play wind sound instead of rain sound when starting the game.
-org $0283AD
-    LDA.b #$09 : STA $012D
+; #_0DA78B: LDA.l $7EF3C5
+; #_0DA78F: AND.w #$00FF
+; #_0DA792: BEQ .no_shield
+org $0DA792
+  NOP #2
 
 ; Music that plays after link wakes up, changed to cancel ambient sound.
 org $05DEA5 ; nothing for now
     LDA.b #$00 : STA $012D
 
-; Music that plays when exiting a dungeon in the rain phase.
-org $028465
-    LDX.b #$07
-    
 org $0083F8
 {
     LDA InCutScene : BEQ .notInCutscene
@@ -56,11 +54,11 @@ org $068CE3
 ; -------- Orange Dress ----------
 ; 76 Zelda Sprite Palette 
 org $0DB3CF
-    db $1F 
+    db $1F
 
 ; C1 
 org $0DB41A
-    db $0E 
+    db $0E
 
 ; Follower palettes 
 org $09A8F9
@@ -90,18 +88,18 @@ org $05ED63
 
 ; 76 Zelda Sprite Palette 
 ;org $0DB3CF
-;    db $1D 
+; db $1D
 
 ; C1 
 ;org $0DB41A
-;    db $0C ; yellow 
+; db $0C ; yellow 
 ;    ; db $02 ; weird yellow index $9X
 ;    ; db $06    ; $BX
 
 ; Follower palettes 
 ;org $09A8F9
-;    db $00
-;    db $0E ; Zelda
+; db $00
+; db $0E ; Zelda
 
 ; Snitch Draw code ? 
 org $1AF8AC
@@ -163,10 +161,10 @@ CutsceneAgahnim_Main:
         LDA.b #$0C : STA $0E60, X
 
         LDA $35 : CMP #$02 : BEQ .summoned
-            LDA.b #$01 : STA $0DC0, X ; Move Zelda to next anim frame
+            LDA.b #$01 : STA $0DC0, X   ; Move Zelda to next anim frame
             LDA SprY, X : CLC : ADC.b #$0C : STA $0D00, X
-            JSL SummonRogueWallmaster
-            LDA #$02 : STA $35 ; Advance the cutscene
+            JSL   SummonRogueWallmaster
+            LDA   #$02 : STA $35        ; Advance the cutscene
 
         .summoned
 
@@ -181,13 +179,13 @@ CutsceneAgahnim_Main:
     RTS
 
     .old_man_save_me
-
+    LDA #$00 : STA $7EF3C5
     ; Old man needs a minute to prepare his spells
     STZ $02F5
-    LDA #$00 : STA InCutScene ; Allow Link to move again
-    LDA #$FF : STA SprTimerA, X  ; Start the timer
-    LDA #$4F : STA $7E010E ; Set destination of old man
-    LDA #$04 : STA $35 ; Advance the cutscene
+    LDA #$00 : STA InCutScene   ; Allow Link to move again
+    LDA #$FF : STA SprTimerA, X ; Start the timer
+    LDA #$4F : STA $7E010E      ; Set destination of old man
+    LDA #$04 : STA $35          ; Advance the cutscene
 
     ; Run some dialogue from the bad guy
     LDA #$0E : LDY #$00
@@ -202,26 +200,26 @@ CutsceneAgahnim_Main:
         LDA #$FF : STA SprTimerA, X ; Start the timer again
           
         LDA #$11 : STA $012D ; Play the church music
-        LDA #$05 : STA $35 ; Advance the cutscene 
+        LDA #$05 : STA $35   ; Advance the cutscene 
 
         RTS
 
     .this_isnt_funny
 
     LDA SprTimerA, X : BNE .return
-        JSL $0BFFA8 ; WallMaster_SendPlayerToLastEntrance
+        JSL $0BFFA8                 ; WallMaster_SendPlayerToLastEntrance
         JSL OldMan_AdvanceGameState
-        LDA #$06 : STA $35 ; End the cutscene 
-
+        LDA #$06 : STA $35          ; End the cutscene 
+        
         RTS
 }
 
-warnpc $1DD2DA
+warnpc $1DD2EE
 
 ; =============================================================================
 ; 0x76 Zelda Sprite Hooks
 
-org $05ECFA
+org    $05ECFA
 Zelda_ApproachingPlayer:
 {
     LDA $0DF0, X : BNE .still_approaching
@@ -247,7 +245,7 @@ Zelda_ApproachingPlayer:
 }
 
 ; $02ED76-$02ED7D DATA
-org    $05ED76
+org $05ED76
 Zelda_WalkTowardsPriest:
 {
     .timers
@@ -256,7 +254,7 @@ Zelda_WalkTowardsPriest:
 
     .directions
     ; db $04, $03, $02, $01
-    db $00, $00, $00, $00
+    db   $00, $00, $00, $00
 }
 
 ; $02EDC4-$02EDEB JUMP LOCATION
@@ -273,6 +271,8 @@ Zelda_RespondToPriest:
     LDA.b #$00 : STA $7EF3C8 ; Set Sanctuary Spawn point 
 
     REP #$30 : LDA.b #$FF : STA SprTimerD, X : SEP   #$30
+
+    LDA #$01 : STA $7EF3C5
     
     RTS
 }
@@ -327,7 +327,7 @@ Zelda_CheckForStartCutscene:
 Uncle_GiveSwordAndShield:
 {
     LDY.b #$00 : STZ $02E9
-    JSL Link_ReceiveItem
+    JSL   Link_ReceiveItem
     LDA.b #$01 : STA $0DC0, X
 
     RTS
@@ -373,7 +373,7 @@ SummonRogueWallmaster:
     
     LDA $0F70 : CLC : ADC #$40 : STA $0F70, Y
     LDA $0D00, Y : SEC : SBC.b #$06 : STA $0D00, Y
-    LDA #$0C : STA $0F50, Y 
+    LDA #$0C : STA $0F50,                   Y
     LDA #$01 : STA InCutScene
 
     TYA : STA $0FA6
@@ -385,8 +385,8 @@ Zelda_LevitateAway:
     LDA.w SprTimerC, X : BNE .dont_levitate
         ; Increase the sprite height with the wallmaster ID in $0FA6
         PHX : LDA $0FA6 : TAX : LDA SprHeight, X : PLX
-        STA SprHeight, X
-        LDA #$28 : STA $012F ; Play warp away sfx
+        STA SprHeight,                         X
+        LDA #$28 : STA $012F                           ; Play warp away sfx
 
     .dont_levitate
 
@@ -394,7 +394,7 @@ Zelda_LevitateAway:
     LDA SprHeight, X : CMP.b #$9F : BCC .draw_zelda
         ; Spawn a rogue wallmaster
         LDA #$90 : JSL Sprite_SpawnDynamically
-        LDA #$0C : STA $0F50, Y 
+        LDA #$0C : STA $0F50, Y
         PHX
         
         LDX $02CF
@@ -405,8 +405,8 @@ Zelda_LevitateAway:
         LDA $22 : STA $0D10, Y ; SprX Low
         LDA $23 : STA $0D30, Y ; SprX High
 
-        LDA $24 : CLC : ADC #$80 : STA $0F70, Y ; SprZ Low
-        LDA.b #$01 : STA $0E80, Y ; SprDelayso yea
+        LDA   $24 : CLC : ADC #$80 : STA $0F70, Y ; SprZ Low
+        LDA.b #$01 : STA $0E80,                 Y ; SprDelayso yea
         LDA $0BA0, Y : INC A : STA $0BA0, Y
         
         ; ISPH HHHH - [I ignore collisions][S Statis (not alive eg beamos)][P Persist code still run outside of camera][H Hitbox] 
@@ -421,7 +421,7 @@ Zelda_LevitateAway:
         LDA #$03 : STA $35
 
         ; Goodbye Zelda
-        STZ $0DD0,     X
+        STZ $0DD0, X
 
     .draw_zelda
     
