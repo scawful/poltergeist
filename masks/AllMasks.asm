@@ -15,7 +15,7 @@ incbin         fierce_deity.bin
 !FierceDeityId = #$2D
 
 pullpc
-print "AllMasks ", pc 
+print          "AllMasks ", pc
 UpdateTmntPalette:
 {
   REP #$30   ; change 16bit mode
@@ -69,18 +69,18 @@ UpdateFierceDeityLinkPalette:
 
 NewBookCode:
 {
-  JSL $07983A ; Reset swim state
+  JSL $07983A              ; Reset swim state
   LDA $46 : BNE .cantuseit
-  LDA #$02 : STA $5D ; state recoil
-  LDA #$01 : STA $4D ; state recoil 2
+  LDA #$02 : STA $5D       ; state recoil
+  LDA #$01 : STA $4D       ; state recoil 2
 
   ; Length of the jump
-  LDA #$20 
+  LDA #$20
 
-  STA $46 
+  STA $46
 
   ; Height of the jump
-  LDA #$24 
+  LDA #$24
 
   ; Set vertical resistance 
   STA $29
@@ -161,12 +161,14 @@ LinkItem_Quake:
 .return
 
   LDA $02B2 : CMP #$02 : BNE .done
-  BIT $3A : BVS .done ;if Y or B are already pressed
-  LDA $6C : BNE .done ; if we are standing in a dooray or not
+  BIT $3A : BVS .done              ;if Y or B are already pressed
+  LDA $6C : BNE .done              ; if we are standing in a dooray or not
 
   ; Link_CheckNewY_ButtonPress
   JSR $B073 : BCC .done ; Check if we just pressed Y Button  
+  LDA.b #$13 : STA $012F
   JSL NewBookCode
+  
 .done
 
   CLC 
@@ -198,6 +200,5 @@ LinkItem_Ether:
 }
 
 warnpc $07A4F6
+
 pullpc
-
-
