@@ -82,6 +82,10 @@ org $0985A0
 org $02A1A4
 MilestoneItem_Flags:
 
+; Change the milestone flag for letters dungeon so the 4th amulet doesn't drop again.
+org $02A1AA
+db $01
+
 ; Replace the clear level to open tag.
 org $01C508
 {
@@ -140,12 +144,12 @@ org $01C709
         LDA $040C : LSR A : TAX
         
         ; Are we in letter's dungeon?
-        CMP.b #$06 : BEQ .letterDungeon2
+        CMP.b #$06 : BEQ .letterDungeon
             ; We're in the Light World.
             LDA $7EF374 : AND.l MilestoneItem_Flags, X : BNE .criticalItemAlreadyObtained
                 BRA .giveCriticalItem
         
-        .letterDungeon2
+        .letterDungeon
      
         LDA $7EF37A : AND.l MilestoneItem_Flags, X : BNE .criticalItemAlreadyObtained
             .giveCriticalItem

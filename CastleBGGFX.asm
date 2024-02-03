@@ -38,7 +38,8 @@ CheckForChangeGraphicsTransitionLoadCastle:
 
 CheckForChangeGraphicsNormalLoadCastle:
 {
-    ;JSL $00E19B ;calls InitTilesets that was replaced
+    ; No longer needed as this was left over from the FG hooks.
+    ; JSL $00E19B ;calls InitTilesets that was replaced
 
     LDA $8A : CMP.b #$40 : BEQ .castleArea
         RTL ;goes back to normal

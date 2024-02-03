@@ -343,13 +343,13 @@ Pool:
 
 ; Debug addresses
 ; $00D8D5 ; W7 Animated tiles on warp.
-!Func00D8D5 = $00
+!Func00D8D5 = $01
 ; $00DA63 ; W8 Enable/Disable subscreen.
-!Func00DA63 = $00
+!Func00DA63 = $01
 ; $00EEBB ; Zeros out the BG color when mirror warping to the pyramid area.
-!Func00EEBB = $00
+!Func00EEBB = $01
 ; $00FF7C ; W9 BG scrolling for HC and the pyramid area.
-!Func00FF7C = $00
+!Func00FF7C = $01
 
 ; $028027
 ; $029C0C
@@ -359,37 +359,37 @@ Pool:
 ; $0283EE ; E2 ; Changes the function that loads overworld properties when exiting a dungeon. Includes removing asm that plays music in certain areas and changing how animated tiles are loaded.
 !Func0283EE = $01
 ; $028632 ; Changes a function that loads animated tiles under certain conditions.
-!Func028632 = $00
+!Func028632 = $01
 ; $029AA6 ; E1 ; Changes part of a function that changes the special BG color when leaving dungeons? not sure.
-!Func029AA6 = $00
+!Func029AA6 = $01
 ; $02AF58 ; T2 S2 W2 Main subscreen loading function.
-!Func02AF58 = $00
+!Func02AF58 = $01
 ; $02B2D4 ; W1 turns on subscreen for pyramid.
-!Func02B2D4 = $00
+!Func02B2D4 = $01
 ; $02B3A1 ; W6 Activate subscreen durring pyramid warp.
-!Func02B3A1 = $00
+!Func02B3A1 = $01
 ; $02BC44 ; Controls overworld vertical subscreen movement for the pyramid BG.
-!Func02BC44 = $00
+!Func02BC44 = $01
 ; $02C02D ; T4 Changes how the pyramid BG scrolls durring transition.
-!Func02C02D = $00
+!Func02C02D = $01
 ; $02C692 ; W3 Main palette loading routine.
 !Func02C692 = $01
 ; $02A4CD ; Rain animation code.
-!Func02A4CD = $00
+!Func02A4CD = $01
 ; $02AADB ; T1 Mosaic
-!Func02AADB = $00
+!Func02AADB = $01
 ; $02ABB8 ; T3 transition animated and main palette.
-!Func02ABB8 = $00
+!Func02ABB8 = $01
 ; $0ABC5A ; Loads the animated tiles after the overworld map is closed.
-!Func0ABC5A = $00
+!Func0ABC5A = $01
 ; $0AB8F5 ; Loads different animated tiles when returning from bird travel.
-!Func0AB8F5 = $00
+!Func0AB8F5 = $01
 ; $0BFEC6 ; W5 Load overlay, fixed color, and BG color.
-!Func0BFEC6 = $00
+!Func0BFEC6 = $01
 ; $0ED627 ; S1 W4 Transparent color durring warp and during special area enter.
-!Func0ED627 = $00
+!Func0ED627 = $01
 ; $0ED8AE ; Resets the area special color after the screen flashes.
-!Func0ED8AE = $00
+!Func0ED8AE = $01
 
 ; Start of expanded space.
 org $288480 ; $140480
@@ -461,7 +461,7 @@ Func00DA63:
         
     REP #$31 ; Set A, X, and Y in 16bit mode. +1 no idea
         
-    ; source address is determined above, number of tiles is 0x0040, base target address is $7F0000
+    ; Source address is determined above, number of tiles is 0x0040, base target address is $7F0000
     LDX.w #$0000
     LDY.w #$0040
         
@@ -2145,7 +2145,7 @@ if !Func0BFEC6 = 1
 org $0BFEC6 ; $05FEC6
 Overworld_LoadBGColorAndSubscreenOverlay:
 {
-    ;JSL ReplaceBGColor
+    JSL ReplaceBGColor
 
     ; set fixed color to neutral
     LDA.w #$4020 : STA.b $9C
@@ -2298,11 +2298,11 @@ ReplaceBGColor:
 
     ;REP #$20 ; Set A in 16bit mode
 
-    ;LDA.b $8A : ASL : TAX ; Get area code and times it by 2
-    ;LDA.l Pool_BGColorTable, X ; Get the color.
+    LDA.b $8A : ASL : TAX ; Get area code and times it by 2
+    LDA.l Pool_BGColorTable, X ; Get the color.
 
     ;STA.l $7EC300 : STA.l $7EC340 ; Set the BG color 
-    ;STA.l $7EC500 : STA.l $7EC540
+    STA.l $7EC500 : STA.l $7EC540
 
     PLB
 
