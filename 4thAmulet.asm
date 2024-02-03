@@ -244,20 +244,6 @@ LoadAmuletPalette:
 
     REP #$20
 
-    ; Pendant 1 green -> orange.
-    LDA.w #hexto555($A9A9A9) : STA $7EC696
-    LDA.w #hexto555($E8E8E8) : STA $7EC698
-
-    LDA.w #hexto555($FFB345) : STA $7EC69C
-    LDA.w #hexto555($D58200) : STA $7EC69E
-
-    ; Pendant 2 blue -> purple.
-    LDA.w #hexto555($A9A9A9) : STA $7EC656
-    LDA.w #hexto555($E8E8E8) : STA $7EC658
-
-    LDA.w #hexto555($AD45FF) : STA $7EC65C
-    LDA.w #hexto555($7C00D5) : STA $7EC65E
-
     ; Pendant 3 red -> green.
     LDA.w #hexto555($A9A9A9) : STA $7EC636
     LDA.w #hexto555($E8E8E8) : STA $7EC638
@@ -265,14 +251,32 @@ LoadAmuletPalette:
     LDA.w #hexto555($15FF36) : STA $7EC63C
     LDA.w #hexto555($00B51E) : STA $7EC63E
 
-    ; Pendant 4 crystal -> yellow.
-    LDA.w #hexto555($F8F8F8) : STA $7EC6D2
+    ; Check if we are in Facade boss room and if we are don't apply this palette because it messes up the pot palette.
+    LDA.b $A0 : CMP.w #$006C : BEQ .dontApplyPalette
+        ; Pendant 1 green -> orange.
+        LDA.w #hexto555($A9A9A9) : STA $7EC696
+        LDA.w #hexto555($E8E8E8) : STA $7EC698
 
-    LDA.w #hexto555($A9A9A9) : STA $7EC6D6
-    LDA.w #hexto555($E8E8E8) : STA $7EC6D8
-    LDA.w #hexto555($282828) : STA $7EC6DA
-    LDA.w #hexto555($FFED23) : STA $7EC6DC
-    LDA.w #hexto555($BFB400) : STA $7EC6DE
+        LDA.w #hexto555($FFB345) : STA $7EC69C
+        LDA.w #hexto555($D58200) : STA $7EC69E
+
+        ; Pendant 2 blue -> purple.
+        LDA.w #hexto555($A9A9A9) : STA $7EC656
+        LDA.w #hexto555($E8E8E8) : STA $7EC658
+
+        LDA.w #hexto555($AD45FF) : STA $7EC65C
+        LDA.w #hexto555($7C00D5) : STA $7EC65E
+
+        ; Pendant 4 crystal -> yellow.
+        LDA.w #hexto555($F8F8F8) : STA $7EC6D2
+
+        LDA.w #hexto555($A9A9A9) : STA $7EC6D6
+        LDA.w #hexto555($E8E8E8) : STA $7EC6D8
+        LDA.w #hexto555($282828) : STA $7EC6DA
+        LDA.w #hexto555($FFED23) : STA $7EC6DC
+        LDA.w #hexto555($BFB400) : STA $7EC6DE
+
+    .dontApplyPalette
     
 
     INC $15
