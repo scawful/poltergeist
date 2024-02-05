@@ -14,6 +14,9 @@ incbin         fierce_deity.bin
 
 !FierceDeityId = #$2D
 
+org $07D576
+Hookshot_CheckTileCollision:
+
 pullpc
 print          "AllMasks ", pc
 UpdateTmntPalette:
@@ -67,7 +70,7 @@ UpdateFierceDeityLinkPalette:
   dw #$3125, #$49A7, #$39CE, #$56ED, #$6350, #$1571, #$4A52, #$0F5F
 }
 
-NewBookCode:
+StalfosMask_Jump:
 {
   JSL $07983A              ; Reset swim state
   LDA $46 : BNE .cantuseit
@@ -112,8 +115,36 @@ NewBookCode:
   RTL
 }
 
+incsrc "Goldstar.asm"
+
+FixShockPalette:
+{
+    LDA $02B2 : BEQ .i_am_link
+    LDA $02B2 : CMP.b #$01 : BEQ .tmnt
+    CMP.b #$02 : BEQ .stalfos
+    CMP.b #$03 : BEQ .fierce_deity
+
+  .tmnt
+    JSL UpdateTmntPalette
+    RTL
+  .stalfos
+    JSL UpdateStalfosPalette
+    RTL
+  .fierce_deity
+    JSL UpdateFierceDeityLinkPalette
+    RTL
+
+  .i_am_link
+    JSL $0ED6C0 ; RefreshLinkEquipmentPalettes_sword_and_mail
+    RTL
+}
+
 pushpc
-  
+
+org $07998C
+  JSL FixShockPalette
+
+
 ; =============================================================================
 ; Press R to transform 
 
@@ -121,24 +152,43 @@ pushpc
 org $07A569
 LinkItem_Bombos:
 {
-  %CheckNewR_ButtonPress() : BEQ .return
-  LDA $6C : BNE .return   ; in a doorway
-  LDA $0FFC : BNE .return ; can't open menu
+    %CheckNewR_ButtonPress() : BEQ .no_transform_input
+      LDA $6C : BNE .no_transform_input   ; in a doorway
+      LDA $0FFC : BNE .no_transform_input ; can't open menu
 
-  %PlayerTransform()
-  
-  LDA $02B2 : CMP #$01 : BEQ .unequip ; is the hood already on?
-  JSL UpdateTmntPalette
-  LDA !TurtleId : STA $BC             ; change link's sprite 
-  LDA #$01 : STA $02B2
-  BRA .return
+      %PlayerTransform()
+      
+      LDA $02B2 : CMP #$01 : BEQ .unequip ; is the hood already on?
+      JSL UpdateTmntPalette
+      LDA !TurtleId : STA $BC             ; change link's sprite 
+      LDA #$01 : STA $02B2
+      BRA .no_transform_input             ; We just transformed, skip the reset.
   .unequip
-  %ResetToLinkGraphics()
+    %ResetToLinkGraphics()
 
-.return
-  CLC
-  RTS
+  .no_transform_input
+
+    LDA $02B2 : CMP #$01 : BNE .done
+    ; BIT $3A : BVS .done              ;if Y or B are already pressed
+    LDA $6C : BNE .done              ; if we are standing in a dooray or not
+
+    ; Link_CheckNewY_ButtonPress
+    JSR $B073 : BCC .done ; Check if we just pressed Y Button  
+      JSL CheckForBallChain
+      JSL Hookshot_Init
+      JSL BallChain_StartAnimationFlag
+      LDY.b #$03
+      LDA.b #$1F ; ANCILLA 1F
+      JSL $099B10 ; AncillaAdd_Hookshot
+      JSL TransferGFXinRAM
+
+
+  .done
+    CLC
+    RTS
 }
+
+warnpc $07A5D8
 
  ; Stalfos Mask
 org $07A64B
@@ -165,9 +215,9 @@ LinkItem_Quake:
   LDA $6C : BNE .done              ; if we are standing in a dooray or not
 
   ; Link_CheckNewY_ButtonPress
-  JSR $B073 : BCC .done ; Check if we just pressed Y Button  
+  JSR   $B073 : BCC .done ; Check if we just pressed Y Button  
   LDA.b #$13 : STA $012F
-  JSL NewBookCode
+  JSL   StalfosMask_Jump
   
 .done
 
