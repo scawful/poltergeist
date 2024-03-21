@@ -19,12 +19,12 @@ org $0288FD ; Replace a BEQ by a BRA
 ; org $0AE7F7 : dw $0090
 
 ; .fairy_rooms
-; org $0AE7F9 : dw $0089 ; ROOM 0089 - Eastern fairy room
+org $0AE7F9 : dw $004C ; ROOM 004C - Anti-Fairy Room
 ; org $0AE7FB : dw $00A7 ; ROOM 00A7 - Hera fairy room
 ; org $0AE7FD : dw $004F ; ROOM 004F - Ice Palace fairy room
 
 ; .fairy_room_replacements
-; org $0AE7FF : dw $00A9 ; ROOM 00A9 - Eastern big chest room
+org $0AE7FF : dw $005B ; ROOM 005B - Rectangle Floor Drop Room
 ; org $0AE801 : dw $0077 ; ROOM 0077 - Hera lobby
 ; org $0AE803 : dw $00BE ; ROOM 00BE - Ice Palace block switch room
 
