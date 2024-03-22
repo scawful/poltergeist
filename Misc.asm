@@ -160,7 +160,7 @@ org $05DEF8
 ; org $0ED58C : db $03, $02	; Palette 06
 ; org $0ED58E : db $13, $01	; Palette 07
 ; org $0ED590 : db $0B, $0C	; Palette 08
-org $0ED592 : db $03, $01	; Palette 09
+org $0ED592 : db $03, $06	; Palette 09
 ; org $0ED594 : db $07, $05	; Palette 0A
 ; org $0ED596 : db $11, $00	; Palette 0B
 ; org $0ED598 : db $09, $0B	; Palette 0C
