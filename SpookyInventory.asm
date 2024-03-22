@@ -70,15 +70,16 @@ pullpc
 ;World Map Disable (TEMP CODE)
 ;-------------------------------------------------------------------------------------
 
-pushpc
+;pushpc
 
+;Moved to DungeonMaps.asm
 ;org $0288FD ; Replace a BEQ by a BRA (dungeon map removed)
     ;db $80
 
 ;org $02A55E ; Replace a BEQ by a BRA (overworld map removed)
     ;db $80
 
-pullpc
+;pullpc
 
 ;-------------------------------------------------------------------------------------
 ;Sword and Shield Textbox Fix
