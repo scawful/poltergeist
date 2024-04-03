@@ -116,3 +116,22 @@ dw $0b00, $0b40, $0b00, $1342
 ; b313 b353 b813 b853 b40b b50b b90b ba0b
 ; a893 a8d3 bb0b a84b bc0b bd0b bf0b 744b
 ; a90b be0b becb a9cb be4b be0b a98b be8b
+
+; dw $0b00, $0b00, $0b93, $0b00 ; Room 21
+; dw $0b94, $1376, $0b74, $4b74 ; Room 31
+
+org $2191A8
+dw $0b00, $8b74, $0b97, $cb97
+dw $0b95, $1396, $0b00, $0b00, $0b74, $136f, $0b00, $0b00
+dw $0b98, $1399, $0b73, $0b00, $139b, $0b00, $0b9c, $0b9d
+dw $0b94, $0b00, $4b74, $0b00, $0b00, $0b00, $4b6f, $0b9f
+dw $0b97, $139e, $4b74, $0b00, $13a0, $0b94, $0ba1, $4b74
+dw $8b74, $136f, $0ba2, $0b00, $8b73, $0b00, $8b98, $13a3
+dw $13a4, $53a4, $0ba5, $4ba5, $8b74, $cb74, $1794, $13a6
+dw $13a7, $53a7, $13a8, $53a8, $0b00, $0b98, $0b00, $0b73
+dw $8b8e, $cb8e, $578f, $178f, $0ba9, $0b9a, $0baa, $0bab
+dw $0b00, $0bac, $0b00, $4b73, $4b51, $0b51, $0b00, $0b00
+dw $0bad, $0bae, $0baf, $0bb0, $13b1, $13b2, $0bb6, $0bb7
+dw $13b3, $53b3, $13b8, $53b8, $0bb4, $0bb5, $0bb9, $0bba
+dw $93a8, $d3a8, $0bbb, $4ba8, $0bbc, $0bbd, $0bbf, $4b74
+dw $0ba9, $0bbe, $cbbe, $cba9, $4bbe, $0bbe, $8ba9, $8bbe
