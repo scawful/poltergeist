@@ -99,7 +99,7 @@ dw $0b00, $0b40, $0b00, $1342
 ; 9b0b 9c0b 9b8b 9bcb 9d0b 9e0b 9f0b a00b
 ; a10b a20b a30b a40b a50b a60b a70b a80b
 ; 840b 844b a84b a80b a90b aa0b ab0b ac0b
-; 
+; ad0b ad4b ae13 ae53 af0b b00b b10b b20b
 ; -------------------------------------------------------------------------------
 ; Shadow Castle
 ; By
