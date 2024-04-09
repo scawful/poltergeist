@@ -39,30 +39,22 @@ org $0AE7FF : dw $005B ; ROOM 005B - Manor Rectangle Floor Drop Room
 ; .offsets
 org $0AEE5D : db $FF, $FF, $FF, $FF
 org $0AEE61 : db $08, $08, $08, $00
-org $0AEE65 : db $00, $00, $08, $00
-org $0AEE69 : db $08, $08, $08, $00
+org $0AEE65 : db $FF, $FF, $08, $00
+org $0AEE69 : db $04, $04, $08, $00
 org $0AEE6D : db $08, $08, $00, $08
 org $0AEE71 : db $08, $08, $08, $08
 org $0AEE75 : db $08, $00, $08, $00
 
 ; -------------------------------------------------------------------------------
-; dw $FFFF = N/A
-; dw $0001 = 2F
-; dw $0006 = 7F
-; dw $00FF = B1
-; dw $00FE = B2
-; dw $00F9 = B7
-; dw $0005 = 6F
-; dw $00FD = B3
 
 ; DungeonMap_BossRoomFloor:
 ; org $0AEE79 : dw $FFFF ; // - Sewers
 ; org $0AEE7B : dw $FFFF ; // - Hyrule Castle
 org $0AEE7D : dw $00FF   ; B1 - Pumpkin Patch (Eastern Palace)
-org $0AEE7F : dw $0001   ; 2F - Living spooM (Desert Palace)
-org $0AEE81 : dw $0006   ; 7F - Shadow Castle (Agahnim's Tower)
+org $0AEE7F : dw $00FF   ; 2F - Living spooM (Desert Palace)
+org $0AEE81 : dw $FFFF   ; // - Shadow Castle (Agahnim's Tower)
 ; org $0AEE83 : dw $00FF ; B1 - Swamp Palace
-org $0AEE85 : dw $00FF   ; B1 - Abandoned Mineshaft (Palace of Darkness)
+org $0AEE85 : dw $00FE   ; B1 - Abandoned Mineshaft (Palace of Darkness)
 ; org $0AEE87 : dw $00FF ; B1 - Misery Mire
 ; org $0AEE89 : dw $00FE ; B2 - Skull Woods
 ; org $0AEE8B : dw $00F9 ; B7 - Ice Palace
