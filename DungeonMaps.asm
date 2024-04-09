@@ -42,23 +42,31 @@ org $0AEE61 : db $08, $08, $08, $00
 org $0AEE65 : db $00, $00, $08, $00
 org $0AEE69 : db $08, $08, $08, $00
 org $0AEE6D : db $08, $08, $00, $08
-org $0AEE71 : db $04, $04, $08, $08
+org $0AEE71 : db $08, $08, $08, $08
 org $0AEE75 : db $08, $00, $08, $00
 
 ; -------------------------------------------------------------------------------
+; dw $FFFF = N/A
+; dw $0001 = 2F
+; dw $0006 = 7F
+; dw $00FF = B1
+; dw $00FE = B2
+; dw $00F9 = B7
+; dw $0005 = 6F
+; dw $00FD = B3
 
 ; DungeonMap_BossRoomFloor:
 ; org $0AEE79 : dw $FFFF ; // - Sewers
 ; org $0AEE7B : dw $FFFF ; // - Hyrule Castle
-org $0AEE7D : dw $0001 ; 2F - Pumpkin Patch (Eastern Palace)
-org $0AEE7F : dw $0001 ; 2F - Living spooM (Desert Palace)
-org $0AEE81 : dw $0006 ; 7F - Shadow Castle (Agahnim's Tower)
+org $0AEE7D : dw $0001   ; 2F - Pumpkin Patch (Eastern Palace)
+org $0AEE7F : dw $0001   ; 2F - Living spooM (Desert Palace)
+org $0AEE81 : dw $0006   ; 7F - Shadow Castle (Agahnim's Tower)
 ; org $0AEE83 : dw $00FF ; B1 - Swamp Palace
-org $0AEE85 : dw $00FF ; B1 - Abandoned Mineshaft (Palace of Darkness)
+org $0AEE85 : dw $00FF   ; B1 - Abandoned Mineshaft (Palace of Darkness)
 ; org $0AEE87 : dw $00FF ; B1 - Misery Mire
 ; org $0AEE89 : dw $00FE ; B2 - Skull Woods
 ; org $0AEE8B : dw $00F9 ; B7 - Ice Palace
-org $0AEE8D : dw $0005 ; 6F - Haunted Manor (Tower of Hera)
+org $0AEE8D : dw $00FE   ; B2 - Haunted Manor (Tower of Hera)
 ; org $0AEE8F : dw $00FF ; B1 - Thieves' Town
 ; org $0AEE91 : dw $00FD ; B3 - Turtle Rock
 ; org $0AEE93 : dw $0006 ; 7F - Ganon's Tower
