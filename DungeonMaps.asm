@@ -58,7 +58,7 @@ org $0AEE75 : db $08, $00, $08, $00
 ; DungeonMap_BossRoomFloor:
 ; org $0AEE79 : dw $FFFF ; // - Sewers
 ; org $0AEE7B : dw $FFFF ; // - Hyrule Castle
-org $0AEE7D : dw $0001   ; 2F - Pumpkin Patch (Eastern Palace)
+org $0AEE7D : dw $00FF   ; B1 - Pumpkin Patch (Eastern Palace)
 org $0AEE7F : dw $0001   ; 2F - Living spooM (Desert Palace)
 org $0AEE81 : dw $0006   ; 7F - Shadow Castle (Agahnim's Tower)
 ; org $0AEE83 : dw $00FF ; B1 - Swamp Palace
