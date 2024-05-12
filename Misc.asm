@@ -150,4 +150,28 @@ org $05DEF8
 
 ; ==============================================================================
 
+; OverworldSpritesPaletteSet:
+; org $0ED580 : db $FF, $FF	; Palette 00
+; org $0ED582 : db $03, $0A	; Palette 01
+; org $0ED584 : db $03, $06	; Palette 02
+; org $0ED586 : db $03, $01	; Palette 03
+; org $0ED588 : db $00, $02	; Palette 04
+; org $0ED58A : db $03, $0E	; Palette 05
+; org $0ED58C : db $03, $02	; Palette 06
+; org $0ED58E : db $13, $01	; Palette 07
+; org $0ED590 : db $0B, $0C	; Palette 08
+org $0ED592 : db $03, $06	; Palette 09
+; org $0ED594 : db $07, $05	; Palette 0A
+; org $0ED596 : db $11, $00	; Palette 0B
+; org $0ED598 : db $09, $0B	; Palette 0C
+; org $0ED59A : db $0F, $05	; Palette 0D
+; org $0ED59C : db $03, $05	; Palette 0E
+; org $0ED59E : db $03, $07	; Palette 0F
+; org $0ED5A0 : db $0F, $02	; Palette 10
+; org $0ED5A2 : db $0A, $02	; Palette 11
+; org $0ED5A4 : db $05, $01	; Palette 12
+; org $0ED5A6 : db $0C, $0E	; Palette 13
+
+; ==============================================================================
+
 pullpc

@@ -299,7 +299,7 @@ Overlord_SpecialCrumbleTilePath:
     db $00, $00, $00, $00, $04, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00 ; B0
     db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00 ; C0
     db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00 ; D0
-    db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00 ; E0
+    db $00, $05, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00 ; E0
     db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00 ; F0
 
     TilePathPtrs:
@@ -308,6 +308,7 @@ Overlord_SpecialCrumbleTilePath:
     dw TilePath02
     dw TilePath03
     dw TilePath04
+    dw TilePath05
 
 ;================================================
 ; Commands can be
@@ -403,6 +404,53 @@ TilePath04:
     db !left, !down, !left, !up, !left, !down, !left, !up, !left, !down
     db !down, !down, !down, !down, !down, !down, !down, !down, !left, !down, !down, !down, !down
     db $3F<<2, !left, !left
+    db $FF
+
+; Shadow Castle Random Drop
+TilePath05:
+    db $00 ; Initial Delay
+    db !right, $FE, 1<<2, !right, $FE, $08<<2, !down
+
+    db $FE, 1<<2, !left, !down, $FE, $08<<2
+
+    db !right, $FE, 1<<2, !right, $FE, $08<<2, !down
+
+    db $FE, 1<<2, !left, $FE, $08<<2, !down
+
+    db $FE, 1<<2, !left, !left, $FE, $08<<2, !right
+
+    db $FE, 1<<2, !right, !right, !down, $FE, $08<<2, !down
+
+    db $FE, 1<<2, !left, !left, $FE, $08<<2, !down
+
+    db !right, !down
+
+    db $FE, 1<<2, !left, !left, $FE, $08<<2, !down
+
+    db $FE, 1<<2, !right, !right, !right, $FE, $08<<2, !down
+
+    db !left, $FE, 1<<2, !left, $FE, $08<<2, !left, $FE, 1<<2, !down, $FE, $08<<2
+
+    db !right, $FE, 1<<2, !right, !down, $FE, $08<<2
+
+    db !right, !down
+
+    db $FE, 1<<2, !left, !left, $FE, $08<<2, !down
+
+    db $FE, 1<<2, !right, $FE, $08<<2, !down
+
+    db $FE, 1<<2, !left, !left, $FE, $08<<2, !down
+
+    db $FE, 1<<2, !right, $FE, $08<<2, !right, $FE, 1<<2, !right, $FE, $08<<2, !down
+
+    db $FE, 1<<2, !left, !left, $FE, $08<<2, !left, $FE, 1<<2, !down, $FE, $08<<2
+
+    db !right, $FE, 1<<2, !right, !right, $FE, $08<<2, !down
+
+    db !left, $FE, 1<<2, !left, $FE, $08<<2, !down
+
+    db $FE, 1<<2, !right, $FE, $08<<2, !down
+
     db $FF
 
 ; ==============================================================================
