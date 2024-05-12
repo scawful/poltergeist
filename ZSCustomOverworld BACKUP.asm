@@ -32,9 +32,6 @@ org $02ABBE
 org $02FD0D
     LoadSubscreenOverlay:
 
-org $02FD8A
-    LoadGearPalettes_bunny:
-
 
 org $099EFC
     Tagalong_Init:
@@ -54,6 +51,9 @@ org $0ED5A8
 
 org $0ED618
     Palette_SetOwBgColor_Long:
+
+org $0ED6DD
+    LoadGearPalettes_bunny:
 
 
 org $1BEC77
