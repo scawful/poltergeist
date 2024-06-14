@@ -24,7 +24,7 @@ NewTargetCheck:
 {
     PHB : PHK : PLB
 
-    LDA $0E30, X : CMP.b #$01 : BCS .newTarget
+    LDA.w $0E30, X : CMP.b #$01 : BCS .newTarget
 
         PLB
     
@@ -35,12 +35,12 @@ NewTargetCheck:
     .newTarget
 
     ; Check if sprite is active (pause menu, etc...)
-    LDA $0D80, X : BEQ .run
-    LDA $11 : BNE .inMenu
-    LDA $10 : CMP #$0E : BEQ .inMenu
-    LDA $5D : CMP #$08 : BEQ .inMenu ; in medallion cut scene
-              CMP #$09 : BEQ .inMenu ; in medallion cut scene
-              CMP #$0A : BEQ .inMenu ; in medallion cut scene
+    LDA.w $0D80, X : BEQ .run
+    LDA.b $11 : BNE .inMenu
+    LDA.b $10 : CMP.b #$0E : BEQ .inMenu
+    LDA.b $5D : CMP.b #$08 : BEQ .inMenu ; in medallion cut scene
+                CMP.b #$09 : BEQ .inMenu ; in medallion cut scene
+                CMP.b #$0A : BEQ .inMenu ; in medallion cut scene
 
         .run
 
@@ -57,7 +57,7 @@ NewTargetCheck:
 
 NewTarget_Main:
 {
-    LDA $0D80, X
+    LDA.w $0D80, X
 	JSL UseImplicitRegIndexedLocalJumpTable
         dw NewTarget_Prep       ; 0x00
         dw NewTarget_Normal     ; 0x01
@@ -69,7 +69,7 @@ NewTarget_Prep: ; 0x00
 {
     LDA.b #$03 : STA.w $0F60, X ; Presist and hitbox properties
 
-    INC $0D80, X ; Jump to NewTarget_Normal
+    INC.w $0D80, X ; Jump to NewTarget_Normal
 
     RTS
 }
