@@ -165,7 +165,7 @@ Credits_FadeColorAndBeginAnimating:
 
 ; ==============================================================================
 
-; Shift he bg down a different amount than vanilla.
+; Shift the bg down a different amount than vanilla.
 org $0EBD04
     dw $FFC0 ;$FFB8
 
