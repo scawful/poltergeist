@@ -12,6 +12,26 @@
 
 
 ; ===============================================================================
+; Dungeon Map Level Title GFX
+; ===============================================================================
+
+org $0AE196 : db $FF ; Sewers
+org $0AE197 : db $FF ; Hyrule Castle
+org $0AE198 : db $00 ; Eastern Palace
+org $0AE199 : db $02 ; Desert Palace
+org $0AE19A : db $FF ; Agahnim's Tower
+org $0AE19B : db $FF ; Swamp Palace
+org $0AE19C : db $06 ; Palace of Darkness
+org $0AE19D : db $FF ; Misery Mire
+org $0AE19E : db $FF ; Skull Woods
+org $0AE19F : db $FF ; Ice Palace
+org $0AE1A0 : db $04 ; Tower of Hera
+org $0AE1A1 : db $FF ; Thieves' Town
+org $0AE1A2 : db $FF ; Turtle Rock
+org $0AE1A3 : db $FF ; Ganon's Tower
+
+
+; ===============================================================================
 ; DungeonMap_DrawRoomMarkers
 ; ===============================================================================
 
@@ -119,7 +139,7 @@ dw $0b00, $0b40, $0b00, $1342
 
 ; ===============================================================================
 ; Abandoned Mineshaft
-; By Jeimuzu & Letterbomb
+; By Jeimuzu with a few minor tweaks by Letterbomb
 ; ===============================================================================
 
 org $219280
