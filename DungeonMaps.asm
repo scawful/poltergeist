@@ -19,7 +19,7 @@ org $0AE196 : db $FF ; Sewers
 org $0AE197 : db $FF ; Hyrule Castle
 org $0AE198 : db $00 ; Eastern Palace
 org $0AE199 : db $02 ; Desert Palace
-org $0AE19A : db $FF ; Agahnim's Tower
+org $0AE19A : db $08 ; Agahnim's Tower
 org $0AE19B : db $FF ; Swamp Palace
 org $0AE19C : db $06 ; Palace of Darkness
 org $0AE19D : db $FF ; Misery Mire
