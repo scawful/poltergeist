@@ -15,20 +15,20 @@
 ; Dungeon Map Level Title GFX
 ; ===============================================================================
 
-org $0AE196 : db $FF ; Sewers
-org $0AE197 : db $FF ; Hyrule Castle
-org $0AE198 : db $00 ; Eastern Palace
-org $0AE199 : db $02 ; Desert Palace
-org $0AE19A : db $08 ; Agahnim's Tower
-org $0AE19B : db $FF ; Swamp Palace
-org $0AE19C : db $06 ; Palace of Darkness
-org $0AE19D : db $FF ; Misery Mire
-org $0AE19E : db $FF ; Skull Woods
-org $0AE19F : db $FF ; Ice Palace
-org $0AE1A0 : db $04 ; Tower of Hera
-org $0AE1A1 : db $FF ; Thieves' Town
-org $0AE1A2 : db $FF ; Turtle Rock
-org $0AE1A3 : db $FF ; Ganon's Tower
+org $0AE196 : db $FF ; UNUSED
+org $0AE197 : db $FF ; UNUSED
+org $0AE198 : db $00 ; Pumpkin Patch
+org $0AE199 : db $02 ; Living spooM
+org $0AE19A : db $08 ; Shadow Castle
+org $0AE19B : db $FF ; UNUSED
+org $0AE19C : db $06 ; Abandoned Mineshaft
+org $0AE19D : db $FF ; UNUSED
+org $0AE19E : db $FF ; UNUSED
+org $0AE19F : db $FF ; UNUSED
+org $0AE1A0 : db $04 ; Haunted Manor
+org $0AE1A1 : db $FF ; UNUSED
+org $0AE1A2 : db $FF ; UNUSED
+org $0AE1A3 : db $FF ; UNUSED
 
 
 ; ===============================================================================
@@ -82,6 +82,26 @@ org $0AEE8D : dw $00FE   ; B2 - Haunted Manor (Tower of Hera)
 ; org $0AEE8F : dw $00FF ; B1 - Thieves' Town
 ; org $0AEE91 : dw $00FD ; B3 - Turtle Rock
 ; org $0AEE93 : dw $0006 ; 7F - Ganon's Tower
+
+
+; ==================================================================================================
+; DungeonMapFloorCountData:
+; ==================================================================================================
+
+org $0AF5D9 : db $10, $00 ; UNUSED
+org $0AF5DB : db $10, $00 ; UNUSED
+org $0AF5DD : db $11, $00 ; Pumpkin Patch
+org $0AF5DF : db $11, $00 ; Living spooM
+org $0AF5E1 : db $81, $01 ; Shadow Castle
+org $0AF5E3 : db $10, $00 ; UNUSED
+org $0AF5E5 : db $22, $00 ; Abandoned Mineshaft
+org $0AF5E7 : db $10, $00 ; UNUSED
+org $0AF5E9 : db $10, $00 ; UNUSED
+org $0AF5EB : db $10, $00 ; UNUSED
+org $0AF5ED : db $22, $00 ; Haunted Manor
+org $0AF5EF : db $10, $00 ; UNUSED
+org $0AF5F1 : db $10, $00 ; UNUSED
+org $0AF5F3 : db $10, $00 ; UNUSED
 
 
 ; ===============================================================================
