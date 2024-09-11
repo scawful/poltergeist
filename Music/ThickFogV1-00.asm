@@ -1,4 +1,4 @@
-;=====================================================================================
+; =================================================================================
 ; The Legend of Zelda: A Link to the Past (Custom Music Track)
 ; Pocky & Rocky - Thick Fog Theme v1.00
 ; Original Song by Hiroyuki

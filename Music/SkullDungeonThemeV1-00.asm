@@ -1,4 +1,4 @@
-;=====================================================================================
+; =================================================================================
 ; The Legend of Zelda: A Link to the Past (Custom Music Track)
 ; The Legend of Zelda: Oracle of Ages - Skull Dungeon Theme v1.00
 ; Original Song by Kyopi, M-Adachi

@@ -1,5 +1,5 @@
 
-;=====================================================================================
+; =================================================================================
 ; The Legend of Zelda: A Link to the Past (Custom Music Track)
 ; Etrian Odyssey III: The Drowned City - Calling That Detestable Name Theme v1.00
 ; Original Song by Yuzo Koshiro
@@ -7,7 +7,7 @@
 ; ASM Framework by Zarby89
 ; Ported by Letterbomb
 ; Size 0x479
-;=====================================================================================
+; =================================================================================
 
 lorom
 

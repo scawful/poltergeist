@@ -1,11 +1,11 @@
-;=====================================================================================
+; =================================================================================
 ; The Legend of Zelda: A Link to the Past (Custom Music Track)
 ; The Legend of Zelda: Oracle of Ages - City Symmetry Theme v1.00
 ; Original Song by Kyopi, M-Adachi
 ; Midi by FireMario
 ; ASM Framework by Zarby89
 ; Ported by Letterbomb
-;=====================================================================================
+; =================================================================================
 
 org $1AB7D5; Sections?
 CitySymmetryTheme:

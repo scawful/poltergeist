@@ -1,4 +1,4 @@
-;=====================================================================================
+; =================================================================================
 ; The Legend of Zelda: A Link to the Past (Custom Music Track)
 ; The Legend of Zelda: Oracle of Seasons - Subrosia Theme v1.00
 ; Original Song by Kyopi, M-Adachi
@@ -6,7 +6,7 @@
 ; ASM Framework by Zarby89
 ; Ported by Letterbomb
 ; Size Small Enough
-;=====================================================================================
+; =================================================================================
 
 org $1AA763; Sections?
 SubrosiaTheme:

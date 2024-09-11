@@ -1,4 +1,4 @@
-;=====================================================================================
+; =================================================================================
 ; The Legend of Zelda: A Link to the Past (Custom Music Track)
 ; The Legend of Zelda: Oracle of Ages - Jabu Jabu's Belly Theme v1.00
 ; Original Song by Kyopi, M-Adachi
@@ -6,7 +6,7 @@
 ; ASM Framework by Zarby89
 ; Ported by Letterbomb
 ; Size 0xE9
-;=====================================================================================
+; =================================================================================
 
 org $1BA308; Sections?
 JabuJabuBellyTheme:

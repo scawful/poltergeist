@@ -1,4 +1,4 @@
-;=====================================================================================
+; =================================================================================
 ; The Legend of Zelda: A Link to the Past (Custom Music Track)
 ; The Legend of Zelda: The Adventure of Link - Palace Theme v1.01
 ; Original Song by Akito Nakatsuka
@@ -6,7 +6,7 @@
 ; ASM Framework by Zarby89
 ; Ported by Letterbomb
 ; Size 0x478
-;=====================================================================================
+; =================================================================================
 
 lorom
 

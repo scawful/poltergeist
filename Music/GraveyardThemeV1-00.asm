@@ -1,4 +1,4 @@
-;=====================================================================================
+; =================================================================================
 ; The Legend of Zelda: A Link to the Past (Custom Music Track)
 ; The Legend of Zelda: Four Swords Adventures - Graveyard Theme v1.00
 ; Original Song by Koji Kondo
@@ -6,7 +6,7 @@
 ; ASM Framework by Zarby89
 ; Ported by Letterbomb
 ; Size 0x27A
-;=====================================================================================
+; =================================================================================
 
 org $1ABE66; Sections?
 GraveyardTheme:
