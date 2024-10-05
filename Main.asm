@@ -96,12 +96,12 @@ incsrc sage.asm
 incsrc FluteMap.asm
 incsrc AllhallowMusic.asm
 incsrc WarpBetweenFloors.asm
-incsrc CollectItemsWithSword.asm
 warnpc $39FFFF ; If it reaches the warning move some code in next bank.
 
 org $3A8000
 
 incsrc CastleBGGFX.asm
+incsrc CollectItemsWithSword.asm
 
 warnpc $3AFFFF ; If it reaches the warning move some code in next bank.
 
