@@ -951,6 +951,8 @@ Hookshot_Init:
 
 ; =========================================================
 
+LinkHop_FindArbitraryLandingSpot = $07E370
+
 ; Bug fix to clear $0112 when the goldstar grabs something
 ; Also will be where we prevent dragging with the goldstar
 Goldstar_CheckForPreventDrag:
