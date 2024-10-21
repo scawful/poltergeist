@@ -2,169 +2,9 @@
 ; Originally from the all in patch by Conn
 ; Restored by scawful with help from Zarby
 
-; 22C700
-
-; 22D2B4
-Routine_22D2B4:
-{
-  LDA $7EF342
-  CMP #$02
-  BEQ + ; $22D2BD
-  RTL
-+
-  REP #$30
-  LDA #$2556
-  STA $16D8
-  LDA #$255E
-  STA $16DA
-  LDA #$255B
-  STA $16DC
-  LDA #$2553
-  STA $16DE
-  LDA #$2562
-  STA $16E0
-  LDA #$2563
-  STA $16E2
-  LDA #$2550
-  STA $16E4
-  LDA #$2561
-  STA $16E6
-  SEP #$30
-  RTL
-}
-
-; 22D100
-; db $FF $FF $FF $FF $FF $FF $FF $F8
-; db $FC $E3 $FB $C4 $F7 $CB $EF $97
-; db $B6 $FF $DD $E3 $FF $C5 $F7 $9A
-; db $BF $C8 $7B $C5 $ED $B7 $FF $DF
-; db $EF $DF $F7 $CF $FB $E7 $FD $F3
-; db $FE $F9 $FD $FF $FE $FF $FF $FF
-; db $FF $AF $FF $D7 $FF $EB $FF $F5
-; db $FF $AB $FF $57 $FF $AF $FF $FF
-
-; 22D170 doesnt seem to execute 
-  ; REP #$30
-  ; LDA $EA
-  ; AND #$00FF
-  ; CMP #$0018
-  ; BNE $22D181
-  ; SEP #$30
-  ; LDA #$02
-  ; RTL
-
-; 22D181 Also doest seem to execute 
-  ; LDA #$7B80
-  ; STA $2116
-  ; LDA #$D100
-  ; STA $4302
-  ; LDA #$1801
-  ; STA $4300
-  ; SEP #$30
-  ; LDA $4212
-  ; AND #$80
-  ; BEQ $22D195
-  ; LDA #$80
-  ; STA $2115
-  ; LDA #$22
-  ; STA $4304
-  ; LDA #$20
-  ; STA $4305
-  ; LDA #$01
-  ; STA $420B
-  ; REP #$30
-  ; LDA #$7B90
-  ; STA $2116
-  ; LDA #$1801
-  ; STA $4300
-  ; LDA #$D120
-  ; STA $4302
-  ; SEP #$30
-  ; LDA #$80
-  ; STA $2115
-  ; LDA #$22
-  ; STA $4304
-  ; LDA #$20
-  ; STA $4305
-  ; LDA #$01
-  ; STA $420B
-  ; LDA #$02
-  ; RTL
-
-; 22D2A0 doesnt execute 
-; menu related
-  ; LDA #$22
-  ; STA $0116
-  ; LDA $0202
-  ; CMP #$0B
-  ; BNE $22D2AF
-  ; JMP $D8B0
-  ; CMP #$03
-  ; BEQ $22D2B4
-  ; RTL
-  
-; 22D2B4
-  ; LDA $7EF342
-  ; CMP #$02
-  ; BEQ $22D2BD
-  ; RTL
-; 22D2BD
-  ; REP #$30
-  ; LDA #$2556
-  ; STA $16D8
-  ; LDA #$255E
-  ; STA $16DA
-  ; LDA #$255B
-  ; STA $16DC
-  ; LDA #$2553
-  ; STA $16DE
-  ; LDA #$2562
-  ; STA $16E0
-  ; LDA #$2563
-  ; STA $16E2
-  ; LDA #$2550
-  ; STA $16E4
-  ; LDA #$2561
-  ; STA $16E6
-  ; SEP #$30
-  ; RTL
-
-; 22D310 
-  ; STA $7EC7BA
-  ; LDA $0202
-  ; AND #$00FF
-  ; CMP #$000B
-  ; BNE $22D322
-  ; JMP $DED0
-  ; CMP #$0004
-  ; BNE $22D32A
-  ; JMP $D390
-  ; CMP #$0002
-  ; BEQ $22D335
-  ; CMP #$0003
-  ; BEQ $22D35F
-  ; RTL
-
-; 22D35F HUD RELATED NOT NECESSARY
-  ; LDA $7EF342
-  ; AND #$00FF
-  ; CMP #$0002
-  ; BEQ $22D36C
-  ; RTL
-; 22D36C
-  ; LDA #$20F5
-  ; STA $7EC778
-  ; LDA #$2971
-  ; STA $7EC77A
-  ; LDA #$2D72
-  ; STA $7EC7B8
-  ; LDA #$2973
-  ; STA $7EC7BA
-  ; RTL
-
 pushpc
 
-org $348000
+org $348000 ; Not sure why this was chosen, feel free to change/remove
 TransferGFXinRAM:
 {
   PHX ; keep X
@@ -180,57 +20,24 @@ TransferGFXinRAM:
   PLP
   PLX
   RTL
+
+  morningstargfx:
+    incbin morningstar.bin
 }
-; TransferGFXinRAM:
-; {
-;   PHX ; keep X
-;   PHP ; keep processor byte
-;   REP #$20 ; 16bit is a bit faster
 
-;   LDX #$80
-;   --
-;   LDA.l morningstargfx, X : STA.l $7E9A00, X
-;   DEX : DEX
-;   BPL --
-
-;   LDX #$80
-;   --
-;   LDA.l morningstargfx, X : STA.l $7E99C0, X
-;   DEX : DEX
-;   BPL --
-
-;   PLP
-;   PLX
-;   RTL
-; }
-morningstargfx:
-  incbin morningstar.bin
-
+; OAM Draw Pattern for spikeball gfx
 org $0085C4
-dw $0040
+  dw $0040
 
 pullpc
-
-; 22D470
-  LDA $7EF342
-  CMP #$02
-  BNE + ; $A2D47C
-  LDA #$03
-  BRA $A2D47E
-+
-  JSL $06ED25
-  RTL
-
 
 ; 22D4A0
 ; Hooked into LinkItem_Hookshot @ _07AB5A
 CheckForBallChain:
 {
   LDA #$13 : STA $5D ; Using hookshot state
-  ; LDA $7EF342 : CMP #$02 ; Check ball chain srm
+  ; LDA.b #$FF : STA $7A ; Start rotation timer (ORACLE)
   JMP LinkItem_BallChain_GfxTransfer ; $D520 
-  
-
   RTL
 }
 
@@ -311,17 +118,12 @@ LinkItem_BallChain_GfxTransfer:
   ; 22D553
   .transfer_gfx_sideways
     REP #$30
-    LDA #$0040 
-    LDX #GFX_D600 ; $D600
-    LDY #$9B00
+    LDA #$0040 : LDX #GFX_D600 : LDY #$9B00
     MVN $39, $7E
-    LDA #$0040 
-    LDX #GFX_D640 ; $D640 
-    LDY #$9B80
+    LDA #$0040 : LDX #GFX_D640 : LDY #$9B80
     MVN $39, $7E
     PLB
-    LDA #GFX_D6C0 ; #$D6C0 
-    STA $4302
+    LDA #GFX_D6C0 : STA $4302
     
   ; 22D574
   .transfer_handle_and_links
@@ -488,6 +290,7 @@ AncillaDraw_Hookshot_BallChain_Properties:
 
 ; =========================================================
 ; Start Zarby
+
 HookMaskCheck:
   LDA.w $0202 : AND.w #$00FF : CMP.w #$0008 : BNE .notMask
   LDA.w $0109
@@ -510,13 +313,13 @@ JSL HookMaskCheck
 BRA bralabel
 
 org $0DABB0
-bralabel:
+  bralabel:
 
 ; org $008542
 ; dw $A180, $A1A0, $A1C0, $A1E0
 org $008542
-dw $A180, $A1A0, $A180, $A1A0
-dw $A1C0, $A1C0, $A1E0, $A1E0
+  dw $A180, $A1A0, $A180, $A1A0
+  dw $A1C0, $A1C0, $A1E0, $A1E0
 
 ; End Zarby 
 ; =========================================================
@@ -873,54 +676,61 @@ BallChain_SpinAncilla:
   SEP #$30
   RTS
 }
+; =========================================================
+
+struct AncillaAdd_HookshotData $099AF8
+  .speed_y: skip 4
+  .speed_x: skip 4
+  .offset_y: skip 8
+  .offset_x: skip 8
+endstruct
 
 ; 22DBD0
 Routine_22DBD0:
 {
   STZ $7A ; Ball Chain Timer
   JSR ClearAncillaVariables ; $DC70
-  LDA $2F : CMP #$00 : BNE +
-  LDA #$C0 : STA $0C26 
-+
-  CMP #$02 : BNE ++
-  LDA #$40 : STA $0C26 
-++
-  CMP #$04 : BNE +++
-  LDA #$C0 : STA $0C30 
-+++
-  CMP #$06 : BNE ++++
-  LDA #$40 : STA $0C30
-++++
+  ; Check Link direction
+  LDA $2F  : CMP #$00 : BNE .not_up
+    LDA #$C0 : STA $0C26 ; Ancilla4 Y Axis Velocity
+  .not_up
+  CMP #$02 : BNE .not_down
+    LDA #$40 : STA $0C26 ; Ancilla4 Y Axis Velocity
+  .not_down
+  CMP #$04 : BNE .not_left
+    LDA #$C0 : STA $0C30 ; Ancilla4 X Axis Velocity
+  .not_left
+  CMP #$06 : BNE .not_right
+    LDA #$40 : STA $0C30 ; Ancilla4 X Axis Velocity
+  .not_right
   SEP #$20
-  STZ $0C58
-  STZ $0C62
-  STZ $0C54
+  STZ $0C58 ; Ancilla4 Misc
+  STZ $0C62 ; Ancilla4 hookshoot extension
+  STZ $0C54 ; Ancilla0 Misc
   REP #$20
 
   LDA $2F : LSR : STA $0C76
   ASL : TAX
-  LDA $20 : CLC
-  ADC $099B00,X ; AncillaAdd_Hookshot_offset_y table
-  STA $00
-  STA $04
-  LDA $22 : CLC
-  ADC $099B08,X ; AncillaAdd_Hookshot_offset_x table
+
+  LDA $20 : CLC : ADC AncillaAdd_HookshotData.offset_y, X
+  STA $00 : STA $04
+
+  LDA $22 : CLC : ADC AncillaAdd_HookshotData.offset_x, X
   STA $02 : STA $06
+
   SEP #$30
-  LDA $00 : STA $0BFE
-  LDA $01 : STA $0C12
-  LDA $02 : STA $0C08
-  LDA $03 : STA $0C1C
-  LDX #$06 : LDA Hookshot_box_size_y,X ; hookshot box size y table 
+  LDA $00 : STA $0BFE : LDA $01 : STA $0C12 ; Ancilla4 Y
+  LDA $02 : STA $0C08 : LDA $03 : STA $0C1C ; Ancilla4 X
+  LDX #$06 : LDA Hookshot_box_size_y,X ; hookshot box size y table
   SEP #$20
-  JML $08BFD0 ; Jumps into AncillaDraw_HookshotChain before Hookshot_CheckProximityToLink
+  JML $08BFD0 ; AncillaDraw_HookshotChain before Hookshot_CheckProximityToLink
 }
 
-pushpc
+; =========================================================
 
+pushpc
 org $08BDFD
   JML HookshotOrBallChain_Extending_ignore_collision
-
 pullpc
 
 ; 22DC50
@@ -930,10 +740,9 @@ HookshotOrBallChain_Extending_ignore_collision:
 {
   ; Ball Chain Timer
   LDA $7A  : CMP #$00 : BNE + ;$22DC5E
-  JSL Hookshot_CheckTileCollision ; $07D576
-
-  JML $08BE01 ; Hookshot_Extending_ignore_collision continue
-+ ; 22DC5E
+    JSL Hookshot_CheckTileCollision ; $07D576
+    JML $08BE01 ; Hookshot_Extending_ignore_collision continue
+  + ; 22DC5E
   JML $08BEDC ; AncillaDraw_Hookshot
 }
 
@@ -971,53 +780,47 @@ BallChain_SFX_Control:
   RTL
 }
 
+; =========================================================
 ; 22DCA0
+; SFX Pan flags?
+
 Routine_22DCA0:
 {
-  LDA $7A
-  CMP #$00
-  BNE + ;$A2DCAB
-  LDA $0DBB5B,X
-  RTL
-+
+  LDA $7A : CMP #$00 : BNE + ;$A2DCAB
+    LDA $0DBB5B, X
+    RTL
+  +
   LDA #$00
   RTL
 }
 
-;; 22DD90
+; =========================================================
+; 22DD90
+
 CheckAndClearAncillaId:
 {
   SEP #$30
   ; Check if hookshot ancillae in this slot
   LDA $0C4A : CMP #$1F : BEQ + ; $22DDC9
-  LDA $0C4C : CMP #$1F : BEQ ++ ; $22DDB1
-  LDA $0C4D : CMP #$1F : BEQ +++ ; $22DDB9
-  LDA $0C4B : CMP #$1F : BEQ ++++ ; $22DDC1
-  LDA $7A ; Ball Chain Timer
+    LDA $0C4C : CMP #$1F : BEQ ++ ; $22DDB1
+      LDA $0C4D : CMP #$1F : BEQ +++ ; $22DDB9
+        LDA $0C4B : CMP #$1F : BEQ ++++ ; $22DDC1
+          LDA $7A ; Ball Chain Timer
+          RTS
+  ++ ; 22DDB1
+  STZ $0C4C : LDA $7A
   RTS
-++ ; 22DDB1
-  NOP
-  NOP
-  STZ $0C4C
-  LDA $7A
+  +++ ; 22DDB9
+  STZ $0C4D : LDA $7A
   RTS
-+++ ; 22DDB9
-  NOP
-  NOP
-  STZ $0C4D
-  LDA $7A
+  ++++ ; 22DDC1
+  STZ $0C4B : LDA $7A
   RTS
-++++ ; 22DDC1
-  NOP
-  NOP
-  STZ $0C4B
-  LDA $7A
-  RTS
-+ ; 22DDC9
-  STZ $0C4A
-  LDA $7A
+  + ; 22DDC9
+  STZ $0C4A : LDA $7A
   RTS
 }
+
 
 ; 22E5A0
 ; Checks for the Somaria block before moving on
@@ -1028,19 +831,19 @@ Routine_22E5A0:
 .22E5A5 ; 22E5A5
   LDA $0C4C : CMP #$2C : BNE + ; $22E5B2
   INC $0C4C
-  JMP $E5DB
+  ;JMP $E5DB
 + ; 22E5B2
   LDA $0C4D : CMP #$2C : BNE ++ ; $22E5BF
   INC $0C4D
-  JMP $E5DB
+  ;JMP $E5DB
 ++ ; 22E5BF
   LDA $0C4E : CMP #$2C : BNE +++ ; $22E5CC
   INC $0C4E
-  JMP $E5DB
+  ;JMP $E5DB
 +++ ; 22E5CC
   LDA $0C4F : CMP #$2C : BNE ++++ ; $22E5D9
   INC $0C4F
-  JMP $E5DB
+  ;JMP $E5DB
 ++++ ; 22E5D9
   BRA +++++ ; $22E5E0
 
@@ -1049,101 +852,62 @@ Routine_22E5A0:
   RTS
 }
 
-; 22E5F0 doesnt execute?
-Routine_22E5F0:
-{
-  LDA $7EF33C
-  BNE + ;$22E5F7
-  RTL
-+ ; 22E5F7
-  LDA $4D
-  BEQ ++ ; $22E5FC
-  RTL
-++ ; 22E5FC
-  JMP $E108
-}
-
-; 22E700
-; Hooked into NMI_ReadJoypads @ 0083E7
-  STA $F6
-  STY $FA
-  REP #$30
-  LDA $7EE000
-  DEC
-  BNE $22E721
-  LDA $7EF339
-  INC
-  CMP #$1770
-  BCC $22E71A
-  LDA #$0000
-  STA $7EF339
-  LDA #$0E10
-  STA $7EE000
-  SEP #$30
-  RTL
-
-
+; =========================================================
 ;22EE80
+; TODO: Handle the somaria blast case, these JMPs are invalid.
+
 CheckForSomariaBlast:
 {
-  LDA $0300
-  BEQ + ; $22EE88
-  JMP $E5DB
-; 22EE88
-+
-  LDA $0C4A
-  CMP #$01
-  BNE ++ ; $22EE92
-  JMP $EEC0
-; 22EE92
-++
-  LDA $0C4B
-  CMP #$01
-  BNE +++ ; $22EE9C
-  JMP $EEC0
-; 22EE9C
-+++
-  LDA $0C4C
-  CMP #$01
-  BNE ++++ ; $22EEA6
-  JMP $EEC0
-; 22EEA6
-++++
-  LDA $0C4D
-  CMP #$01
-  BNE +++++ ; $22EEB0
-  JMP $EEC0
-; 22EEB0
-+++++
-  LDA $0C4E
-  CMP #$01
-  BNE ++++++ ; $22EEBA
-  JMP $EEC0
-; 22EEBA
-++++++
-  JMP Routine_22E5A0_22E5A5 ; $E5A5
+  LDA $0300 : BEQ + ; $22EE88
+  ;JMP $E5DB
+
+  + ; 22EE88
+  LDA $0C4A : CMP #$01 : BNE ++ ; $22EE92
+  ;JMP $EEC0
+
+  ++ ; 22EE92
+  LDA $0C4B : CMP #$01 : BNE +++ ; $22EE9C
+  ;JMP $EEC0
+
+  +++ ; 22EE9C
+  LDA $0C4C : CMP #$01 : BNE ++++ ; $22EEA6
+  ;JMP $EEC0
+
+  ++++ ; 22EEA6
+  LDA $0C4D : CMP #$01 : BNE +++++ ; $22EEB0
+  ;JMP $EEC0
+
+  +++++ ; 22EEB0
+  LDA $0C4E : CMP #$01 : BNE ++++++ ; $22EEBA
+  ;JMP $EEC0
+
+  ++++++ ; 22EEBA
+  JMP CheckForSomariaBlock_22E5A5 ; $E5A5
 }
 
 
-;; 22EF00
+; =========================================================
+; 22EF00
 ; Hooked inside LinkItem_Hookshot @ 07AB5E
+
 BallChain_StartAnimationFlag:
 {
-  LDA #$01 : STA $037B ; Vanilla code
-  LDA $037A : CMP #$04 ; We are hookshotting
-
-  BNE +
-  LDA #$01 : STA $0112 ; Animation flag, prevent menu from opening
-+
+  ; Restore vanilla code
+  LDA #$01 : STA $037B
+  ; Check if we are rotating the goldstar
+  LDA $037A : CMP #$04 : BNE +
+    ; Animation flag, prevent menu from opening
+    LDA #$01 : STA $0112
+  +
   RTL
 }
 
-pushpc
+; =========================================================
 
+pushpc
 org $07AB95
   JSL BallChain_Finish
   NOP #2
-
 pullpc
 
 ; 22EF12
@@ -1152,56 +916,52 @@ BallChain_Finish:
 {
   STZ.w $0300 : STZ.w $037B ; Restore vanilla
   LDA $037A : CMP #$04 : BNE .not_done ; We are hookshotting
-  STZ $0112 ; Clear animation flag
-.not_done
+    STZ $0112 ; Clear animation flag
+  .not_done
   RTL
 }
 
+; =========================================================
 ; 22EF30
 ; Hooked at $07AC98
 
-
 Hookshot_Init:
 {
-; ResetAllAcceleration:
- REP #$20
+  ; ResetAllAcceleration:
+  REP #$20
+  STZ.w $032F : STZ.w $0331
+  STZ.w $0326 : STZ.w $0328
+  STZ.w $032B : STZ.w $032D
+  STZ.w $033C : STZ.w $033E
+  STZ.w $0334 : STZ.w $0336
+  SEP #$20
 
- STZ.w $032F
- STZ.w $0331
+  ; Initialize hookshot variables
+  STZ.w $0300
+  LDA.b #$01 : TSB.b $50
+  LDA.b #$07 : STA.b $3D
+  STZ.b $2E
 
- STZ.w $0326
- STZ.w $0328
+  LDA.b $67 : AND.b #$F0 : STA.b $67
+  LDA.w $037A : AND.b #$00 : ORA.b #$04
+  STA.w $037A
 
- STZ.w $032B
- STZ.w $032D
-
- STZ.w $033C
- STZ.w $033E
-
- STZ.w $0334
- STZ.w $0336
-
- SEP #$20
-
-
- STZ.w $0300
-
- LDA.b #$01
- TSB.b $50
-
- LDA.b #$07
- STA.b $3D
-
- STZ.b $2E
-
- LDA.b $67
- AND.b #$F0
- STA.b $67
-
- LDA.w $037A
- AND.b #$00
- ORA.b #$04
- STA.w $037A
-
-RTL
+  RTL
 }
+
+; =========================================================
+
+; Bug fix to clear $0112 when the goldstar grabs something
+; Also will be where we prevent dragging with the goldstar
+Goldstar_CheckForPreventDrag:
+{
+  STZ.w $0112
+  JSL LinkHop_FindArbitraryLandingSpot
+  RTL
+}
+
+pushpc
+
+org $07AD49
+LinkHookshot_GetDragged:
+  JSL Goldstar_CheckForPreventDrag
