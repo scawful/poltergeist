@@ -957,7 +957,7 @@ ApplyGoldstarDamageClass:
   ; If the hookshot is active
   LDA.w $0202 : CMP.b #$03 : BNE .return
     ; If the goldstar is active, swap in the damage class
-    LDA.w GoldstarOrHookshot : CMP.b #$02 : BNE .return
+    LDA.w $0202 : CMP.b #$08 : BNE .return
       PLA
       LDA #$02
       JMP .apply
@@ -991,3 +991,5 @@ LinkHookshot_GetDragged:
 ; Ancilla_CheckDamageToSprite.not_airborne
 org $06ECF2
   JSL ApplyGoldstarDamageClass
+
+pullpc
