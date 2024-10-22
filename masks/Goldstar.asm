@@ -824,7 +824,7 @@ CheckAndClearAncillaId:
 
 ; 22E5A0
 ; Checks for the Somaria block before moving on
-Routine_22E5A0:
+CheckForSomariaBlock:
 {
   SEP #$30
   JMP CheckForSomariaBlast ; $EE80
