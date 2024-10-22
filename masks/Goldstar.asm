@@ -383,7 +383,7 @@ HookshotChain_AncillaDraw:
   LDA Hookshot_box_size_y, X
   JML $08BFB5 ; Jumps into AncillaDraw_HookshotChain  
 ++
-  JSR Routine_22E5A0 ; $E5A0 CheckAndClearAncillaId has set the timer in A
+  JSR CheckForSomariaBlock ; $E5A0 CheckAndClearAncillaId has set the timer in A
 
   SEP #$30
   ; Compare rotation progress
