@@ -951,13 +951,33 @@ Hookshot_Init:
 
 ; =========================================================
 
+ApplyGoldstarDamageClass:
+{
+  PHA
+  ; If the hookshot is active
+  LDA.w $0202 : CMP.b #$03 : BNE .return
+    ; If the goldstar is active, swap in the damage class
+    LDA.w GoldstarOrHookshot : CMP.b #$02 : BNE .return
+      PLA
+      LDA #$02
+      JMP .apply
+  .return
+  PLA
+  .apply
+  JSL $06ED25 ; Ancilla_CheckDamageToSprite_preset.apply
+  RTL
+}
+
 LinkHop_FindArbitraryLandingSpot = $07E370
 
 ; Bug fix to clear $0112 when the goldstar grabs something
-; Also will be where we prevent dragging with the goldstar
+; Prevents grappling by clearing the timer checked by hookshot
 Goldstar_CheckForPreventDrag:
 {
-  STZ.w $0112
+  LDA.w $0202 : CMP.b #$08 : BNE +
+    STZ.w $0112
+    STZ.w $037E
+  +
   JSL LinkHop_FindArbitraryLandingSpot
   RTL
 }
@@ -967,3 +987,7 @@ pushpc
 org $07AD49
 LinkHookshot_GetDragged:
   JSL Goldstar_CheckForPreventDrag
+
+; Ancilla_CheckDamageToSprite.not_airborne
+org $06ECF2
+  JSL ApplyGoldstarDamageClass
