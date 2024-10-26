@@ -161,6 +161,7 @@ CutsceneAgahnim_Main:
         LDA.b #$0C : STA $0E60, X
 
         LDA $35 : CMP #$02 : BEQ .summoned
+            LDA.b #$F1 : STA.w $012C ; Function F1 - Fade Out Music
             LDA.b #$01 : STA $0DC0, X   ; Move Zelda to next anim frame
             LDA SprY, X : CLC : ADC.b #$0C : STA $0D00, X
             JSL   SummonRogueWallmaster
