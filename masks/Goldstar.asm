@@ -36,8 +36,10 @@ pullpc
 CheckForBallChain:
 {
   LDA #$13 : STA $5D ; Using hookshot state
-  ; LDA.b #$FF : STA $7A ; Start rotation timer (ORACLE)
-  JMP LinkItem_BallChain_GfxTransfer ; $D520 
+  LDA.w $0202 : CMP.b #$08 : BNE +
+    LDA.b #$FF : STA $7A ; Start rotation timer (ORACLE)
+    JMP LinkItem_BallChain_GfxTransfer ; $D520
+  +
   RTL
 }
 
@@ -54,7 +56,7 @@ pullpc
 BallChain_DrawOrReturn:
 {
   ; LDA $7EF342 : CMP #$02 : BEQ $22D4CD
-  LDA $02B2 : CMP #$01 : BEQ + 
+  LDA $0202 : CMP #$08 : BEQ +
   LDA #$00
   STA ($92),Y
   RTL
@@ -76,8 +78,7 @@ pullpc
 BallChain_ExtraCollisionLogic:
 {
     TAX
-    ; LDA $7EF342 : CMP #$02 : BNE $22D4F2
-    LDA $02B2 : CMP #$01 : BNE + ; Check if turtle
+    LDA $0202 : CMP #$08 : BNE + ; Check if turtle
     TXA
     CMP #$0A : BNE ++ ; $22D4F3
     LDA #$FF : BRA ++ ; $22D4F3
@@ -102,7 +103,7 @@ LinkItem_BallChain_GfxTransfer:
     LDA $2F : CMP #$04 : BEQ .transfer_gfx_sideways
               CMP #$06 : BEQ .transfer_gfx_sideways
     REP #$30
-    LDA #$0040 
+    LDA #$0040
     LDX #GFX_D600 ; $D600
     LDY #$9AC0
     MVN $39, $7E
@@ -204,7 +205,7 @@ LinkItem_BallChain_GfxTransfer:
     db $F9, $7E, $7E, $00, $00, $00, $00, $00
 }
 
-pushpc 
+pushpc
 
 org $07ABAF
   JSL BallChain_ResetTimer
@@ -216,17 +217,17 @@ pullpc
 ; Sets Link state to 0x00 and resets the hookshot timer
 BallChain_ResetTimer:
 {
-  LDA $02B2 : CMP #$01 : BNE + 
+  LDA $0202 : CMP #$08 : BNE +
   ; LDA #$00
   ; STA $5D
   ; STA $7A ; Ball Chain Timer
   STZ $7A
-+
+  +
   STZ $5D
   RTL
 }
 
-pushpc 
+pushpc
 
 org $08BFDA
   JSL BallChain_DrawChainOrHookshot
@@ -240,8 +241,7 @@ pullpc
 ; Natively NOPs out the bytes 08BFDA - 08BFEA
 BallChain_DrawChainOrHookshot:
 {
-  ; LDA $7EF342 : CMP #$02 BEQ $22D812
-  LDA $02B2 : CMP #$01 : BEQ +
+  LDA $0202 : CMP #$08 : BEQ +
   LDA #$19 : STA ($90),Y
   JSR BallChainOrHookshot_Modifier ; $D820
   ORA.b #$02
@@ -249,7 +249,7 @@ BallChain_DrawChainOrHookshot:
 + ; 22D812
   LDA #$0E : STA ($90),Y
   JSR BallChainOrHookshot_Modifier ; $D820
-  ORA.b #$04 ; 02 is gray color 
+  ORA.b #$04 ; 02 is gray color
   RTL
 }
 
@@ -274,8 +274,7 @@ pullpc
 ; In place of Hookshot_prop
 AncillaDraw_Hookshot_BallChain_Properties:
 {
-  ; LDA $7EF342 : CMP #$02 : BEQ .ball_chain
-  LDA $02B2 : CMP #$01 : BEQ .ball_chain
+  LDA $0202 : CMP #$08 : BEQ .ball_chain
   LDA $08BD58, X ; 08BD58
   ORA.b #$02
   ORA.b $65
@@ -326,7 +325,7 @@ org $008542
 
 org $0DA6E3
   JSL Link_OAM_Actually
-  NOP 
+  NOP
 
 pullpc
 
@@ -335,10 +334,10 @@ Link_OAM_Actually:
 {
     REP #$20
     ; LDA $7EF342
-    LDA $02B2
+    LDA $0202
     AND #$00FF
     ; CMP #$0002
-    CMP #$0001
+    CMP #$0008
     BEQ + ; $22D892
     LDA $839B,Y
     RTL
