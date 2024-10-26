@@ -251,4 +251,23 @@ LinkItem_Ether:
 
 warnpc $07A4F6
 
+org $0296AF
+  JSL CheckForSwitchDungeonId
+
 pullpc
+
+CheckForSwitchDungeonId:
+{
+  LDA $A0 : CMP.b #$20 : BEQ .set_castle
+            CMP.b #$21 : BEQ .set_tower
+            JMP +
+  .set_castle
+  LDA.b #$08 : STA.w $040C
+  JMP +
+  .set_tower
+  LDA.b #$02 : STA.w $040C
+  +
+  LDA.l $7EC011 ; Restore vanilla
+  RTL
+}
+
