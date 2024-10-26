@@ -258,13 +258,13 @@ pullpc
 
 CheckForSwitchDungeonId:
 {
-  LDA $A0 : CMP.b #$20 : BEQ .set_castle
-            CMP.b #$21 : BEQ .set_tower
+  LDA $A0 : CMP.b #$21 : BEQ .set_tower
+            CMP.b #$20 : BEQ .set_castle
             JMP +
-  .set_castle
+  .set_tower
   LDA.b #$08 : STA.w $040C
   JMP +
-  .set_tower
+  .set_castle
   LDA.b #$02 : STA.w $040C
   +
   LDA.l $7EC011 ; Restore vanilla
