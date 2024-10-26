@@ -89,7 +89,7 @@ org $0AEE8D : dw $00FE   ; B2 - Haunted Manor (Tower of Hera)
 ; ==================================================================================================
 
 org $0AF5D9 : db $10, $00 ; UNUSED
-org $0AF5DB : db $22, $00 ; Shadow Castle
+org $0AF5DB : db $22, $01 ; Shadow Castle
 org $0AF5DD : db $11, $00 ; Pumpkin Patch
 org $0AF5DF : db $11, $00 ; Living spooM
 org $0AF5E1 : db $60, $01 ; Shadow Castle Tower
