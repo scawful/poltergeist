@@ -18,7 +18,7 @@ WarpRoomCheck:
     + 
 
     CMP.w #$0021 : BNE + ; room 21
-        LDX.b #08 : STX $A4
+        LDX.b #05 : STX $A4
     + 
 
     RTL

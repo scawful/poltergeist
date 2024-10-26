@@ -16,10 +16,10 @@
 ; ===============================================================================
 
 org $0AE196 : db $FF ; UNUSED
-org $0AE197 : db $FF ; UNUSED
+org $0AE197 : db $08 ; Shadow Castle
 org $0AE198 : db $00 ; Pumpkin Patch
 org $0AE199 : db $02 ; Living spooM
-org $0AE19A : db $08 ; Shadow Castle
+org $0AE19A : db $08 ; Shadow Castle Tower
 org $0AE19B : db $FF ; UNUSED
 org $0AE19C : db $06 ; Abandoned Mineshaft
 org $0AE19D : db $FF ; UNUSED
@@ -89,10 +89,10 @@ org $0AEE8D : dw $00FE   ; B2 - Haunted Manor (Tower of Hera)
 ; ==================================================================================================
 
 org $0AF5D9 : db $10, $00 ; UNUSED
-org $0AF5DB : db $10, $00 ; UNUSED
+org $0AF5DB : db $22, $00 ; Shadow Castle
 org $0AF5DD : db $11, $00 ; Pumpkin Patch
 org $0AF5DF : db $11, $00 ; Living spooM
-org $0AF5E1 : db $81, $01 ; Shadow Castle
+org $0AF5E1 : db $60, $01 ; Shadow Castle Tower
 org $0AF5E3 : db $10, $00 ; UNUSED
 org $0AF5E5 : db $22, $00 ; Abandoned Mineshaft
 org $0AF5E7 : db $10, $00 ; UNUSED
@@ -185,39 +185,44 @@ dw $0b8a, $0b8b, $0b8c, $0b8d
 ; ===============================================================================
 
 ; TOWER
-; F8
-; dw $0b00, $0b00, $0b93, $0b00 ; Room 21
-; dw $0b94, $1376, $0b74, $4b74 ; Room 31
+; F6
+org $219198
+dw $0b00, $0b00, $0b93, $0b00 ; Room 21
+dw $0b94, $1376, $0b74, $4b74 ; Room 31
 
-org $2191A8
-; F7
+; F5
 dw $0b00, $8b74, $0b97, $cb97 ; Room 90
 dw $0b95, $1396, $0b00, $0b00 ; Room 91
 dw $0b74, $136f, $0b00, $0b00 ; Room A0
 
-; F6
+; F4
 dw $0b98, $1399, $0b73, $0b00 ; Room A1
 dw $139b, $0b00, $0b9c, $0b9d ; Room B0
 dw $0b94, $0b00, $4b74, $0b00 ; Room B1
 
-; F5
+; F3
 dw $0b00, $0b00, $4b6f, $0b9f ; Room C0
 dw $0b97, $139e, $4b74, $0b00 ; Room C1
 dw $13a0, $0b94, $0ba1, $4b74 ; Room D0
 
-; F4
+; F2
 dw $8b74, $136f, $0ba2, $0b00 ; Room D1
 dw $8b73, $0b00, $8b98, $13a3 ; Room E1
 
-; F3
-dw $13a4, $53a4, $0ba5, $4ba5 ; Room 20 - CASTLE
+; F1
+org $219208
 dw $8b74, $cb74, $1794, $13a6 ; Room E0 - TOWER
 
 ; CASTLE
 ; F2
-dw $13a7, $53a7, $13a8, $53a8 ; Room 51
+org $219200
+dw $13a4, $53a4, $0ba5, $4ba5 ; Room 20 - CASTLE
 
 ; F1
+org $219210
+dw $13a7, $53a7, $13a8, $53a8 ; Room 51
+
+; B1
 dw $0b00, $0b98, $0b00, $0b73 ; Room 40
 dw $8b8e, $cb8e, $578f, $178f ; Room 41
 dw $0ba9, $0b9a, $0baa, $0bab ; Room 42
@@ -228,8 +233,10 @@ dw $13b1, $13b2, $0bb6, $0bb7 ; Room 60
 dw $13b3, $53b3, $13b8, $53b8 ; Room 61
 dw $0bb4, $0bb5, $0bb9, $0bba ; Room 62
 
-; B1
+; B2
 dw $93a8, $d3a8, $0bbb, $4ba8 ; Room 70
 dw $0bbc, $0bbd, $0bbf, $4b74 ; Room 80
 dw $0ba9, $0bbe, $cbbe, $cba9 ; Room 81
 dw $4bbe, $0bbe, $8ba9, $8bbe ; Room 82
+
+; ===============================================================================
