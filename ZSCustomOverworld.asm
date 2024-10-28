@@ -2226,7 +2226,7 @@ Overworld_LoadBGColorAndSubscreenOverlay:
         
         .BRANCH_12
         
-        LDA.w #$06C0 : STA.b $E6
+        LDA.w #$02C0 : STA.b $E6
     
     .subscreenOnAndReturn
     
@@ -2283,63 +2283,84 @@ ReplaceBGColor:
 {
     PHB : PHK : PLB
 
-    ; TODO: This may need to check if we are in a warp and then if so load the custom color.
-    ; If not, then chceck if its enabled or not.
-    ;SEP #$20 ; Set A in 8bit mode
+    SEP #$20 ; Set A in 8bit mode.
 
-    ;LDA.l Pool_EnableBGColor : BNE .custom
-        ;REP #$20 ; Set A in 16bit mode
+    LDA.w Pool_EnableBGColor : BNE .custom
+        REP #$20 ; Set A in 16bit mode.
 
-        ;PLB
+        PLB
 
-        ;RTL
+        RTL
 
-    ;.custom
+    .custom
 
-    ;REP #$20 ; Set A in 16bit mode
+    REP #$20 ; Set A in 16bit mode.
 
-    LDA.b $8A : ASL : TAX ; Get area code and times it by 2
-    LDA.l Pool_BGColorTable, X ; Get the color.
+    ; TODO: Saving the Y may not be necessary, done just in case.
+    PHY
 
-    ;STA.l $7EC300 : STA.l $7EC340 ; Set the BG color 
+    ; Get area code and times it by 2.
+    LDA.b $8A : ASL : TAX
+
+    ; Get the color.
+    LDA.w Pool_BGColorTable, X
+
+    ; Set the BG color.
     STA.l $7EC500 : STA.l $7EC540
+
+    TAY ; Save the color.
+    
+    SEP #$20 ; Set A in 8bit mode.
+
+    ; TODO: Possibly needed as well.
+    ; Set the buffer color when exiting to the OW to prevent a bug when using the
+    ; map in an area with a subscreen overlay.
+    LDA.b $10 : CMP.b #$08 : BNE .notPreOverworld
+        BRA .setBuffer
+
+    .notPreOverworld
+
+    ; TODO: Check if this is needed. I think it is. If not, it should always
+    ; set the buffer too. If not the warp fades into the wrong color for a
+    ; second.
+    ; Only set the buffer color during warps.
+    LDA.b $11 : CMP.b #$23 : BNE .notWarp
+        .setBuffer
+        REP #$20 ; Set A in 16bit mode.
+
+        TYA
+
+        ; Set the BG color buffer.
+        STA.l $7EC300 : STA.l $7EC340
+
+    .notWarp
+
+    REP #$20 ; Set A in 16bit mode.
+
+    PLY
 
     PLB
 
     RTL
 }
 
+; Changed for AHE.
 NeedSomeSpaceForWhateverThisIs:
-{
-    LDA.b $E2 : SEC : SBC.w #$0778 : LSR A : TAY : AND.w #$4000 : BEQ .BRANCH_7
-        TYA : ORA.w #$8000 : TAY
-            
-    .BRANCH_7
-            
-    STY.b $00
-                
-    LDA.b $E2 : SEC : SBC.b $00 : STA.b $E0
-                
-    LDA.b $E6 : CMP.w #$06C0 : BCC .BRANCH_9
-        SEC : SBC.w #$0600 : AND.w #$03FF : CMP.w #$0180 : BCS .BRANCH_8
-            LSR A : ORA.w #$0600
-                
-                BRA .BRANCH_10
-            
-            .BRANCH_8
-            
-            LDA.w #$06C0
+{      
+    LDA.b $E6 : CMP.w #$0208 : BCC .BRANCH_9
+        CMP.w #$02C0 : BCS .BRANCH_10
+            LDA.w #$02C0
                 
             BRA .BRANCH_10
             
     .BRANCH_9
 
-    LDA.b $E6 : AND.w #$00FF : LSR A : ORA.w #$0600
+    LDA.w #$0208
             
     .BRANCH_10
             
-    ; Set BG1 vertical scroll
-    STA.b $E6
+    ; Set BG1 vertical scroll.
+    STA.b $E6 : STA.w $0124
 
     RTL
 }
