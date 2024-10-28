@@ -9,7 +9,44 @@
 
 ; org $0288FD ; Replace a BEQ by a BRA
 ;     db $80
+pushpc
+org $0288FF
+JML XButtonPressDungeon
+NOP #$03
+OpenMap:
 
+org $02891B
+NoMap:
+
+
+pullpc
+XButtonPressDungeon:
+; Restored Code
+LDA.w $040C
+CMP.b #$FF 
+BEQ .no_mapping
+
+; Check for specific rooms
+LDA.b $A0 ; load room id
+
+CMP.b #$B6 : BNE + ; are we in room B6 - Metroid
+JML NoMap
++
+CMP.b #$33 : BNE + ; are we in room B6 - VittyVattyYatta
+JML NoMap
++
+CMP.b #$C8 : BNE + ; are we in room C8 - Pimpkinghead
+JML NoMap
++
+CMP.b #$6C : BNE + ; are we in room 6C - "The" face
+JML NoMap
++
+JML OpenMap
+
+.no_mapping
+JML NoMap
+
+pushpc
 
 ; ===============================================================================
 ; Dungeon Map Level Title GFX
@@ -240,3 +277,4 @@ dw $0ba9, $0bbe, $cbbe, $cba9 ; Room 81
 dw $4bbe, $0bbe, $8ba9, $8bbe ; Room 82
 
 ; ===============================================================================
+pullpc
