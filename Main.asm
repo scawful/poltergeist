@@ -103,7 +103,7 @@ org $3A8000
 incsrc CastleBGGFX.asm
 incsrc CollectItemsWithSword.asm
 incsrc EyeStatueChestAppear.asm
-
+incsrc BlindMaidenB7.asm
 warnpc $3AFFFF ; If it reaches the warning move some code in next bank.
 
 pushpc

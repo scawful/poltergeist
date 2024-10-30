@@ -690,10 +690,10 @@ Sprite_Facade_Draw:
 	db $39
 	db $39
 	db $31
-	db $37, $37
-	db $37
-	db $77, $37
-	db $37
+	db $3F, $3F
+	db $3F
+	db $7F, $3F
+	db $3F
 
 	.sizes
 	db $02, $02, $02, $02
