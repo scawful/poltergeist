@@ -191,6 +191,9 @@ mainblinking:
 		LDA.w SprFrame, X : CMP #$07 : BNE +
 		LDA.b #$50 : STA.w SprTimerA, X
 		LDA.b #$03 : STA.w SprFrame, X
+		LDA.w SprMiscB, X : CMP #$1E : BNE .notholephase
+			JSL Sprite_SpawnFireball
+		.notholephase
 	+
 
 	LDA.w SprMiscB, X : CMP #$1E : BNE .noholesyet
