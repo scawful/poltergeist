@@ -88,7 +88,6 @@ incsrc SahasralalalalaFlippers.asm
 incsrc SpikeSubtypes.asm
 incsrc SpookyCredits.asm
 incsrc SpookyInventory.asm
-incsrc TitleScreen.asm
 incsrc Captain.asm
 incsrc Swordbeam.asm
 incsrc sage.asm
@@ -105,6 +104,7 @@ incsrc CollectItemsWithSword.asm
 incsrc EyeStatueChestAppear.asm
 incsrc BlindMaidenB7.asm
 incsrc ItemCollection.asm
+incsrc TitleScreen/TitleScreen.asm
 warnpc $3AFFFF ; If it reaches the warning move some code in next bank.
 
 pushpc
