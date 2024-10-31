@@ -226,16 +226,6 @@ RTS
 
 
 
-
-org $00D020 ; bank
-db gfxsheetA0>>16
-org $00D0FF ; high
-db gfxsheetA0>>8
-org $00D1DE ; low
-db gfxsheetA0
-
-
-
 pullpc
 
 
