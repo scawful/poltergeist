@@ -163,8 +163,8 @@ org $0E8000
 incbin fontdata2
 
 
-org $0EB07E : dw $3CC0 ; tile 35 (yellow J)
-org $0EB08C : dw $3CD0 ; tile 42 (yellow Q)
+org $0EB07E : dw $3C87 ; tile 35 (yellow J)
+org $0EB08C : dw $3C97 ; tile 42 (yellow Q)
 
 
 
