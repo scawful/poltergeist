@@ -145,9 +145,6 @@ STA.b $10
 RTL
 
 
-gfxsheetA0:
-incbin sheetcompressedA0
-
 oam_data:
 db $A0, $B8, $00, $3B
 db $B0, $B8, $02, $3B
