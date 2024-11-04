@@ -12,17 +12,17 @@
 
 pushpc
 
-org $0DF872
-    db $28
+; org $0DF872
+;     db $28
 
-org $0DF876
-    db $28
+; org $0DF876
+;     db $28
 
-org $0DF874
-    db $68
+; org $0DF874
+;     db $68
 
-org $0DF878
-    db $68
+; org $0DF878
+;     db $68
 
 pullpc
 
