@@ -13,6 +13,7 @@ incsrc OverworldMap.asm
 incsrc SanctuaryMusicTransitionNOP.asm
 incsrc DoorOverlay.asm
 incsrc HitBoxProperties.asm
+incsrc MenuGapFixNItemNames.asm
 
 ; ==============================================================================
 
