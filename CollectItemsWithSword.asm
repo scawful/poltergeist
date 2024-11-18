@@ -2,6 +2,8 @@
 ; COLLECT ITEMS WITH SWORD
 ; By Con
 ; ==============================================================================
+; Non-Expanded Space
+; ==============================================================================
 
 pushpc
 
@@ -11,74 +13,75 @@ org $86F725
 pullpc
 
 ; ==============================================================================
+; Expanded Space
+; ==============================================================================
 
-collectSword:
-ADC #$00
-STA $09
-LDA $79
-BEQ $01
-RTL
+CollectSword:
+{
+    ADC.b #$00 : STA.b $09
 
-LDA $0E20, X
-SEC
-SBC #$D8
-BCS $01
-RTL
+    LDA.b $79 : BEQ +
+        RTL
+    +
 
-LDA $0E20, X
-SEC
-SBC #$E7
-BCC $01
-RTL
+    LDA.w $0E20, X : CMP.b #$AC : BEQ .apples ; Collect Apples
 
-PHY
-LDY $3C
-BPL $02
-PLY
-RTL
+    LDA.w $0E20, X : SEC : SBC.b #$D8 : BCS + ; Collect items with Sprite IDs greater than D8
+        RTL
+    +
 
-LDA $F571, Y
-BEQ $02
-PLY
-RTL
+    LDA.w $0E20, X : SEC : SBC.b #$E7 : BCC + ; Collect items with Sprite IDs less than E7
+        RTL
+    +
 
-PHX
-LDA $2F
-ASL A
-ASL A
-ASL A
-CLC
-ADC $3C
-TAX
-INX
-LDY #$00
-LDA $45
-CLC
-ADC $F46D, X
-BPL $01
-DEY
-CLC
-ADC $22
-STA $00
-TYA
-ADC $23
-STA $08
-LDY #$00
-LDA $44
-CLC
-ADC $F4EF, X
-BPL $01
-DEY
-CLC
-ADC $20
-STA $01
-TYA
-ADC $21
-STA $09
-LDA $F4AE, X
-STA $02
-LDA $F530, X
-STA $03
-PLX
-PLY
-RTL
+    .apples
+
+    PHY
+
+    LDY.b $3C : BPL +
+        PLY
+        RTL
+    +
+
+    LDA.w $F571, Y : BEQ +
+        PLY
+        RTL
+    +
+
+    PHX
+
+    LDA.b $2F
+    ASL A : ASL A : ASL A
+    CLC : ADC.b $3C
+    TAX
+
+    INX
+    LDY.b #$00
+    LDA.b $45 : CLC : ADC.w $F46D, X : BPL +
+        DEY
+    +
+
+    CLC : ADC.b $22 : STA.b $00
+
+    TYA
+    ADC.b $23 : STA.b $08
+
+    LDY.b #$00
+    LDA.b $44 : CLC : ADC.w $F4EF, X : BPL +
+        DEY
+    +
+
+    CLC : ADC.b $20 : STA.b $01
+
+    TYA
+    ADC.b $21 : STA.b $09
+
+    LDA.w $F4AE, X : STA.b $02
+    LDA.w $F530, X : STA.b $03
+
+    PLX
+    PLY
+    RTL
+}
+
+; ==============================================================================
