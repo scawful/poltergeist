@@ -8,7 +8,7 @@
 pushpc
 
 org $86F725
-    JSL collectSword
+    JSL CollectSword
 
 pullpc
 
