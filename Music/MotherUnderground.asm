@@ -279,20 +279,14 @@ Song13_Segment1_Channel6: ; Harp
 
 %CallSubroutine(.sub161+!ARAMC, 20)
 
-db $0D, Rest
-
-%CallSubroutine(.sub162+!ARAMC, 1)
+db $0C, $3F, Rest, E5, Tie, F5, Tie, F5s, Tie, G5
+db Tie, E5, Tie, F5, Tie, F5s, Tie, G5
 db End
 
 ; ------------------------------------------------------------------------------
 
 .sub161
 db $60, Rest
-db End
-
-.sub162
-db $0C, $3F, E5, Tie, F5, Tie, F5s, Tie, G5
-db Tie, E5, Tie, F5, Tie, F5s, Tie, G5
 db End
 
 ; ==============================================================================
@@ -305,20 +299,14 @@ Song13_Segment1_Channel7: ; Harp
 
 %CallSubroutine(.sub171+!ARAMC, 20)
 
-db $0D, Rest
-
-%CallSubroutine(.sub172+!ARAMC, 1)
+db $0C, $3F, Rest, Tie, G5, Tie, G5s, Tie, A5, Tie
+db A5s, Tie, G5, Tie, G5s, Tie, A5, Tie
 db End
 
 ; ------------------------------------------------------------------------------
 
 .sub171
 db $60, Rest
-db End
-
-.sub172
-db $0C, $3F, Tie, G5, Tie, G5s, Tie, A5, Tie
-db A5s, Tie, G5, Tie, G5s, Tie, A5, Tie
 db End
 
 ; ==============================================================================
