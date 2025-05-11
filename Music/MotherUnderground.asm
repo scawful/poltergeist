@@ -275,6 +275,7 @@ Song13_Segment1_Channel6: ; Harp
 %SetChannelVolume($78)
 %SetPan($02) ; Leaning Right
 %SetInstrument($0F) ; Harp
+%VibratoOn($00, $14, $64)
 
 %CallSubroutine(.sub161+!ARAMC, 20)
 
@@ -300,6 +301,7 @@ Song13_Segment1_Channel7: ; Harp
 %SetChannelVolume($78)
 %SetPan($02) ; Leaning Right
 %SetInstrument($0F) ; Harp
+%VibratoOn($00, $14, $64)
 
 %CallSubroutine(.sub171+!ARAMC, 20)
 
