@@ -31,6 +31,7 @@ incsrc Music/SkullDungeonThemeV1-00.asm ; fugitive song 0x0C
 incsrc Music/SadThemeV1-00.asm  ; village song 0x07
 incsrc Music/ThickFogV1-00.asm ; bunny theme song 0x04
 incsrc Music/SubrosiaThemeV1-00.asm 
+incsrc Music/MotherUnderground.asm 
 
 ; ==============================================================================
 
